@@ -434,11 +434,8 @@
           </select>
           
           <script>
-            // Add all handstand exercises and sort them alphabetically
-            const handstandSel = document.getElementById('handstand-selector');
-            
-            // Complete list of handstand exercises
-            const exercises = [
+            // Define the exercises array - exact same code as handstand-test.html that works correctly
+            const dropdownExercises = [
               "Back to Wall Hold",
               "Box Hold",
               "Face to Wall Hold",
@@ -451,17 +448,24 @@
               "Uneven Hands",
               "Wall Walk",
               "Wrist Prep"
-            ].sort();
+            ];
             
-            // Add the sorted options
-            exercises.forEach(exercise => {
+            // Sort the array alphabetically
+            dropdownExercises.sort();
+            
+            // Output to console for debugging
+            console.log("Handstand exercises for dropdown:", dropdownExercises);
+            
+            // Get the selector element
+            const handstandSel = document.getElementById('handstand-selector');
+            
+            // Populate the dropdown with options - same approach as test page
+            dropdownExercises.forEach(exercise => {
               const option = document.createElement('option');
               option.value = exercise;
               option.textContent = exercise;
-              handstandSel.add(option);
+              handstandSel.appendChild(option);
             });
-            
-            console.log("Handstand exercises loaded:", exercises.length);
           </script>
           
           <div id="handstand-exercises" class="handstand-list">
