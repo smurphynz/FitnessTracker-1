@@ -109,7 +109,7 @@ export default function Home() {
         setActiveTab={setActiveTab} 
       />
       
-      <main className="flex-1 container mx-auto px-4 pb-28" style={{ overflow: 'visible' }}>
+      <main className="flex-1 container mx-auto px-4 pb-32" style={{ overflow: 'visible' }}>
         {activeTab === "workout" ? (
           <WorkoutTab 
             date={date}

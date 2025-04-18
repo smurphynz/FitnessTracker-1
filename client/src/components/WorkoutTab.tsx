@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import { useState } from "react";
 import MobilitySection from "./MobilitySection";
 import HandstandSection from "./HandstandSection";
 import StrengthSection from "./StrengthSection";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Workout, Exercise } from "@shared/schema";
+import SaveWorkoutButton from "./SaveWorkoutButton";
 
 interface WorkoutTabProps {
   date: string;
@@ -23,21 +23,6 @@ export default function WorkoutTab({
   onSaveWorkout 
 }: WorkoutTabProps) {
   const { toast } = useToast();
-  
-  // Portal for fixed save button
-  useEffect(() => {
-    // Create a div to hold our portal and add it directly to the body
-    const portalNode = document.createElement('div');
-    portalNode.id = 'save-button-portal';
-    document.body.appendChild(portalNode);
-    
-    // Cleanup function to remove the node when component unmounts
-    return () => {
-      if (document.body.contains(portalNode)) {
-        document.body.removeChild(portalNode);
-      }
-    };
-  }, []);
   
   // Mobility state
   const [mobilityDay, setMobilityDay] = useState<number | undefined>(
@@ -102,72 +87,44 @@ export default function WorkoutTab({
     }
   };
 
-  // Render our component and create a portal for the fixed button
   return (
-    <>
-      <div id="workout-content" className="flex flex-col space-y-4">
-        {/* Mobility Section */}
-        <MobilitySection 
-          lastMobilityDay={lastMobilityDay}
-          mobilityDay={mobilityDay}
-          setMobilityDay={setMobilityDay}
-          mobilityCompletion={mobilityCompletion}
-          setMobilityCompletion={setMobilityCompletion}
-        />
-        
-        {/* Handstand Section */}
-        <HandstandSection 
-          handstandExercises={handstandExercises}
-          setHandstandExercises={setHandstandExercises}
-        />
-        
-        {/* Strength Section */}
-        <StrengthSection 
-          lastStrengthDay={lastStrengthDay}
-          strengthDay={strengthDay}
-          setStrengthDay={setStrengthDay}
-          strengthExercises={strengthExercises}
-          setStrengthExercises={setStrengthExercises}
-        />
-        
-        {/* In-page Save Button */}
-        <div className="mt-10 mb-20 relative">
-          <Button 
-            className="relative w-full bg-gradient-to-r from-[#FFEB3B] to-[#FFC107] hover:from-[#FFC107] hover:to-[#FFD700] text-forest-900 font-extrabold text-2xl py-7 h-auto rounded-lg shadow-xl border-2 border-[#FFEB3B] flex items-center justify-center"
-            onClick={handleSaveWorkout}
-          >
-            SAVE WORKOUT
-          </Button>
-        </div>
-      </div>
+    <div id="workout-content" className="flex flex-col space-y-4 pb-20">
+      {/* Mobility Section */}
+      <MobilitySection 
+        lastMobilityDay={lastMobilityDay}
+        mobilityDay={mobilityDay}
+        setMobilityDay={setMobilityDay}
+        mobilityCompletion={mobilityCompletion}
+        setMobilityCompletion={setMobilityCompletion}
+      />
       
-      {/* Portal for fixed button - render only if portal container exists */}
-      {document.getElementById('save-button-portal') && 
-        ReactDOM.createPortal(
-          <button 
-            onClick={handleSaveWorkout}
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: '#FFEB3B',
-              color: 'black',
-              zIndex: 9999,
-              padding: '12px 24px',
-              fontSize: '16px',
-              borderRadius: '8px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
-              border: 'none',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            SAVE WORKOUT
-          </button>,
-          document.getElementById('save-button-portal')!
-        )
-      }
-    </>
+      {/* Handstand Section */}
+      <HandstandSection 
+        handstandExercises={handstandExercises}
+        setHandstandExercises={setHandstandExercises}
+      />
+      
+      {/* Strength Section */}
+      <StrengthSection 
+        lastStrengthDay={lastStrengthDay}
+        strengthDay={strengthDay}
+        setStrengthDay={setStrengthDay}
+        strengthExercises={strengthExercises}
+        setStrengthExercises={setStrengthExercises}
+      />
+      
+      {/* In-page Save Button */}
+      <div className="mt-10 mb-20 relative">
+        <Button 
+          className="relative w-full bg-gradient-to-r from-[#FFEB3B] to-[#FFC107] hover:from-[#FFC107] hover:to-[#FFD700] text-forest-900 font-extrabold text-2xl py-7 h-auto rounded-lg shadow-xl border-2 border-[#FFEB3B] flex items-center justify-center"
+          onClick={handleSaveWorkout}
+        >
+          SAVE WORKOUT
+        </Button>
+      </div>
+
+      {/* Fixed Position Save Button */}
+      <SaveWorkoutButton onClick={handleSaveWorkout} />
+    </div>
   );
 }
