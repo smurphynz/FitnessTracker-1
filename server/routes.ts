@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { workoutSchema, Workout } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
+import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes for the fitness tracker
@@ -84,20 +85,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve the forest app at the standalone route
   app.get("/standalone", (req: Request, res: Response) => {
-    // Add cache-busting headers
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
     res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.sendFile(path.resolve(process.cwd(), "server/public/standalone/index.html"));
+    res.setHeader('Expires', '-1');
+    // Add version parameter to URL to prevent caching
+    const version = Date.now().toString();
+    let content = fs.readFileSync(path.resolve(process.cwd(), "server/public/standalone/index.html"), 'utf8');
+    // Add version parameter to force reload in Safari
+    content = content.replace('</head>', `<meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="version" content="${version}">
+    </head>`);
+    res.send(content);
   });
   
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
-    // Add cache-busting headers
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
     res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
+    res.setHeader('Expires', '-1');
+    // Add version parameter to URL to prevent caching
+    const version = Date.now().toString();
+    let content = fs.readFileSync(path.resolve(process.cwd(), "server/public/index.html"), 'utf8');
+    // Add version parameter to force reload in Safari
+    content = content.replace('</head>', `<meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="version" content="${version}">
+    </head>`);
+    res.send(content);
   });
   
   // Emergency Save API endpoint - can be accessed directly through a browser
