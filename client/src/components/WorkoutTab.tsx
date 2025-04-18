@@ -113,12 +113,16 @@ export default function WorkoutTab({
       />
       
       {/* Save Workout Button */}
-      <Button 
-        className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium text-lg py-7 h-auto rounded-lg shadow-lg border border-[#FFEB3B]/50"
-        onClick={handleSaveWorkout}
-      >
-        Save Workout
-      </Button>
+      <div className="fixed bottom-4 left-0 right-0 px-4 z-10">
+        <Button 
+          className="w-full bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-bold text-xl py-6 h-auto rounded-lg shadow-lg border-2 border-[#FFEB3B]/80 flex items-center justify-center"
+          onClick={handleSaveWorkout}
+        >
+          <span className="drop-shadow-sm">Save Workout</span>
+        </Button>
+      </div>
+      {/* Extra space at bottom to prevent button overlap */}
+      <div className="h-24"></div>
     </div>
   );
 }

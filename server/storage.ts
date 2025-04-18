@@ -78,27 +78,27 @@ export class DatabaseStorage implements IStorage {
 
   // Last day tracking methods
   async getLastMobilityDay(): Promise<number | undefined> {
-    // Get the most recent workout with a mobility day
-    const [workout] = await db
+    // Get all workouts ordered by date
+    const allWorkouts = await db
       .select()
       .from(workouts)
-      .where(db.sql`"mobility_day" IS NOT NULL`)
-      .orderBy(desc(workouts.date))
-      .limit(1);
+      .orderBy(desc(workouts.date));
     
-    return workout?.mobilityDay || undefined;
+    // Find the first one with a mobility day
+    const workoutWithMobilityDay = allWorkouts.find(w => w.mobilityDay !== null);
+    return workoutWithMobilityDay?.mobilityDay || undefined;
   }
 
   async getLastStrengthDay(): Promise<number | undefined> {
-    // Get the most recent workout with a strength day
-    const [workout] = await db
+    // Get all workouts ordered by date
+    const allWorkouts = await db
       .select()
       .from(workouts)
-      .where(db.sql`"strength_day" IS NOT NULL`)
-      .orderBy(desc(workouts.date))
-      .limit(1);
+      .orderBy(desc(workouts.date));
     
-    return workout?.strengthDay || undefined;
+    // Find the first one with a strength day
+    const workoutWithStrengthDay = allWorkouts.find(w => w.strengthDay !== null);
+    return workoutWithStrengthDay?.strengthDay || undefined;
   }
 
   // Helper method to map database workout format to application workout format
