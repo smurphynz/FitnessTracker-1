@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Dropdown Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Handstand Exercises Dropdown Test</h1>
+  
+  <select id="handstand-selector">
+    <option value="">Select handstand exercise</option>
+    <option value="Back to Wall Hold">Back to Wall Hold</option>
+    <option value="Box Hold">Box Hold</option>
+    <option value="Face to Wall Hold">Face to Wall Hold</option>
+    <option value="Freestanding Practice">Freestanding Practice</option>
+    <option value="Kick Ups">Kick Ups</option>
+    <option value="Mexican">Mexican</option>
+    <option value="Shape Changes">Shape Changes</option>
+    <option value="Shoulder Taps">Shoulder Taps</option>
+    <option value="Splits">Splits</option>
+    <option value="Uneven Hands">Uneven Hands</option>
+    <option value="Wall Walk">Wall Walk</option>
+    <option value="Wrist Prep">Wrist Prep</option>
+  </select>
+
+  <div id="selected-exercise">
+    No exercise selected
+  </div>
+
+  <script>
+    const selector = document.getElementById('handstand-selector');
+    const display = document.getElementById('selected-exercise');
+
+    selector.addEventListener('change', () => {
+      const exercise = selector.value;
+      if (exercise) {
+        display.textContent = `You selected: ${exercise}`;
+      } else {
+        display.textContent = 'No exercise selected';
+      }
+    });
+  </script>
+</body>
+</html>
