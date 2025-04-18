@@ -10,15 +10,50 @@
       max-width: 600px;
       margin: 0 auto;
       padding: 20px;
+      background-color: #1A402B;
+      color: white;
     }
     select {
       width: 100%;
       padding: 10px;
       margin-bottom: 20px;
       font-size: 16px;
+      background-color: rgba(34, 84, 61, 0.7);
+      color: white;
+      border: 1px solid rgba(255, 235, 59, 0.3);
+      border-radius: 4px;
     }
     h1 {
       margin-bottom: 20px;
+      color: #FFEB3B;
+    }
+    .button {
+      padding: 8px 12px;
+      background-color: rgba(255, 235, 59, 0.3);
+      color: #FFEB3B;
+      border: 1px solid rgba(255, 235, 59, 0.5);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .exercise-list {
+      margin-top: 20px;
+    }
+    .exercise-item {
+      background-color: rgba(34, 84, 61, 0.6);
+      padding: 10px 15px;
+      margin: 5px 0;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255, 235, 59, 0.2);
+    }
+    .remove-btn {
+      background-color: rgba(231, 76, 60, 0.3);
+      color: #FFC107;
+      border: 1px solid rgba(231, 76, 60, 0.5);
     }
   </style>
 </head>
@@ -41,22 +76,53 @@
     <option value="Wrist Prep">Wrist Prep</option>
   </select>
 
-  <div id="selected-exercise">
-    No exercise selected
+  <button id="add-exercise" class="button">Add Exercise</button>
+  
+  <div id="exercise-list" class="exercise-list">
+    <!-- Added exercises will appear here -->
   </div>
 
   <script>
     const selector = document.getElementById('handstand-selector');
-    const display = document.getElementById('selected-exercise');
-
-    selector.addEventListener('change', () => {
+    const addButton = document.getElementById('add-exercise');
+    const exerciseList = document.getElementById('exercise-list');
+    const handstandExercises = [];
+    
+    addButton.addEventListener('click', () => {
       const exercise = selector.value;
-      if (exercise) {
-        display.textContent = `You selected: ${exercise}`;
-      } else {
-        display.textContent = 'No exercise selected';
+      if (exercise && !handstandExercises.includes(exercise)) {
+        handstandExercises.push(exercise);
+        updateExerciseList();
+        selector.value = '';
       }
     });
+    
+    function updateExerciseList() {
+      exerciseList.innerHTML = '';
+      
+      handstandExercises.forEach((exercise, index) => {
+        const item = document.createElement('div');
+        item.className = 'exercise-item';
+        
+        const span = document.createElement('span');
+        span.textContent = exercise;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'button remove-btn';
+        removeBtn.textContent = 'Remove';
+        removeBtn.dataset.index = index;
+        
+        removeBtn.addEventListener('click', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          handstandExercises.splice(idx, 1);
+          updateExerciseList();
+        });
+        
+        item.appendChild(span);
+        item.appendChild(removeBtn);
+        exerciseList.appendChild(item);
+      });
+    }
   </script>
 </body>
 </html>
