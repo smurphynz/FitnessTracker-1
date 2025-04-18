@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Redirect</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .button {
+      display: block;
+      width: 90%;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .save-button {
+      background-color: red;
+      color: white;
+      border: 4px solid white;
+      box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.5);
+    }
+    .home-button {
+      background-color: #1A402B;
+      color: #FFEB3B;
+      border: 4px solid #FFEB3B;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .description {
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>EMERGENCY WORKOUT SAVER</h1>
+  
+  <div class="description">
+    This page provides direct access to save your workout data when the main application buttons are not visible.
+  </div>
+  
+  <a href="/emergency-save" class="button save-button">
+    SAVE WORKOUT NOW
+  </a>
+  
+  <a href="/" class="button home-button">
+    RETURN TO APP
+  </a>
+  
+  <script>
+    // Auto redirect to emergency save after 5 seconds if no action is taken
+    setTimeout(function() {
+      window.location.href = "/emergency-save";
+    }, 5000);
+  </script>
+</body>
+</html>
