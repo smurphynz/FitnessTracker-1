@@ -11,6 +11,107 @@
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Direct HTML Save Workout Button -->
+    <div id="direct-save-button" style="
+      position: fixed;
+      bottom: 30px;
+      left: 0;
+      right: 0;
+      z-index: 99999;
+      padding: 0 16px;
+      pointer-events: auto;
+    ">
+      <div style="
+        position: relative;
+        max-width: 400px;
+        margin: 0 auto;
+      ">
+        <div style="
+          position: absolute;
+          inset: -4px;
+          background: linear-gradient(to right, #FFEB3B, #FFC107);
+          border-radius: 8px;
+          opacity: 0.8;
+          filter: blur(4px);
+          animation: pulse 2s infinite;
+        "></div>
+        <button id="html-save-workout-button" style="
+          position: relative;
+          width: 100%;
+          background: linear-gradient(to right, #FFEB3B, #FFC107);
+          color: black;
+          font-weight: 900;
+          font-size: 24px;
+          padding: 16px;
+          border-radius: 8px;
+          border: 4px solid #FFEB3B;
+          box-shadow: 0 0 20px 5px rgba(255, 235, 59, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        ">
+          SAVE WORKOUT
+        </button>
+      </div>
+    </div>
+    
+    <style>
+      @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.6; }
+      }
+      
+      #direct-save-button {
+        font-family: sans-serif;
+      }
+    </style>
+    
+    <script>
+      // Connect HTML button to API
+      document.addEventListener('DOMContentLoaded', () => {
+        const saveButton = document.getElementById('html-save-workout-button');
+        if (saveButton) {
+          saveButton.addEventListener('click', async () => {
+            try {
+              // Create a simple workout object
+              const workout = {
+                date: new Date().toISOString().split('T')[0],
+                mobility: {
+                  completion: 'full-session'
+                },
+                handstand: {
+                  exercises: []
+                },
+                strength: {
+                  exercises: []
+                }
+              };
+              
+              // Send to API
+              const response = await fetch('/api/workouts', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(workout),
+              });
+              
+              if (response.ok) {
+                alert('Workout saved successfully!');
+              } else {
+                alert('Failed to save workout');
+              }
+            } catch (error) {
+              alert('Error saving workout');
+              console.error(error);
+            }
+          });
+        }
+      });
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
