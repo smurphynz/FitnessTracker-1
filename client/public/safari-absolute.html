@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Safari Absolute Path Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: white;
+      text-align: center;
+      background-color: #1A402B; /* Fallback color */
+    }
+    
+    .wrapper {
+      max-width: 100vw;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    #background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    
+    img.background {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+      margin: 50px auto;
+      width: 90%;
+      max-width: 600px;
+      background-color: rgba(34, 84, 61, 0.8);
+      border-radius: 15px;
+      border: 3px solid #FFEB3B;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    h1 {
+      color: #FFEB3B;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    
+    .save-button {
+      display: block;
+      margin: 40px auto;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      background-color: #FF0000;
+      color: white;
+      border: 4px solid white;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+      width: 80%;
+      max-width: 400px;
+    }
+    
+    .navigation {
+      margin-top: 40px;
+    }
+    
+    a {
+      color: #FFEB3B;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Fixed save button at bottom */
+    .fixed-button {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+      z-index: 1000;
+      background: linear-gradient(145deg, #3C825F, #22543D);
+      color: #FFEB3B;
+      padding: 20px 0;
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border: 4px solid #FFEB3B;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 235, 59, 0.4);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Direct embedding of background with absolute path -->
+    <div id="background-container">
+      <img src="/forest-background.png" class="background" alt="Forest">
+    </div>
+    
+    <div class="content">
+      <h1>Safari Absolute Path Test</h1>
+      
+      <p>This page tests using an absolute path to the background image, which is sometimes required for Safari.</p>
+      
+      <p>If you can see the forest background, great! If not, we'll try another approach.</p>
+      
+      <button class="save-button" onclick="saveEmergencyWorkout()">
+        SAVE WORKOUT
+      </button>
+      
+      <div class="navigation">
+        <a href="/">Home</a>
+        <a href="/safari-test.html">Safari Test</a>
+        <a href="/direct-forest.html">Forest Test</a>
+        <a href="/emergency-save">Emergency Save</a>
+      </div>
+    </div>
+    
+    <!-- Fixed save button at bottom -->
+    <button class="fixed-button" onclick="saveEmergencyWorkout()">
+      SAVE WORKOUT
+    </button>
+  </div>
+  
+  <script>
+    // Log the image loading status to help debug
+    document.querySelector('.background').addEventListener('load', function() {
+      console.log('Forest background loaded successfully!');
+    });
+    
+    document.querySelector('.background').addEventListener('error', function(e) {
+      console.error('Error loading background image:', e);
+      // Try alternative URL
+      this.src = '/forest-background.png?' + new Date().getTime();
+    });
+    
+    function saveEmergencyWorkout() {
+      alert('Attempting to save workout...');
+      
+      // Create a basic workout object
+      const workout = {
+        date: new Date().toISOString().split('T')[0],
+        weight: '70',
+        mobility: { completion: 'full-session' },
+        handstand: { exercises: [] },
+        strength: { exercises: [] }
+      };
+      
+      // Send to API
+      fetch('/api/workouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(workout)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('SUCCESS: Workout saved!');
+        } else {
+          alert('ERROR: Failed to save workout');
+        }
+      })
+      .catch(error => {
+        alert('ERROR: ' + error.message);
+      });
+    }
+  </script>
+</body>
+</html>
