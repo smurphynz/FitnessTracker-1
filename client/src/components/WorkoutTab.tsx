@@ -114,7 +114,7 @@ export default function WorkoutTab({
       
       {/* Save Workout Button */}
       <Button 
-        className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium text-lg py-7 h-auto rounded-lg shadow-lg"
+        className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium text-lg py-7 h-auto rounded-lg shadow-lg border border-[#FFEB3B]/50"
         onClick={handleSaveWorkout}
       >
         Save Workout

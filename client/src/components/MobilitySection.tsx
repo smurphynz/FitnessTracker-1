@@ -21,7 +21,7 @@ export default function MobilitySection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-[#FFEB3B] pb-1">Mobility Training</span>
+        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Mobility Training</span>
       </h2>
       
       <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">

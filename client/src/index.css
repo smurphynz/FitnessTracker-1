@@ -10,7 +10,7 @@
   body {
     @apply font-sans antialiased text-white;
     background-color: #1A402B;
-    background-image: url('/images/forest-background.png');
+    background-image: url('/assets/forest-background.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -19,6 +19,7 @@
 
   .forest-panel {
     @apply bg-opacity-75 bg-forest-900 backdrop-blur-sm border border-[#FFEB3B]/20 shadow-lg;
+    box-shadow: 0 0 15px rgba(255, 235, 59, 0.1);
   }
 
   .tab-active {
