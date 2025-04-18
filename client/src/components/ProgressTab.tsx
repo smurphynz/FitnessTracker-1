@@ -10,7 +10,7 @@ export default function ProgressTab({ workouts }: ProgressTabProps) {
     <div id="progress-content" className="flex flex-col space-y-4">
       <div className="forest-panel rounded-lg p-4">
         <h2 className="text-xl font-semibold text-center mb-3">
-          <span className="border-b-2 border-accent pb-1">Workout History</span>
+          <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Workout History</span>
         </h2>
         
         {/* Workout History List */}

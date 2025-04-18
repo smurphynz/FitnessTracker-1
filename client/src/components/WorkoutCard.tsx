@@ -26,9 +26,9 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
   };
 
   return (
-    <div className="bg-forest-800 rounded-lg p-3">
+    <div className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3 shadow-md">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium">{formattedDate}</h3>
+        <h3 className="font-medium text-[#FFEB3B]">{formattedDate}</h3>
         {workout.weight && <span className="text-sm">{workout.weight} kg</span>}
       </div>
       

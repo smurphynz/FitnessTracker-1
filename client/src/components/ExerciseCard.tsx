@@ -21,7 +21,9 @@ export default function ExerciseCard({
     <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-medium text-[#FFEB3B]">{exercise.name}</h3>
-        <span className={`text-xs px-2 py-1 rounded-full ${exercise.isTimeBased ? 'bg-green-500' : 'bg-blue-500'}`}>
+        <span className={`text-xs px-2 py-1 rounded-full border ${exercise.isTimeBased 
+          ? 'bg-green-500/70 backdrop-blur-sm border-green-400' 
+          : 'bg-blue-500/70 backdrop-blur-sm border-blue-400'}`}>
           {exercise.isTimeBased ? 'Time-based' : 'Rep-based'}
         </span>
       </div>
@@ -59,7 +61,7 @@ export default function ExerciseCard({
         <Button 
           variant="outline"
           size="sm"
-          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium" 
+          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium border border-[#FFEB3B]/50" 
           onClick={onAddSet}
         >
           + Add Set
