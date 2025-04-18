@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface MobilitySectionProps {
   lastMobilityDay: number | null;
@@ -64,6 +65,31 @@ export default function MobilitySection({
               <SelectItem value="not-completed">Not Completed</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        
+        {/* Exercise Completion Button */}
+        <div className="mt-4">
+          <Button 
+            className={`w-full py-4 font-medium ${
+              mobilityCompletion !== 'not-completed' 
+                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+                : 'bg-forest-700 hover:bg-forest-600'
+            }`}
+            onClick={() => {
+              const nextState = mobilityCompletion === 'not-completed'
+                ? 'half-session'
+                : mobilityCompletion === 'half-session'
+                  ? 'full-session'
+                  : 'not-completed';
+              setMobilityCompletion(nextState);
+            }}
+          >
+            {mobilityCompletion === 'not-completed' 
+              ? 'Mark Exercise Day Completed' 
+              : mobilityCompletion === 'half-session'
+                ? 'Half Session Completed ✓' 
+                : 'Full Session Completed ✓'}
+          </Button>
         </div>
       </div>
     </section>

@@ -16,6 +16,7 @@ export default function HandstandSection({
   setHandstandExercises
 }: HandstandSectionProps) {
   const [selectedExercise, setSelectedExercise] = useState<string>("");
+  const [handstandCompleted, setHandstandCompleted] = useState<boolean>(false);
   
   const handleAddExercise = () => {
     if (selectedExercise && !selectedExercises.includes(selectedExercise)) {
@@ -77,6 +78,22 @@ export default function HandstandSection({
           disabled={!selectedExercise}
         >
           Add
+        </Button>
+      </div>
+      
+      {/* Exercise Completion Button */}
+      <div className="mt-4">
+        <Button 
+          className={`w-full py-4 font-medium ${
+            handstandCompleted 
+              ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+              : 'bg-forest-700 hover:bg-forest-600'
+          }`}
+          onClick={() => setHandstandCompleted(!handstandCompleted)}
+        >
+          {handstandCompleted 
+            ? 'Handstand Training Completed ✓' 
+            : 'Mark Exercise Day Completed'}
         </Button>
       </div>
     </section>
