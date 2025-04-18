@@ -111,8 +111,8 @@ export default function WorkoutTab({
         setStrengthExercises={setStrengthExercises}
       />
       
-      {/* Save Button - Now with high-contrast RED styling */}
-      <div className="mt-10 mb-20">
+      {/* Save Button - Fixed position high-contrast RED */}
+      <div className="save-btn-container">
         <button
           onClick={handleSaveWorkout}
           id="save-workout-button"
