@@ -91,45 +91,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Save to database
       const savedWorkout = await storage.createWorkout(workout);
       
-      // Return simple HTML response - no React
+      // Return ultra-minimal HTML response for Safari compatibility
       res.send(`
         <!DOCTYPE html>
         <html>
           <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Emergency Save</title>
             <style>
               body {
-                font-family: Arial, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
                 text-align: center;
-                padding: 50px;
-                background-color: #1A402B;
+                padding: 20px;
+                margin: 0;
+                background-color: #22543D;
                 color: white;
               }
-              .success {
-                color: #4CAF50;
+              .container {
+                max-width: 500px;
+                margin: 30px auto;
+                padding: 20px;
+                background-color: rgba(34, 84, 61, 0.7);
+                border: 2px solid #FFEB3B;
+                border-radius: 10px;
+              }
+              h1 {
+                color: #FFEB3B;
                 font-size: 24px;
                 margin-bottom: 20px;
               }
+              .success-message {
+                background-color: #4CAF50;
+                color: white;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 18px;
+              }
+              .detail {
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 10px;
+                margin: 10px 0;
+                border-radius: 5px;
+              }
               .button {
                 display: inline-block;
-                padding: 10px 20px;
+                padding: 12px 25px;
                 background-color: #FFEB3B;
-                color: black;
+                color: #333;
                 text-decoration: none;
                 border-radius: 5px;
                 font-weight: bold;
                 margin: 10px;
+                border: none;
+              }
+              .button:hover {
+                background-color: #FDD835;
+              }
+              .button.secondary {
+                background-color: #4CAF50;
+                color: white;
               }
             </style>
           </head>
           <body>
-            <h1>Emergency Save Function</h1>
-            <div class="success">✅ Workout saved successfully!</div>
-            <p>Saved workout ID: ${savedWorkout.id}</p>
-            <p>Date: ${workout.date}</p>
-            <div>
-              <a class="button" href="/">Return to App</a>
-              <a class="button" href="/emergency-save">Save Another</a>
+            <div class="container">
+              <h1>Emergency Save Function</h1>
+              <div class="success-message">✅ Workout saved successfully!</div>
+              <div class="detail">Saved workout ID: ${savedWorkout.id}</div>
+              <div class="detail">Date: ${workout.date}</div>
+              <div class="detail">Mobility: Full Session</div>
+              <div>
+                <a class="button" href="/">Return to App</a>
+                <a class="button secondary" href="/emergency-save">Save Another</a>
+              </div>
+              <div style="margin-top: 20px">
+                <a class="button" href="/redirect-save.html">More Save Options</a>
+              </div>
             </div>
           </body>
         </html>
@@ -140,39 +180,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Emergency Save</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Emergency Save - Error</title>
             <style>
               body {
-                font-family: Arial, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
                 text-align: center;
-                padding: 50px;
-                background-color: #1A402B;
+                padding: 20px;
+                margin: 0;
+                background-color: #22543D;
                 color: white;
               }
-              .error {
-                color: #f44336;
+              .container {
+                max-width: 500px;
+                margin: 30px auto;
+                padding: 20px;
+                background-color: rgba(34, 84, 61, 0.7);
+                border: 2px solid #FFEB3B;
+                border-radius: 10px;
+              }
+              h1 {
+                color: #FFEB3B;
                 font-size: 24px;
                 margin-bottom: 20px;
               }
+              .error-message {
+                background-color: #F44336;
+                color: white;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 18px;
+              }
+              .detail {
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 10px;
+                margin: 10px 0;
+                border-radius: 5px;
+              }
               .button {
                 display: inline-block;
-                padding: 10px 20px;
+                padding: 12px 25px;
                 background-color: #FFEB3B;
-                color: black;
+                color: #333;
                 text-decoration: none;
                 border-radius: 5px;
                 font-weight: bold;
                 margin: 10px;
+                border: none;
+              }
+              .button:hover {
+                background-color: #FDD835;
+              }
+              .button.retry {
+                background-color: #F44336;
+                color: white;
               }
             </style>
           </head>
           <body>
-            <h1>Emergency Save Function</h1>
-            <div class="error">❌ Failed to save workout</div>
-            <p>Error: ${error instanceof Error ? error.message : 'Unknown error'}</p>
-            <div>
-              <a class="button" href="/">Return to App</a>
-              <a class="button" href="/emergency-save">Try Again</a>
+            <div class="container">
+              <h1>Emergency Save Function</h1>
+              <div class="error-message">❌ Failed to save workout</div>
+              <div class="detail">Error: ${error instanceof Error ? error.message : 'Unknown error'}</div>
+              <div>
+                <a class="button" href="/">Return to App</a>
+                <a class="button retry" href="/emergency-save">Try Again</a>
+              </div>
+              <div style="margin-top: 20px">
+                <a class="button" href="/redirect-save.html">Other Save Options</a>
+              </div>
             </div>
           </body>
         </html>
