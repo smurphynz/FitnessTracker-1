@@ -32,7 +32,7 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
               <Input 
                 type="date" 
                 id="workout-date" 
-                className="bg-forest-800 rounded px-2 py-1 text-sm h-auto w-auto" 
+                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded px-2 py-1 text-sm h-auto w-auto" 
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
@@ -45,7 +45,7 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
                 type="number" 
                 id="weight-input" 
                 placeholder="kg" 
-                className="bg-forest-800 rounded w-16 px-2 py-1 text-sm h-auto" 
+                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded w-16 px-2 py-1 text-sm h-auto" 
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 step="0.1"

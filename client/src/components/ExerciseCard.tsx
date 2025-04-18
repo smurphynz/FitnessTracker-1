@@ -33,7 +33,7 @@ export default function ExerciseCard({
             <span className="text-sm text-[#FFEB3B]">Set {setIndex + 1}:</span>
             <Input 
               type="number" 
-              className="bg-forest-700 w-16 rounded p-1 text-sm" 
+              className="bg-forest-700 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 w-16 rounded p-1 text-sm" 
               value={set.value}
               onChange={(e) => onUpdateSetValue(setIndex, parseInt(e.target.value) || 0)}
               min={1}

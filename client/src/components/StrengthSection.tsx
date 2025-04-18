@@ -89,7 +89,7 @@ export default function StrengthSection({
         <Input 
           type="number" 
           id="strength-day" 
-          className="w-full bg-forest-800 rounded p-2" 
+          className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
           value={strengthDay === undefined ? '' : strengthDay}
           onChange={(e) => {
             const value = e.target.value;
@@ -120,7 +120,7 @@ export default function StrengthSection({
         <div>
           <Label htmlFor="strength-exercise" className="block text-sm font-medium mb-1">Add Exercise</Label>
           <Select value={selectedExercise} onValueChange={setSelectedExercise}>
-            <SelectTrigger id="strength-exercise" className="w-full bg-forest-800 rounded">
+            <SelectTrigger id="strength-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
               <SelectValue placeholder="Choose exercise" />
             </SelectTrigger>
             <SelectContent className="bg-forest-800">

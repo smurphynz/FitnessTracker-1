@@ -62,7 +62,7 @@ export default function HandstandSection({
         <div className="flex-grow">
           <Label htmlFor="handstand-exercise" className="block text-sm font-medium mb-1">Add Exercise</Label>
           <Select value={selectedExercise} onValueChange={setSelectedExercise}>
-            <SelectTrigger id="handstand-exercise" className="w-full bg-forest-800 rounded">
+            <SelectTrigger id="handstand-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
               <SelectValue placeholder="Choose exercise" />
             </SelectTrigger>
             <SelectContent className="bg-forest-800">
