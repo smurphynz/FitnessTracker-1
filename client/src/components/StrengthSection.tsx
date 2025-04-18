@@ -75,7 +75,7 @@ export default function StrengthSection({
         <span className="border-b-2 border-[#FFEB3B] pb-1">CaliMove Level 2</span>
       </h2>
       
-      <div className="bg-forest-800 rounded-md mb-3 p-2 text-center">
+      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
         <p className="text-sm">
           Last CaliMove Strength Day: 
           <span className="font-medium text-[#FFEB3B] ml-1">

@@ -24,7 +24,7 @@ export default function MobilitySection({
         <span className="border-b-2 border-[#FFEB3B] pb-1">Mobility Training</span>
       </h2>
       
-      <div className="bg-forest-800 rounded-md mb-3 p-2 text-center">
+      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
         <p className="text-sm">
           Last Mobility Day: 
           <span className="font-medium text-[#FFEB3B] ml-1">
@@ -39,7 +39,7 @@ export default function MobilitySection({
           <Input 
             type="number" 
             id="mobility-day" 
-            className="w-full bg-forest-800 rounded p-2" 
+            className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
             value={mobilityDay === undefined ? '' : mobilityDay}
             onChange={(e) => {
               const value = e.target.value;
@@ -56,7 +56,7 @@ export default function MobilitySection({
               setMobilityCompletion(value)
             }
           >
-            <SelectTrigger id="mobility-completion" className="w-full bg-forest-800 rounded">
+            <SelectTrigger id="mobility-completion" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
               <SelectValue placeholder="Select completion level" />
             </SelectTrigger>
             <SelectContent className="bg-forest-800">

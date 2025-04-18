@@ -18,7 +18,7 @@ export default function ExerciseCard({
   onRemoveExercise
 }: ExerciseCardProps) {
   return (
-    <div className="bg-forest-800 rounded-lg p-3">
+    <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-medium text-[#FFEB3B]">{exercise.name}</h3>
         <span className={`text-xs px-2 py-1 rounded-full ${exercise.isTimeBased ? 'bg-green-500' : 'bg-blue-500'}`}>
