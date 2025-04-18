@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal Save Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background-color: #22543D;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin: 20px 0;
+      color: #FFEB3B;
+    }
+    
+    .save-btn {
+      display: block;
+      width: 90%;
+      max-width: 300px;
+      margin: 30px auto;
+      padding: 15px;
+      background-color: #FF0000;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border: 3px solid white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    
+    .success {
+      background-color: #4CAF50;
+      padding: 15px;
+      margin: 20px auto;
+      border-radius: 8px;
+      max-width: 300px;
+      display: none;
+    }
+    
+    .error {
+      background-color: #F44336;
+      padding: 15px;
+      margin: 20px auto;
+      border-radius: 8px;
+      max-width: 300px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Emergency Workout Save</h1>
+  
+  <p>Click the button below to save a basic workout</p>
+  
+  <button id="saveBtn" class="save-btn">SAVE WORKOUT NOW</button>
+  
+  <div id="success" class="success">
+    Workout saved successfully!
+  </div>
+  
+  <div id="error" class="error">
+    Error saving workout.
+  </div>
+  
+  <script>
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      var workout = {
+        date: new Date().toISOString().split('T')[0],
+        weight: '70',
+        mobility: { completion: 'full-session' },
+        handstand: { exercises: [] },
+        strength: { exercises: [] }
+      };
+      
+      fetch('/api/workouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(workout)
+      })
+      .then(function(response) {
+        if (response.ok) {
+          document.getElementById('success').style.display = 'block';
+          document.getElementById('error').style.display = 'none';
+        } else {
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('success').style.display = 'none';
+        }
+      })
+      .catch(function(error) {
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('success').style.display = 'none';
+        console.error('Error:', error);
+      });
+    });
+  </script>
+</body>
+</html>
