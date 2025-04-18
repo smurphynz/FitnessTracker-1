@@ -445,6 +445,24 @@
             <option value="Wrist Prep">Wrist Prep</option>
           </select>
           
+          <script>
+            // Sort handstand dropdown options alphabetically
+            const handstandSel = document.getElementById('handstand-selector');
+            const defaultOption = handstandSel.options[0]; // Keep the first "Select" option
+            const sortedOptions = Array.from(handstandSel.options)
+              .slice(1) // Skip the first default option
+              .sort((a, b) => a.text.localeCompare(b.text));
+            
+            // Clear the select
+            handstandSel.innerHTML = '';
+            
+            // Add back the default option
+            handstandSel.add(defaultOption);
+            
+            // Add the sorted options
+            sortedOptions.forEach(option => handstandSel.add(option));
+          </script>
+          
           <div id="handstand-exercises" class="handstand-list">
             <!-- Handstand exercises will be added here -->
           </div>
