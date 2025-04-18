@@ -82,6 +82,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
   });
   
+  // Serve the forest app at the standalone route
+  app.get("/standalone", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/standalone/index.html"));
+  });
+  
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
