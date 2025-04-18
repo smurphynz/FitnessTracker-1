@@ -2,10 +2,8 @@ import { useState } from "react";
 import MobilitySection from "./MobilitySection";
 import HandstandSection from "./HandstandSection";
 import StrengthSection from "./StrengthSection";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Workout, Exercise } from "@shared/schema";
-import SaveWorkoutButton from "./SaveWorkoutButton";
 
 interface WorkoutTabProps {
   date: string;
@@ -88,7 +86,7 @@ export default function WorkoutTab({
   };
 
   return (
-    <div id="workout-content" className="flex flex-col space-y-4 pb-20">
+    <div id="workout-content" className="flex flex-col space-y-4 pb-20" style={{ overflow: "visible" }}>
       {/* Mobility Section */}
       <MobilitySection 
         lastMobilityDay={lastMobilityDay}
@@ -113,18 +111,30 @@ export default function WorkoutTab({
         setStrengthExercises={setStrengthExercises}
       />
       
-      {/* In-page Save Button */}
-      <div className="mt-10 mb-20 relative">
-        <Button 
-          className="relative w-full bg-gradient-to-r from-[#FFEB3B] to-[#FFC107] hover:from-[#FFC107] hover:to-[#FFD700] text-forest-900 font-extrabold text-2xl py-7 h-auto rounded-lg shadow-xl border-2 border-[#FFEB3B] flex items-center justify-center"
+      {/* Save Button - Simple, Clean Implementation */}
+      <div className="mt-10 mb-20 flex justify-center">
+        <button
           onClick={handleSaveWorkout}
+          id="save-workout-button"
+          style={{
+            background: "#FFEB3B",
+            color: "black",
+            fontSize: "16px",
+            padding: "12px 24px",
+            borderRadius: "8px",
+            marginTop: "40px",
+            display: "block",
+            border: "none",
+            cursor: "pointer",
+            fontWeight: "bold",
+            width: "200px",
+            textAlign: "center",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+          }}
         >
           SAVE WORKOUT
-        </Button>
+        </button>
       </div>
-
-      {/* Fixed Position Save Button */}
-      <SaveWorkoutButton onClick={handleSaveWorkout} />
     </div>
   );
 }
