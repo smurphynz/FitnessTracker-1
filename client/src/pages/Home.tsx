@@ -96,7 +96,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen pb-16 relative z-0">
+    <div className="flex flex-col min-h-screen relative" style={{ overflow: 'visible' }}>
       <Header 
         date={date} 
         setDate={setDate} 
@@ -109,7 +109,7 @@ export default function Home() {
         setActiveTab={setActiveTab} 
       />
       
-      <main className="flex-1 container mx-auto px-4 pb-24">
+      <main className="flex-1 container mx-auto px-4 pb-28" style={{ overflow: 'visible' }}>
         {activeTab === "workout" ? (
           <WorkoutTab 
             date={date}
