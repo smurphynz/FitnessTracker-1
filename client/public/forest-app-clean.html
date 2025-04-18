@@ -431,42 +431,19 @@
           
           <select id="handstand-selector">
             <option value="">Select handstand exercise</option>
+            <option value="Back to Wall Hold">Back to Wall Hold</option>
+            <option value="Box Hold">Box Hold</option>
+            <option value="Face to Wall Hold">Face to Wall Hold</option>
+            <option value="Freestanding Practice">Freestanding Practice</option>
+            <option value="Kick Ups">Kick Ups</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Shape Changes">Shape Changes</option>
+            <option value="Shoulder Taps">Shoulder Taps</option>
+            <option value="Splits">Splits</option>
+            <option value="Uneven Hands">Uneven Hands</option>
+            <option value="Wall Walk">Wall Walk</option>
+            <option value="Wrist Prep">Wrist Prep</option>
           </select>
-          
-          <script>
-            // Define the exercises array - exact same code as handstand-test.html that works correctly
-            const dropdownExercises = [
-              "Back to Wall Hold",
-              "Box Hold",
-              "Face to Wall Hold",
-              "Freestanding Practice",
-              "Kick Ups",
-              "Mexican",
-              "Shape Changes",
-              "Shoulder Taps",
-              "Splits",
-              "Uneven Hands",
-              "Wall Walk",
-              "Wrist Prep"
-            ];
-            
-            // Sort the array alphabetically
-            dropdownExercises.sort();
-            
-            // Output to console for debugging
-            console.log("Handstand exercises for dropdown:", dropdownExercises);
-            
-            // Get the selector element
-            const handstandSel = document.getElementById('handstand-selector');
-            
-            // Populate the dropdown with options - same approach as test page
-            dropdownExercises.forEach(exercise => {
-              const option = document.createElement('option');
-              option.value = exercise;
-              option.textContent = exercise;
-              handstandSel.appendChild(option);
-            });
-          </script>
           
           <div id="handstand-exercises" class="handstand-list">
             <!-- Handstand exercises will be added here -->
