@@ -20,13 +20,13 @@ export default function MobilitySection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-accent pb-1">Mobility Training</span>
+        <span className="border-b-2 border-[#FFEB3B] pb-1">Mobility Training</span>
       </h2>
       
       <div className="bg-forest-800 rounded-md mb-3 p-2 text-center">
         <p className="text-sm">
           Last Mobility Day: 
-          <span className="font-medium text-accent ml-1">
+          <span className="font-medium text-[#FFEB3B] ml-1">
             {lastMobilityDay !== null ? lastMobilityDay : "None"}
           </span>
         </p>

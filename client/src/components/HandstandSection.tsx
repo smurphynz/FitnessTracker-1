@@ -31,7 +31,7 @@ export default function HandstandSection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-accent pb-1">Handstand Training</span>
+        <span className="border-b-2 border-[#FFEB3B] pb-1">Handstand Training</span>
       </h2>
       
       {/* Selected exercises */}
@@ -72,7 +72,7 @@ export default function HandstandSection({
           </Select>
         </div>
         <Button 
-          className="bg-accent text-forest-900 font-medium" 
+          className="bg-[#FFEB3B] text-forest-900 font-medium" 
           onClick={handleAddExercise}
           disabled={!selectedExercise}
         >

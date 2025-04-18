@@ -20,7 +20,7 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
     <header className="forest-panel sticky top-0 z-10 shadow-md">
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-col items-center">
-          <h1 className="text-2xl font-bold text-accent">
+          <h1 className="text-2xl font-bold text-[#FFEB3B]">
             Sean's Cali Fitness Tracker
           </h1>
           
