@@ -198,6 +198,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.send(content);
   });
   
+  // Entirely new route with fixed HTML for Safari users
+  app.get("/finalversion", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    
+    // Send the new implementation file
+    res.sendFile(path.resolve(process.cwd(), "server/public/final_fresh.html"));
+  });
+  
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
     // Add extreme cache-busting headers for Safari
