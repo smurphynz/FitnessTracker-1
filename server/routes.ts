@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { workoutSchema, Workout } from "@shared/schema";
 import { z } from "zod";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes for the fitness tracker
@@ -74,6 +75,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch last strength day" });
     }
+  });
+  
+  // Serve the forest app as the main app
+  app.get("/forest-app", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
+  });
+  
+  // Also serve the forest app at the root route with higher priority than Vite
+  app.get("/", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
   });
   
   // Emergency Save API endpoint - can be accessed directly through a browser

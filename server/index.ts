@@ -47,10 +47,14 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  // Always serve static files first
+  app.use(express.static('server/public'));
+  
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
+    // Customize the setupVite to not override our main route
     await setupVite(app, server);
   } else {
     serveStatic(app);
