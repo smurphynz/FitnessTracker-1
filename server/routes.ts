@@ -83,6 +83,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
   });
   
+  // Safari-specific route with different filename to avoid caching issues
+  app.get("/safari", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    res.sendFile(path.resolve(process.cwd(), "server/public/safari_index.html"));
+  });
+  
   // Serve the forest app at the standalone route
   app.get("/standalone", (req: Request, res: Response) => {
     // Add extreme cache-busting headers for Safari
