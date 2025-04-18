@@ -75,6 +75,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch last strength day" });
     }
   });
+  
+  // Emergency Save API endpoint - can be accessed directly through a browser
+  app.get("/emergency-save", async (req: Request, res: Response) => {
+    try {
+      // Create a minimal workout
+      const workout: Workout = {
+        date: new Date().toISOString().split('T')[0],
+        weight: "70",
+        mobility: { completion: "full-session" },
+        handstand: { exercises: [] },
+        strength: { exercises: [] }
+      };
+      
+      // Save to database
+      const savedWorkout = await storage.createWorkout(workout);
+      
+      // Return simple HTML response - no React
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Emergency Save</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                padding: 50px;
+                background-color: #1A402B;
+                color: white;
+              }
+              .success {
+                color: #4CAF50;
+                font-size: 24px;
+                margin-bottom: 20px;
+              }
+              .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #FFEB3B;
+                color: black;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                margin: 10px;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Emergency Save Function</h1>
+            <div class="success">✅ Workout saved successfully!</div>
+            <p>Saved workout ID: ${savedWorkout.id}</p>
+            <p>Date: ${workout.date}</p>
+            <div>
+              <a class="button" href="/">Return to App</a>
+              <a class="button" href="/emergency-save">Save Another</a>
+            </div>
+          </body>
+        </html>
+      `);
+    } catch (error) {
+      console.error("Emergency save failed:", error);
+      res.status(500).send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Emergency Save</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                padding: 50px;
+                background-color: #1A402B;
+                color: white;
+              }
+              .error {
+                color: #f44336;
+                font-size: 24px;
+                margin-bottom: 20px;
+              }
+              .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #FFEB3B;
+                color: black;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                margin: 10px;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Emergency Save Function</h1>
+            <div class="error">❌ Failed to save workout</div>
+            <p>Error: ${error instanceof Error ? error.message : 'Unknown error'}</p>
+            <div>
+              <a class="button" href="/">Return to App</a>
+              <a class="button" href="/emergency-save">Try Again</a>
+            </div>
+          </body>
+        </html>
+      `);
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
