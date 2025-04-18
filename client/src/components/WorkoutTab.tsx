@@ -111,27 +111,12 @@ export default function WorkoutTab({
         setStrengthExercises={setStrengthExercises}
       />
       
-      {/* Save Button - Simple, Clean Implementation */}
-      <div className="mt-10 mb-20 flex justify-center" style={{ opacity: 1 }}>
+      {/* Save Button - Now with high-contrast RED styling */}
+      <div className="mt-10 mb-20">
         <button
           onClick={handleSaveWorkout}
           id="save-workout-button"
-          style={{
-            backgroundColor: "#FFEB3B",
-            color: "black",
-            fontSize: "16px",
-            padding: "12px 24px",
-            borderRadius: "8px",
-            marginTop: "40px",
-            display: "block",
-            border: "2px solid black",
-            cursor: "pointer",
-            fontWeight: "bold",
-            width: "200px",
-            textAlign: "center",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-            opacity: 1
-          }}
+          className="save-workout-btn"
         >
           SAVE WORKOUT
         </button>
