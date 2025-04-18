@@ -11,6 +11,69 @@
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Emergency Save Button -->
+    <button 
+      id="emergency-save-button"
+      style="
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #FFEB3B;
+        color: #000;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        z-index: 9999999;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        font-weight: bold;
+        min-width: 200px;
+        text-align: center;
+        font-family: system-ui, sans-serif;
+        display: block;
+      "
+    >
+      SAVE WORKOUT (EMERGENCY)
+    </button>
+    
+    <script>
+      // Ensure the emergency save button works
+      document.addEventListener('DOMContentLoaded', () => {
+        const emergencyButton = document.getElementById('emergency-save-button');
+        if (emergencyButton) {
+          emergencyButton.addEventListener('click', async () => {
+            try {
+              // Simple workout object
+              const workout = {
+                date: new Date().toISOString().split('T')[0],
+                mobility: { completion: 'full-session' },
+                handstand: { exercises: [] },
+                strength: { exercises: [] }
+              };
+              
+              // Send to API
+              const response = await fetch('/api/workouts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(workout)
+              });
+              
+              if (response.ok) {
+                alert('Workout saved successfully!');
+              } else {
+                alert('Failed to save workout');
+              }
+            } catch (error) {
+              alert('Error saving workout');
+            }
+          });
+        }
+      });
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
