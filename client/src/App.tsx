@@ -15,18 +15,17 @@ function Router() {
 
 function App() {
   return (
-    <div>
+    <>
       <Router />
       
-      {/* Link to emergency button page */}
-      <div style={{
+      {/* Special utility class overriding any Tailwind issues */}
+      <div className="emergency-visible" style={{
         position: "fixed",
-        top: "10px",
-        right: "10px",
-        zIndex: 999999
+        top: "100px",
+        right: "10px"
       }}>
         <a 
-          href="/emergency_button.html" 
+          href="/bare_minimum.html" 
           style={{
             backgroundColor: "red",
             color: "white",
@@ -38,15 +37,44 @@ function App() {
             border: "2px solid white"
           }}
         >
-          EMERGENCY SAVE
+          VISIT SAVE PAGE
         </a>
       </div>
       
+      {/* Direct DOM button with maximum z-index */}
       <button
-        onClick={() => alert("Save clicked")}
+        onClick={() => {
+          alert("Save clicked");
+          // Basic workout data
+          const workout = {
+            date: new Date().toISOString().split('T')[0],
+            weight: "70",
+            mobility: { day: 1, completion: "full-session" },
+            handstand: { exercises: [] },
+            strength: { day: 1, exercises: [] }
+          };
+          
+          // Send to API
+          fetch('/api/workouts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(workout)
+          })
+          .then(response => {
+            if (response.ok) {
+              alert("SUCCESS: Workout saved!");
+            } else {
+              alert("Failed to save workout");
+            }
+          })
+          .catch(error => {
+            alert("Error: " + error.message);
+          });
+        }}
+        className="emergency-visible"
         style={{
           position: "fixed",
-          bottom: "40px",
+          bottom: "100px",
           left: "50%",
           transform: "translateX(-50%)",
           backgroundColor: "#FF0000",
@@ -55,14 +83,15 @@ function App() {
           fontWeight: "bold",
           padding: "16px 32px",
           borderRadius: "10px",
-          zIndex: 99999,
           border: "4px solid white",
-          boxShadow: "0px 0px 20px 5px rgba(255,255,255,0.8)"
+          boxShadow: "0px 0px 20px 5px rgba(255,255,255,0.8)",
+          width: "80%",
+          textAlign: "center"
         }}
       >
-        SAVE WORKOUT (TEST)
+        SAVE WORKOUT NOW
       </button>
-    </div>
+    </>
   );
 }
 

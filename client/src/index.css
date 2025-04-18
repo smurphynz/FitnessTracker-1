@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Critical override for Tailwind - must be after imports */
+@layer utilities {
+  .emergency-visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: fixed !important;
+    z-index: 9999999 !important;
+  }
+}
+
 /* Global override to ensure fixed elements are visible */
 html, body {
   overflow: visible !important;
