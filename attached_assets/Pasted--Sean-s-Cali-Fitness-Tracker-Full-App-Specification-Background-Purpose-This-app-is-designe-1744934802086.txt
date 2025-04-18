@@ -1,0 +1,162 @@
+🌲 Sean's Cali Fitness Tracker – Full App Specification
+
+🧭 Background & Purpose
+This app is designed for daily logging and progress tracking of my calisthenics-based workout routine using the CaliMove program. I follow:
+
+Move 2.0 (Mobility Program) – ~210 days
+Complete Calisthenics Level 2 – ~130 days
+Additional handstand skill work and bodyweight strength training
+Workouts are done in a gym or minimal equipment setup, usually on phone.
+Tracking is done during workouts (not after) to stay focused and log set-by-set.
+
+Key goals:
+
+See which Mobility/Strength Day I last completed
+Log each exercise and set individually
+Track bodyweight over time
+Quickly check past workouts
+Maintain a clean, motivating mobile UI
+🧩 Core Features
+
+🟢 Log daily workouts
+🟢 Track Mobility, Handstand, Strength training
+🟢 Support both rep-based and time-based exercises
+🟢 See previously completed CaliMove day for Mobility and Strength
+🟢 Record different reps per set
+🟢 Bodyweight input
+🟢 View past workouts in Progress Tracker
+🟢 Offline-friendly (PWA)
+🎨 Visual Design
+
+Theme: Forest
+Background: Dark green with subtle forest imagery
+Accent colour: Yellow (#FFEB3B)
+UI panels: Semi-transparent, rounded corners
+Mobile-first: Easy to tap inputs, large buttons, readable layout
+Headings centered and clear:
+Mobility Training
+Handstand Training
+CaliMove Level 2
+🧪 Data Structure
+
+interface Exercise {
+  name: string;
+  isTimeBased: boolean;
+  sets: {
+    value: number; // seconds or reps
+  }[];
+}
+
+interface Workout {
+  date: string;
+  weight: string;
+  mobility: {
+    dayNumber?: number;
+    completion: 'not-completed' | 'half-session' | 'full-session';
+  };
+  handstand: {
+    exercises: string[]; // Names only
+  };
+  strength: {
+    dayNumber?: number;
+    exercises: Exercise[];
+  };
+}
+🧘 Mobility Training (Section 1)
+
+Heading: Mobility Training
+Inputs:
+Day Number (integer)
+Completion Level dropdown:
+Full Session
+Half Session
+Not Completed
+Display:
+Show most recently logged Mobility Day at top:
+Last Mobility Day: 23
+🤸 Handstand Training (Section 2)
+
+Heading: Handstand Training
+Track only exercise names
+Dropdown list (alphabetical):
+- Back to Wall Hold
+- Box Hold
+- Face to Wall Hold
+- Freestanding Practice
+- Kick Ups
+- Mexican
+- Shape Changes
+- Shoulder Taps
+- Splits
+- Uneven Hands
+- Wall Walk
+- Wrist Prep
+💪 CaliMove Level 2 (Section 3 – Strength Training)
+
+Heading: CaliMove Level 2
+Inputs:
+Day Number (integer)
+Dropdown of exercises (alphabetical)
+For each exercise:
+Number of sets
+Reps or Seconds (depending on type)
+Display:
+Show most recently logged CaliMove Strength Day:
+Last CaliMove Strength Day: 47
+⏱ Time-based Exercises:
+- Active Hangs
+- Arch Up Hold
+- Deep Squat Hold
+- Hollow Body Hold
+- Horse Stance
+- Pike Stand
+🔁 Rep-based Exercises:
+- Archer Bodyrow
+- Archer Squat
+- Bodyrow
+- Dip
+- Elevated Pistol Squat
+- Hollow Body Crunch
+- Jumping Squat
+- Lying Knee Twist
+- Pull-Up
+- Push-Up
+- Side to Side Push Up
+- SL Glute Bridge Raise
+- Step Up
+- Swimmer
+⚖️ Weight Tracking
+
+Input field at top, near date
+Accepts format like 72.8
+Label: Weight
+Small and mobile-optimised
+📈 Progress Tracker (Workout History & Stats)
+
+Minimum Features:
+Show list of past workouts by date
+For each workout:
+Date
+Weight
+Mobility:
+Day Number + Completion
+Handstand:
+Exercises listed
+Strength:
+Day Number
+Exercises
+Each set’s reps or seconds clearly listed
+Optional Future Features:
+Line chart of weight over time
+Exercise totals (e.g., total pull-up reps to date)
+Filters by section or exercise name
+Auto-suggest next Day Number (based on last saved)
+✅ Success Criteria
+
+ Time vs. rep-based exercises displayed correctly
+ Each set can have different number of reps/seconds
+ UI shows last completed day for Mobility and Strength
+ Exercise dropdowns sorted alphabetically
+ Clean, mobile-friendly UI
+ Offline PWA functionality
+ All sections save and load from persistent storage
