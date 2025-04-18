@@ -23,6 +23,7 @@ export default function StrengthSection({
   setStrengthExercises
 }: StrengthSectionProps) {
   const [selectedExercise, setSelectedExercise] = useState<string>("");
+  const [strengthCompleted, setStrengthCompleted] = useState<boolean>(false);
   
   const handleAddExercise = () => {
     if (!selectedExercise) return;
@@ -145,6 +146,22 @@ export default function StrengthSection({
         >
           Add Exercise
         </Button>
+        
+        {/* Exercise Completion Button */}
+        <div className="mt-4">
+          <Button 
+            className={`w-full py-4 font-medium ${
+              strengthCompleted 
+                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+                : 'bg-forest-700 hover:bg-forest-600'
+            }`}
+            onClick={() => setStrengthCompleted(!strengthCompleted)}
+          >
+            {strengthCompleted 
+              ? 'Strength Training Completed ✓' 
+              : 'Mark Exercise Day Completed'}
+          </Button>
+        </div>
       </div>
     </section>
   );

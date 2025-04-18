@@ -20,7 +20,7 @@ export default function ExerciseCard({
   return (
     <div className="bg-forest-800 rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-medium">{exercise.name}</h3>
+        <h3 className="font-medium text-[#FFEB3B]">{exercise.name}</h3>
         <span className={`text-xs px-2 py-1 rounded-full ${exercise.isTimeBased ? 'bg-green-500' : 'bg-blue-500'}`}>
           {exercise.isTimeBased ? 'Time-based' : 'Rep-based'}
         </span>
@@ -30,7 +30,7 @@ export default function ExerciseCard({
       <div className="space-y-2 mb-3">
         {exercise.sets.map((set, setIndex) => (
           <div key={setIndex} className="flex items-center space-x-2">
-            <span className="text-sm">Set {setIndex + 1}:</span>
+            <span className="text-sm text-[#FFEB3B]">Set {setIndex + 1}:</span>
             <Input 
               type="number" 
               className="bg-forest-700 w-16 rounded p-1 text-sm" 
@@ -59,7 +59,7 @@ export default function ExerciseCard({
         <Button 
           variant="outline"
           size="sm"
-          className="bg-forest-700 hover:bg-forest-600 text-xs h-7" 
+          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium" 
           onClick={onAddSet}
         >
           + Add Set
