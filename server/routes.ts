@@ -90,29 +90,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '-1');
     
-    // Generate a version number based on timestamp
+    // Redirect to a unique URL
     const timestamp = Date.now();
+    res.redirect(`/newsafari/${timestamp}`);
+  });
+  
+  // Complete new implementation to avoid Safari caching issues
+  app.get("/newsafari/:timestamp", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
     
-    // Read the HTML file
-    let content = fs.readFileSync(path.resolve(process.cwd(), "server/public/safari_index.html"), 'utf8');
-    
-    // Add version to the HTML to force reload
-    content = content.replace('</head>', `
-      <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
-      <meta http-equiv="pragma" content="no-cache" />
-      <meta http-equiv="expires" content="0" />
-      <meta name="version" content="${timestamp}" />
-      <script>
-        // Check if we're on the 'fresh' route already
-        if (!window.location.pathname.includes('/fresh/')) {
-          // Redirect to a fresh version with timestamp
-          window.location.href = '/fresh/' + Date.now();
-        }
-      </script>
-    </head>`);
-    
-    // Send the modified HTML
-    res.send(content);
+    // Send the new implementation file
+    res.sendFile(path.resolve(process.cwd(), "server/public/new_safari.html"));
   });
   
   // Extreme cache-busting route that includes timestamp in URL
