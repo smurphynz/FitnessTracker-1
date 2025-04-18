@@ -8,6 +8,9 @@
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#1A402B" />
     <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     
     <!-- Load emergency CSS that overrides everything -->
     <link rel="stylesheet" href="/emergency.css">
@@ -18,11 +21,34 @@
       html, body {
         overflow: visible !important;
         height: auto !important;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: white;
+        background-color: #1A402B; /* Fallback color */
+      }
+      
+      /* Background container with image approach that works in Safari */
+      #background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      
+      img.background {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       
       #root {
         position: relative !important;
         z-index: 1 !important;
+        min-height: 100vh;
+        padding-bottom: 100px; /* Space for save button */
       }
       
       .absolute-link {
@@ -41,45 +67,87 @@
         font-size: 16px !important;
         box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.7) !important;
       }
-    </style>
-  </head>
-  <body style="background-image: url('/images/forest-background.png'); background-size: cover; background-position: center; background-attachment: fixed;">
-    <!-- Direct link to emergency page -->
-    <a href="/bare_minimum.html" class="absolute-link">EMERGENCY SAVE PAGE →</a>
-    
-    <div id="root"></div>
-    
-    <!-- Emergency fixed button outside of React -->
-    <button 
-      id="emergency-save-button"
-      onclick="saveEmergencyWorkout()"
-      style="
+      
+      /* Forest-themed save button */
+      .forest-save-button {
         position: fixed !important; 
-        bottom: 20px !important; 
+        bottom: 40px !important; 
         left: 50% !important; 
         transform: translateX(-50%) !important;
-        background-color: #FF0000 !important; 
-        color: #FFFFFF !important; 
-        font-size: 24px !important; 
-        font-weight: bold !important; 
-        padding: 16px 32px !important; 
-        border-radius: 10px !important;
+        width: 90% !important;
+        max-width: 400px !important;
+        padding: 20px 0 !important;
+        font-size: 24px !important;
+        
+        /* Forest theme colors */
+        background: linear-gradient(145deg, #3C825F, #22543D) !important;
+        color: #FFEB3B !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        
+        text-transform: uppercase !important;
+        font-weight: 900 !important;
+        letter-spacing: 2px !important;
+        border: 4px solid #FFEB3B !important;
+        border-radius: 12px !important;
+        box-shadow: 
+          0 0 0 2px rgba(60, 130, 95, 0.5) !important,
+          0 8px 30px rgba(0, 0, 0, 0.6) !important,
+          0 0 15px 5px rgba(255, 235, 59, 0.3) !important;
+        cursor: pointer !important;
+        text-align: center !important;
         z-index: 2147483647 !important;
-        border: 4px solid white !important;
-        box-shadow: 0px 0px 30px 10px rgba(255,255,255,1) !important;
-        width: 80% !important;
+        
+        /* Make it even more visible */
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-      "
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Direct embedding of background with image tag -->
+    <div id="background-container">
+      <img src="/forest-background.png" class="background" alt="Forest">
+    </div>
+    
+    <!-- Links to test pages -->
+    <a href="/direct-forest.html" class="absolute-link">FOREST PAGE →</a>
+    
+    <div id="root"></div>
+    
+    <!-- Emergency fixed button outside of React with forest styling -->
+    <button 
+      id="emergency-save-button"
+      class="forest-save-button"
+      onclick="saveEmergencyWorkout()"
     >
-      EMERGENCY SAVE
+      SAVE WORKOUT
     </button>
     
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Vanilla JavaScript for emergency save function -->
+    <!-- Vanilla JavaScript for image loading and emergency save -->
     <script>
+      // Log the image loading status to help debug
+      window.addEventListener('load', function() {
+        const backgroundImg = document.querySelector('.background');
+        if (backgroundImg) {
+          console.log('Background image found, setting up event listeners');
+          
+          backgroundImg.addEventListener('load', function() {
+            console.log('Forest background loaded successfully!');
+          });
+          
+          backgroundImg.addEventListener('error', function(e) {
+            console.error('Error loading background image:', e);
+            // Try alternative URL as fallback
+            this.src = '/images/forest-background.png';
+          });
+        } else {
+          console.error('Background image element not found');
+        }
+      });
+      
       function saveEmergencyWorkout() {
         alert('Attempting to save workout...');
         
