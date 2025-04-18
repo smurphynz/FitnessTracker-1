@@ -111,16 +111,8 @@ export default function WorkoutTab({
         setStrengthExercises={setStrengthExercises}
       />
       
-      {/* Save Button - Fixed position high-contrast RED */}
-      <div className="save-btn-container">
-        <button
-          onClick={handleSaveWorkout}
-          id="save-workout-button"
-          className="save-workout-btn"
-        >
-          SAVE WORKOUT
-        </button>
-      </div>
+      {/* Original save button now hidden, using global SaveWorkoutButton instead */}
+      <div className="h-20"></div> {/* Spacer at bottom */}
     </div>
   );
 }

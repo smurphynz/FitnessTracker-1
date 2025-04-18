@@ -1,28 +1,13 @@
-import React from "react";
+import { Link } from "wouter";
 
-const SaveWorkoutButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+export default function SaveWorkoutButton() {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        background: "#FFEB3B",
-        color: "black",
-        fontSize: "16px",
-        padding: "12px 24px",
-        borderRadius: "8px",
-        marginTop: "40px",
-        display: "block",
-        border: "none",
-        cursor: "pointer",
-        fontWeight: "bold",
-        marginLeft: "auto",
-        marginRight: "auto",
-        marginBottom: "60px"
-      }}
-    >
-      SAVE WORKOUT
-    </button>
+    <div className="fixed bottom-0 left-0 w-full bg-black p-4 flex justify-center z-50">
+      <Link href="/save">
+        <a className="block w-full py-4 bg-red-600 text-white text-2xl font-bold rounded-lg text-center uppercase border-4 border-white shadow-lg">
+          Save Workout
+        </a>
+      </Link>
+    </div>
   );
-};
-
-export default SaveWorkoutButton;
+}

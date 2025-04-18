@@ -17,12 +17,12 @@
   }
 
   .forest-panel {
-    @apply bg-forest-800 border border-[#FFEB3B]/50 shadow-lg;
+    @apply bg-green-800 border border-yellow-300/50 shadow-lg;
     box-shadow: 0 0 15px rgba(255, 235, 59, 0.1);
   }
 
   .tab-active {
-    @apply border-b-3 border-[#FFEB3B] text-[#FFEB3B] font-semibold;
+    @apply border-b-2 border-yellow-300 text-yellow-300 font-semibold;
   }
 }
 
@@ -75,19 +75,19 @@
 
 /* Additional custom styles */
 .workout-card {
-  @apply my-4 p-4 rounded-lg bg-forest-700 border border-forest-400 shadow;
+  @apply my-4 p-4 rounded-lg bg-green-800 border border-green-600 shadow;
 }
 
 .forest-card {
-  @apply bg-forest-700 border border-forest-400 rounded-lg p-4 shadow-lg;
+  @apply bg-green-800 border border-green-600 rounded-lg p-4 shadow-lg;
 }
 
 .tab-content {
-  @apply p-4 bg-forest-700 rounded-lg border border-forest-400 shadow;
+  @apply p-4 bg-green-800 rounded-lg border border-green-600 shadow;
 }
 
 .date-heading {
-  @apply font-semibold text-[#FFEB3B] mb-2;
+  @apply font-semibold text-yellow-300 mb-2;
 }
 
 /* Save workout button styling */
