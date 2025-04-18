@@ -3,23 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forest Background Test</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Sean's Cali Fitness Tracker</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: white;
-      height: 100vh;
-      width: 100vw;
-      background-image: url('/images/forest-background.png');
+      min-height: 100vh;
+      width: 100%;
+      background-image: url('/forest-background.png');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     }
     
     .container {
@@ -31,12 +34,21 @@
       padding: 30px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
       text-align: center;
+      margin: 40px 0 100px 0;
     }
     
     h1 {
       color: #FFEB3B;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      font-size: 32px;
+    }
+    
+    h2 {
+      color: #FFEB3B;
+      margin: 30px 0 15px 0;
+      font-size: 24px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
     
     .forest-button {
@@ -52,12 +64,14 @@
       margin-top: 30px;
       box-shadow: 0 0 15px rgba(255, 235, 59, 0.3);
       text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+      max-width: 100%;
+      width: 100%;
     }
     
     .forest-button:hover {
       background: linear-gradient(145deg, #4B9872, #2D694E);
       box-shadow: 0 0 20px rgba(255, 235, 59, 0.5);
-      transform: scale(1.05);
+      transform: scale(1.02);
     }
     
     p {
@@ -82,25 +96,317 @@
       background: linear-gradient(to right, transparent, rgba(255, 235, 59, 0.7), transparent);
       margin: 30px auto;
     }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    
+    .stat-card {
+      background-color: rgba(28, 70, 50, 0.9);
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid rgba(255, 235, 59, 0.4);
+    }
+    
+    .stat-label {
+      font-weight: bold;
+      color: #FFEB3B;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    .stat-value {
+      font-size: 18px;
+    }
+    
+    .workout-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 15px 0;
+    }
+    
+    .option-button {
+      background: linear-gradient(145deg, #3C825F, #22543D);
+      color: #FFEB3B;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 12px 5px;
+      border: 2px solid rgba(255, 235, 59, 0.7);
+      border-radius: 8px;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .option-button:hover {
+      background: linear-gradient(145deg, #4B9872, #2D694E);
+      transform: scale(1.03);
+    }
+    
+    /* Fixed save button at bottom */
+    .fixed-button {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+      background: linear-gradient(145deg, #E53935, #C62828);
+      color: white;
+      padding: 20px 0;
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border: 4px solid white;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      text-align: center;
+      z-index: 1000;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .fixed-button:hover {
+      background: linear-gradient(145deg, #F44336, #D32F2F);
+      transform: translateX(-50%) scale(1.03);
+    }
+    
+    .section {
+      background-color: rgba(28, 70, 50, 0.8);
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      border: 1px solid rgba(255, 235, 59, 0.4);
+      text-align: left;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #FFEB3B;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid rgba(255, 235, 59, 0.5);
+      background-color: rgba(34, 84, 61, 0.6);
+      color: white;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    
+    select.form-input {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFEB3B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+      padding-right: 30px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Sean's Cali Fitness Tracker</h1>
     
-    <p>This page demonstrates the forest background and the styling for the fitness tracker app.</p>
+    <p>Your calisthenics workout tracker with a beautiful forest background</p>
     
-    <div class="separator"></div>
+    <div class="section">
+      <h2>Workout Information</h2>
+      
+      <div class="form-group">
+        <label class="form-label" for="date">Date</label>
+        <input type="date" id="date" class="form-input" value="">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="weight">Weight (kg)</label>
+        <input type="number" id="weight" class="form-input" value="70">
+      </div>
+    </div>
     
-    <p>If you'd like to save a workout directly, click the button below or visit <a href="/emergency-save">/emergency-save</a>.</p>
+    <div class="section">
+      <h2>Current Progress</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Last Mobility Day:</div>
+          <div class="stat-value" id="last-mobility-day">Loading...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Last Strength Day:</div>
+          <div class="stat-value" id="last-strength-day">Loading...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Workouts Logged:</div>
+          <div class="stat-value" id="workouts-count">Loading...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Today's Date:</div>
+          <div class="stat-value" id="today-date">Loading...</div>
+        </div>
+      </div>
+    </div>
     
-    <button class="forest-button" onclick="window.location.href='/emergency-save'">
-      Save Workout
+    <div class="section">
+      <h2>Mobility Session</h2>
+      <div class="form-group">
+        <label class="form-label" for="mobility">Session Completion</label>
+        <select id="mobility" class="form-input">
+          <option value="full-session">Full Session</option>
+          <option value="half-session">Half Session</option>
+          <option value="not-completed">Not Completed</option>
+        </select>
+      </div>
+      
+      <div class="workout-options">
+        <button class="option-button" onclick="quickSave('full-session')">
+          Save Full Session
+        </button>
+        <button class="option-button" onclick="quickSave('half-session')">
+          Save Half Session
+        </button>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Handstand Exercises</h2>
+      <p>Note: Handstand exercises tracking is available in the main application.</p>
+    </div>
+    
+    <div class="section">
+      <h2>Strength Exercises</h2>
+      <p>Note: Strength exercises tracking is available in the main application.</p>
+    </div>
+    
+    <button class="forest-button" onclick="saveWorkout()">
+      SAVE COMPLETE WORKOUT
     </button>
     
     <div class="separator"></div>
     
-    <p>Return to the <a href="/">main application</a></p>
+    <p>Access other versions: <a href="/">Main App</a> | <a href="/fitness.html">Fitness</a> | <a href="/final.html">Final</a></p>
   </div>
+  
+  <!-- Fixed save button at bottom -->
+  <button class="fixed-button" onclick="saveWorkout()">
+    SAVE WORKOUT
+  </button>
+  
+  <script>
+    // Set default date to today
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const dateString = today.toISOString().split('T')[0];
+      document.getElementById('date').value = dateString;
+      document.getElementById('today-date').textContent = dateString;
+      
+      // Fetch data
+      fetchWorkouts();
+      fetchLastMobilityDay();
+      fetchLastStrengthDay();
+    });
+    
+    function fetchWorkouts() {
+      fetch('/api/workouts')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('workouts-count').textContent = data.length;
+        })
+        .catch(error => {
+          console.error('Error fetching workouts:', error);
+          document.getElementById('workouts-count').textContent = 'Error';
+        });
+    }
+    
+    function fetchLastMobilityDay() {
+      fetch('/api/last-mobility-day')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('last-mobility-day').textContent = data.lastDay || 'None';
+        })
+        .catch(error => {
+          console.error('Error fetching mobility day:', error);
+          document.getElementById('last-mobility-day').textContent = 'Error';
+        });
+    }
+    
+    function fetchLastStrengthDay() {
+      fetch('/api/last-strength-day')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('last-strength-day').textContent = data.lastDay || 'None';
+        })
+        .catch(error => {
+          console.error('Error fetching strength day:', error);
+          document.getElementById('last-strength-day').textContent = 'Error';
+        });
+    }
+    
+    function quickSave(mobilityCompletion) {
+      const date = document.getElementById('date').value;
+      const weight = document.getElementById('weight').value;
+      
+      const workout = {
+        date: date,
+        weight: weight,
+        mobility: { completion: mobilityCompletion },
+        handstand: { exercises: [] },
+        strength: { exercises: [] }
+      };
+      
+      saveWorkoutToAPI(workout);
+    }
+    
+    function saveWorkout() {
+      const date = document.getElementById('date').value;
+      const weight = document.getElementById('weight').value;
+      const mobilityCompletion = document.getElementById('mobility').value;
+      
+      const workout = {
+        date: date,
+        weight: weight,
+        mobility: { completion: mobilityCompletion },
+        handstand: { exercises: [] },
+        strength: { exercises: [] }
+      };
+      
+      saveWorkoutToAPI(workout);
+    }
+    
+    function saveWorkoutToAPI(workout) {
+      fetch('/api/workouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(workout)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('SUCCESS: Workout saved!');
+          // Refresh data
+          fetchWorkouts();
+          fetchLastMobilityDay();
+          fetchLastStrengthDay();
+        } else {
+          alert('ERROR: Failed to save workout');
+        }
+      })
+      .catch(error => {
+        alert('ERROR: ' + error.message);
+      });
+    }
+  </script>
 </body>
 </html>
