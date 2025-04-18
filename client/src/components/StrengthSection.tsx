@@ -72,7 +72,7 @@ export default function StrengthSection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-[#FFEB3B] pb-1">CaliMove Level 2</span>
+        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">CaliMove Level 2</span>
       </h2>
       
       <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
@@ -140,7 +140,7 @@ export default function StrengthSection({
           </Select>
         </div>
         <Button 
-          className="bg-[#FFEB3B] text-forest-900 font-medium py-6"
+          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium py-6 border border-[#FFEB3B]/50"
           onClick={handleAddExercise}
           disabled={!selectedExercise}
         >

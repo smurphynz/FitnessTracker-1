@@ -32,14 +32,14 @@ export default function HandstandSection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-[#FFEB3B] pb-1">Handstand Training</span>
+        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Handstand Training</span>
       </h2>
       
       {/* Selected exercises */}
       <div className="mb-3">
         <div className="flex flex-wrap gap-2" id="selected-handstand-exercises">
           {selectedExercises.map((exercise, index) => (
-            <Badge key={index} className="bg-forest-800 text-white hover:bg-forest-700 rounded-full px-3 py-1 flex items-center">
+            <Badge key={index} className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/20 text-white hover:bg-forest-700 rounded-full px-3 py-1 flex items-center">
               <span>{exercise}</span>
               <Button 
                 variant="ghost" 
@@ -73,7 +73,7 @@ export default function HandstandSection({
           </Select>
         </div>
         <Button 
-          className="bg-[#FFEB3B] text-forest-900 font-medium" 
+          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium border border-[#FFEB3B]/50" 
           onClick={handleAddExercise}
           disabled={!selectedExercise}
         >
