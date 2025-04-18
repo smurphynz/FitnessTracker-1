@@ -30,7 +30,7 @@ function App() {
           fontWeight: "bold",
           padding: "16px 32px",
           borderRadius: "10px",
-          zIndex: 10000,
+          zIndex: 99999,
           border: "4px solid white",
           boxShadow: "0px 0px 20px 5px rgba(255,255,255,0.8)"
         }}

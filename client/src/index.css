@@ -2,16 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global override to ensure fixed elements are visible */
+html, body {
+  overflow: visible !important;
+  height: auto !important;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
 
+  html, body {
+    overflow: visible !important;
+  }
+
   body {
     @apply font-sans antialiased text-white;
     background-color: #1A402B; /* Solid forest green background */
-    overflow-x: hidden;
-    overflow-y: auto;
     position: relative;
     min-height: 100vh;
   }

@@ -53,7 +53,7 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-6 pb-24 max-w-md">
+    <div className="container mx-auto px-4 pt-6 pb-24 max-w-md" style={{height: "auto", overflow: "visible", position: "relative"}}>
       <Header
         date={date}
         setDate={setDate}
