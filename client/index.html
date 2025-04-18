@@ -11,6 +11,76 @@
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Emergency Save Button -->
+    <div id="emergency-button" style="
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 99999999;
+      pointer-events: auto;
+    ">
+      <form id="emergency-form" action="#" method="post" style="display: inline-block;">
+        <button 
+          type="submit"
+          id="emergency-save-btn"
+          style="
+            background-color: #FFEB3B;
+            color: black;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: 2px solid black;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+          "
+        >
+          EMERGENCY SAVE
+        </button>
+      </form>
+    </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('emergency-form');
+        if (form) {
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+              // Simple workout object
+              const workout = {
+                date: new Date().toISOString().split('T')[0],
+                weight: '70',
+                mobility: { completion: 'full-session' },
+                handstand: { exercises: [] },
+                strength: { exercises: [] }
+              };
+              
+              // Send to API
+              const response = await fetch('/api/workouts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(workout)
+              });
+              
+              if (response.ok) {
+                alert('Workout saved successfully!');
+              } else {
+                alert('Failed to save workout');
+              }
+            } catch (error) {
+              alert('Error saving workout');
+            }
+          });
+        }
+      });
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
