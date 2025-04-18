@@ -113,16 +113,16 @@ export default function WorkoutTab({
       />
       
       {/* Save Workout Button */}
-      <div className="fixed bottom-4 left-0 right-0 px-4 z-10">
+      <div className="mt-10 mb-20 relative">
+        {/* Pulsing effect for attention */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg blur-sm opacity-60 save-button-glow"></div>
         <Button 
-          className="w-full bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-bold text-xl py-6 h-auto rounded-lg shadow-lg border-2 border-[#FFEB3B]/80 flex items-center justify-center"
+          className="relative w-full bg-gradient-to-r from-[#FFEB3B] to-[#FFC107] hover:from-[#FFC107] hover:to-[#FFD700] text-forest-900 font-extrabold text-2xl py-7 h-auto rounded-lg shadow-xl border-2 border-[#FFEB3B] flex items-center justify-center"
           onClick={handleSaveWorkout}
         >
-          <span className="drop-shadow-sm">Save Workout</span>
+          SAVE WORKOUT
         </Button>
       </div>
-      {/* Extra space at bottom to prevent button overlap */}
-      <div className="h-24"></div>
     </div>
   );
 }
