@@ -17,6 +17,31 @@ function App() {
   return (
     <div>
       <Router />
+      
+      {/* Link to emergency button page */}
+      <div style={{
+        position: "fixed",
+        top: "10px",
+        right: "10px",
+        zIndex: 999999
+      }}>
+        <a 
+          href="/emergency_button.html" 
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            padding: "10px 15px",
+            borderRadius: "5px",
+            textDecoration: "none",
+            fontWeight: "bold",
+            display: "block",
+            border: "2px solid white"
+          }}
+        >
+          EMERGENCY SAVE
+        </a>
+      </div>
+      
       <button
         onClick={() => alert("Save clicked")}
         style={{
