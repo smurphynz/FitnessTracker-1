@@ -431,36 +431,37 @@
           
           <select id="handstand-selector">
             <option value="">Select handstand exercise</option>
-            <option value="Back to Wall Hold">Back to Wall Hold</option>
-            <option value="Box Hold">Box Hold</option>
-            <option value="Face to Wall Hold">Face to Wall Hold</option>
-            <option value="Freestanding Practice">Freestanding Practice</option>
-            <option value="Kick Ups">Kick Ups</option>
-            <option value="Mexican">Mexican</option>
-            <option value="Shape Changes">Shape Changes</option>
-            <option value="Shoulder Taps">Shoulder Taps</option>
-            <option value="Splits">Splits</option>
-            <option value="Uneven Hands">Uneven Hands</option>
-            <option value="Wall Walk">Wall Walk</option>
-            <option value="Wrist Prep">Wrist Prep</option>
           </select>
           
           <script>
-            // Sort handstand dropdown options alphabetically
+            // Add all handstand exercises and sort them alphabetically
             const handstandSel = document.getElementById('handstand-selector');
-            const defaultOption = handstandSel.options[0]; // Keep the first "Select" option
-            const sortedOptions = Array.from(handstandSel.options)
-              .slice(1) // Skip the first default option
-              .sort((a, b) => a.text.localeCompare(b.text));
             
-            // Clear the select
-            handstandSel.innerHTML = '';
-            
-            // Add back the default option
-            handstandSel.add(defaultOption);
+            // Complete list of handstand exercises
+            const exercises = [
+              "Back to Wall Hold",
+              "Box Hold",
+              "Face to Wall Hold",
+              "Freestanding Practice",
+              "Kick Ups",
+              "Mexican",
+              "Shape Changes",
+              "Shoulder Taps",
+              "Splits",
+              "Uneven Hands",
+              "Wall Walk",
+              "Wrist Prep"
+            ].sort();
             
             // Add the sorted options
-            sortedOptions.forEach(option => handstandSel.add(option));
+            exercises.forEach(exercise => {
+              const option = document.createElement('option');
+              option.value = exercise;
+              option.textContent = exercise;
+              handstandSel.add(option);
+            });
+            
+            console.log("Handstand exercises loaded:", exercises.length);
           </script>
           
           <div id="handstand-exercises" class="handstand-list">
