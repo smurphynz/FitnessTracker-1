@@ -1,4 +1,6 @@
 import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
   // User methods (keeping original methods)
@@ -9,82 +11,115 @@ export interface IStorage {
   // Workout methods
   getWorkouts(): Promise<Workout[]>;
   getWorkout(id: number): Promise<Workout | undefined>;
-  createWorkout(workout: InsertWorkout): Promise<Workout>;
+  createWorkout(workout: Workout): Promise<Workout>;
   
   // Last day tracking methods
   getLastMobilityDay(): Promise<number | undefined>;
   getLastStrengthDay(): Promise<number | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private workoutsMap: Map<number, Workout>;
-  private currentUserId: number;
-  private currentWorkoutId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.workoutsMap = new Map();
-    this.currentUserId = 1;
-    this.currentWorkoutId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   // User methods
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   // Workout methods
   async getWorkouts(): Promise<Workout[]> {
-    // Sort workouts by date in descending order (newest first)
-    return Array.from(this.workoutsMap.values())
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Get workouts sorted by date in descending order (newest first)
+    const workoutsFromDB = await db.select().from(workouts).orderBy(desc(workouts.date));
+    
+    // Convert database workout format to application workout format
+    return workoutsFromDB.map(workout => this.mapDBWorkoutToWorkout(workout));
   }
 
   async getWorkout(id: number): Promise<Workout | undefined> {
-    return this.workoutsMap.get(id);
+    const [workout] = await db.select().from(workouts).where(eq(workouts.id, id));
+    if (!workout) return undefined;
+    
+    return this.mapDBWorkoutToWorkout(workout);
   }
 
   async createWorkout(workout: Workout): Promise<Workout> {
-    const id = this.currentWorkoutId++;
-    const newWorkout: Workout = { ...workout, id };
-    this.workoutsMap.set(id, newWorkout);
-    return newWorkout;
+    // Map the workout to database format
+    const insertData = {
+      date: workout.date,
+      weight: workout.weight || null,
+      mobilityDay: workout.mobility.dayNumber || null,
+      mobilityCompletion: workout.mobility.completion,
+      handstandExercises: workout.handstand.exercises,
+      strengthDay: workout.strength.dayNumber || null,
+      strengthExercises: workout.strength.exercises
+    };
+    
+    // Insert workout into database
+    const [createdWorkout] = await db
+      .insert(workouts)
+      .values(insertData)
+      .returning();
+    
+    // Map back to application format and return
+    return this.mapDBWorkoutToWorkout(createdWorkout);
   }
 
   // Last day tracking methods
   async getLastMobilityDay(): Promise<number | undefined> {
-    const workouts = await this.getWorkouts();
-    for (const workout of workouts) {
-      if (workout.mobility.dayNumber) {
-        return workout.mobility.dayNumber;
-      }
-    }
-    return undefined;
+    // Get the most recent workout with a mobility day
+    const [workout] = await db
+      .select()
+      .from(workouts)
+      .where(db.sql`"mobility_day" IS NOT NULL`)
+      .orderBy(desc(workouts.date))
+      .limit(1);
+    
+    return workout?.mobilityDay || undefined;
   }
 
   async getLastStrengthDay(): Promise<number | undefined> {
-    const workouts = await this.getWorkouts();
-    for (const workout of workouts) {
-      if (workout.strength.dayNumber) {
-        return workout.strength.dayNumber;
+    // Get the most recent workout with a strength day
+    const [workout] = await db
+      .select()
+      .from(workouts)
+      .where(db.sql`"strength_day" IS NOT NULL`)
+      .orderBy(desc(workouts.date))
+      .limit(1);
+    
+    return workout?.strengthDay || undefined;
+  }
+
+  // Helper method to map database workout format to application workout format
+  private mapDBWorkoutToWorkout(dbWorkout: any): Workout {
+    return {
+      id: dbWorkout.id,
+      date: dbWorkout.date,
+      weight: dbWorkout.weight || undefined,
+      mobility: {
+        dayNumber: dbWorkout.mobilityDay || undefined,
+        completion: dbWorkout.mobilityCompletion as 'not-completed' | 'half-session' | 'full-session'
+      },
+      handstand: {
+        exercises: dbWorkout.handstandExercises as string[]
+      },
+      strength: {
+        dayNumber: dbWorkout.strengthDay || undefined,
+        exercises: dbWorkout.strengthExercises as Exercise[]
       }
-    }
-    return undefined;
+    };
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
