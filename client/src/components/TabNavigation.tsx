@@ -5,7 +5,7 @@ interface TabNavigationProps {
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   return (
-    <div className="forest-panel shadow-md mb-2">
+    <div className="forest-panel border-b border-[#FFEB3B]/20 shadow-md mb-2">
       <div className="container mx-auto">
         <div className="flex">
           <button 

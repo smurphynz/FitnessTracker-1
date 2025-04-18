@@ -17,7 +17,7 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
   }, [setDate]);
 
   return (
-    <header className="forest-panel sticky top-0 z-10 shadow-md">
+    <header className="forest-panel sticky top-0 z-10 shadow-md border-b border-[#FFEB3B]/30">
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-col items-center">
           <h1 className="text-2xl font-bold text-[#FFEB3B]">

@@ -22,7 +22,7 @@
   }
 
   .tab-active {
-    @apply border-b-3 border-accent;
+    @apply border-b-3 border-[#FFEB3B] text-[#FFEB3B] font-semibold;
   }
 }
 

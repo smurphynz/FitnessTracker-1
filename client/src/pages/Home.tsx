@@ -96,7 +96,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen pb-16">
+    <div className="flex flex-col min-h-screen pb-16 relative z-0">
       <Header 
         date={date} 
         setDate={setDate} 
