@@ -84,11 +84,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve the forest app at the standalone route
   app.get("/standalone", (req: Request, res: Response) => {
+    // Add cache-busting headers
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.resolve(process.cwd(), "server/public/standalone/index.html"));
   });
   
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
+    // Add cache-busting headers
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
   });
   
