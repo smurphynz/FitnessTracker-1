@@ -111,13 +111,42 @@ export default function Home() {
       
       <main className="flex-1 container mx-auto px-4">
         {activeTab === "workout" ? (
-          <WorkoutTab 
-            date={date}
-            weight={weight}
-            lastMobilityDay={lastMobilityDay} 
-            lastStrengthDay={lastStrengthDay}
-            onSaveWorkout={handleSaveWorkout}
-          />
+          <>
+            <WorkoutTab 
+              date={date}
+              weight={weight}
+              lastMobilityDay={lastMobilityDay} 
+              lastStrengthDay={lastStrengthDay}
+              onSaveWorkout={handleSaveWorkout}
+            />
+            
+            {/* Save Workout Button - Standalone */}
+            <div className="my-8 mx-auto max-w-md">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg blur-sm opacity-75 save-button-glow"></div>
+                <button 
+                  className="relative w-full bg-gradient-to-r from-[#FFEB3B] to-[#FFC107] hover:from-[#FFC107] hover:to-[#FFD700] text-forest-900 font-extrabold text-3xl py-6 h-auto rounded-lg shadow-xl border-2 border-[#FFEB3B] flex items-center justify-center"
+                  onClick={() => handleSaveWorkout({
+                    date,
+                    weight: weight || undefined,
+                    mobility: {
+                      dayNumber: lastMobilityDay ? lastMobilityDay + 1 : undefined,
+                      completion: 'full-session'
+                    },
+                    handstand: {
+                      exercises: []
+                    },
+                    strength: {
+                      dayNumber: lastStrengthDay ? lastStrengthDay + 1 : undefined,
+                      exercises: []
+                    }
+                  })}
+                >
+                  SAVE WORKOUT
+                </button>
+              </div>
+            </div>
+          </>
         ) : (
           <ProgressTab workouts={workouts} />
         )}
