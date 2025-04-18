@@ -429,21 +429,27 @@
         <div class="section handstand-section">
           <h2>Handstand</h2>
           
-          <select id="handstand-selector">
-            <option value="">Select handstand exercise</option>
-            <option value="Back to Wall Hold">Back to Wall Hold</option>
-            <option value="Box Hold">Box Hold</option>
-            <option value="Face to Wall Hold">Face to Wall Hold</option>
-            <option value="Freestanding Practice">Freestanding Practice</option>
-            <option value="Kick Ups">Kick Ups</option>
-            <option value="Mexican">Mexican</option>
-            <option value="Shape Changes">Shape Changes</option>
-            <option value="Shoulder Taps">Shoulder Taps</option>
-            <option value="Splits">Splits</option>
-            <option value="Uneven Hands">Uneven Hands</option>
-            <option value="Wall Walk">Wall Walk</option>
-            <option value="Wrist Prep">Wrist Prep</option>
-          </select>
+          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <select id="handstand-selector" style="flex: 1;">
+              <option value="">Select handstand exercise</option>
+              <option value="Back to Wall Hold">Back to Wall Hold</option>
+              <option value="Box Hold">Box Hold</option>
+              <option value="Face to Wall Hold">Face to Wall Hold</option>
+              <option value="Freestanding Practice">Freestanding Practice</option>
+              <option value="Kick Ups">Kick Ups</option>
+              <option value="Mexican">Mexican</option>
+              <option value="Shape Changes">Shape Changes</option>
+              <option value="Shoulder Taps">Shoulder Taps</option>
+              <option value="Splits">Splits</option>
+              <option value="Uneven Hands">Uneven Hands</option>
+              <option value="Wall Walk">Wall Walk</option>
+              <option value="Wrist Prep">Wrist Prep</option>
+            </select>
+            
+            <button id="add-handstand" class="button add" style="margin-top: 0; white-space: nowrap;">
+              Add Exercise
+            </button>
+          </div>
           
           <div id="handstand-exercises" class="handstand-list">
             <!-- Handstand exercises will be added here -->
@@ -454,10 +460,16 @@
         <div class="section strength-section">
           <h2>Strength</h2>
           
-          <select id="strength-selector">
-            <option value="">Select strength exercise</option>
-            <!-- Options will be populated by JavaScript -->
-          </select>
+          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <select id="strength-selector" style="flex: 1;">
+              <option value="">Select strength exercise</option>
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <button id="add-strength" class="button add" style="margin-top: 0; white-space: nowrap;">
+              Add Exercise
+            </button>
+          </div>
           
           <div id="strength-exercises" class="exercises-list">
             <!-- Strength exercises will be added here -->
@@ -533,10 +545,12 @@
     
     // Handstand exercises
     const handstandSelector = document.getElementById('handstand-selector');
+    const addHandstandBtn = document.getElementById('add-handstand');
     const handstandExercisesList = document.getElementById('handstand-exercises');
     const handstandExercises = [];
     
-    handstandSelector.addEventListener('change', () => {
+    // Add exercise when button is clicked
+    addHandstandBtn.addEventListener('click', () => {
       const exercise = handstandSelector.value;
       if (exercise && !handstandExercises.includes(exercise)) {
         handstandExercises.push(exercise);
@@ -570,6 +584,7 @@
     
     // Strength exercises
     const strengthSelector = document.getElementById('strength-selector');
+    const addStrengthBtn = document.getElementById('add-strength');
     const strengthExercisesList = document.getElementById('strength-exercises');
     const strengthExercises = [];
     
@@ -586,7 +601,8 @@
       strengthSelector.appendChild(option);
     });
     
-    strengthSelector.addEventListener('change', () => {
+    // Add exercise when button is clicked
+    addStrengthBtn.addEventListener('click', () => {
       const exercise = strengthSelector.value;
       if (exercise) {
         const isTimeBased = timeBasedExercises.includes(exercise);
