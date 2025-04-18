@@ -130,20 +130,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve the forest app at the standalone route
   app.get("/standalone", (req: Request, res: Response) => {
+    // Redirect to timestamped URL to bypass Safari caching
+    const timestamp = Date.now();
+    res.redirect(`/standalone-fresh/${timestamp}`);
+  });
+
+  // Version with timestamp to force Safari to reload
+  app.get("/standalone-fresh/:timestamp", (req: Request, res: Response) => {
     // Add extreme cache-busting headers for Safari
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '-1');
-    // Add version parameter to URL to prevent caching
-    const version = Date.now().toString();
+    
+    // Get timestamp for all assets
+    const timestamp = req.params.timestamp;
+    
+    // Read the HTML file
     let content = fs.readFileSync(path.resolve(process.cwd(), "server/public/standalone/index.html"), 'utf8');
-    // Add version parameter to force reload in Safari
-    content = content.replace('</head>', `<meta http-equiv="cache-control" content="max-age=0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta name="version" content="${version}">
+    
+    // Add anti-cache measures in HTML
+    content = content.replace('</head>', `
+      <meta http-equiv="cache-control" content="max-age=0" />
+      <meta http-equiv="cache-control" content="no-cache" />
+      <meta http-equiv="expires" content="0" />
+      <meta http-equiv="pragma" content="no-cache" />
+      <meta name="version" content="${timestamp}">
+      <script>
+        // Check if browser might be caching
+        if(window.performance && window.performance.navigation.type === 1) {
+          // This is a refresh - force bypass cache by reloading from server
+          window.location.href = '/standalone-fresh/' + Date.now();
+        }
+      </script>
+      <style>
+        /* Weight input styling - inline to avoid caching */
+        .input-group input#weight {
+          width: 90px !important; 
+          text-align: right !important;
+          padding-right: 25px !important;
+        }
+        .weight-container {
+          position: relative !important;
+        }
+        .weight-unit {
+          position: absolute !important;
+          right: 8px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          font-size: 0.75rem !important;
+          color: white !important;
+          pointer-events: none !important;
+        }
+      </style>
     </head>`);
+    
+    // Replace the weight input HTML directly
+    content = content.replace(
+      '<div class="input-group">\n          <label for="weight">Weight:</label>\n          <input type="number" id="weight"',
+      '<div class="input-group">\n          <label for="weight">Weight:</label>\n          <div class="weight-container">\n            <input type="number" id="weight"'
+    );
+    
+    content = content.replace(
+      'placeholder="kg" step="0.1" value="70">',
+      'placeholder="" step="0.1" value="70">\n            <span class="weight-unit">kg</span>\n          </div>'
+    );
+    
     res.send(content);
   });
   
