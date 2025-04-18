@@ -3,106 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minimal Save Page</title>
+  <title>Minimal Test</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background-color: #22543D;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    
-    h1 {
-      font-size: 24px;
-      margin: 20px 0;
-      color: #FFEB3B;
-    }
-    
-    .save-btn {
-      display: block;
-      width: 90%;
-      max-width: 300px;
-      margin: 30px auto;
-      padding: 15px;
-      background-color: #FF0000;
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-      border: 3px solid white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    
-    .success {
-      background-color: #4CAF50;
-      padding: 15px;
-      margin: 20px auto;
-      border-radius: 8px;
-      max-width: 300px;
-      display: none;
-    }
-    
-    .error {
-      background-color: #F44336;
-      padding: 15px;
-      margin: 20px auto;
-      border-radius: 8px;
-      max-width: 300px;
-      display: none;
+      margin: 20px;
+      font-family: Arial, sans-serif;
     }
   </style>
 </head>
 <body>
-  <h1>Emergency Workout Save</h1>
+  <h1>Minimal Test Page</h1>
   
-  <p>Click the button below to save a basic workout</p>
+  <select id="test-select">
+    <option value="">Choose an option</option>
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+  </select>
   
-  <button id="saveBtn" class="save-btn">SAVE WORKOUT NOW</button>
+  <button id="test-button" style="margin-top: 10px; padding: 5px 10px;">
+    Test Button
+  </button>
   
-  <div id="success" class="success">
-    Workout saved successfully!
-  </div>
-  
-  <div id="error" class="error">
-    Error saving workout.
+  <div id="output" style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; min-height: 100px;">
+    Output will appear here
   </div>
   
   <script>
-    document.getElementById('saveBtn').addEventListener('click', function() {
-      var workout = {
-        date: new Date().toISOString().split('T')[0],
-        weight: '70',
-        mobility: { completion: 'full-session' },
-        handstand: { exercises: [] },
-        strength: { exercises: [] }
-      };
+    document.getElementById('test-button').addEventListener('click', function() {
+      const selected = document.getElementById('test-select').value;
+      const output = document.getElementById('output');
       
-      fetch('/api/workouts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(workout)
-      })
-      .then(function(response) {
-        if (response.ok) {
-          document.getElementById('success').style.display = 'block';
-          document.getElementById('error').style.display = 'none';
-        } else {
-          document.getElementById('error').style.display = 'block';
-          document.getElementById('success').style.display = 'none';
-        }
-      })
-      .catch(function(error) {
-        document.getElementById('error').style.display = 'block';
-        document.getElementById('success').style.display = 'none';
-        console.error('Error:', error);
-      });
+      if (selected) {
+        output.textContent = 'You selected: ' + selected;
+      } else {
+        output.textContent = 'Please select an option first';
+      }
     });
   </script>
 </body>
