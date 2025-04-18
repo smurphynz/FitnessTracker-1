@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    background-color: #1A402B;
+    background-image: url('/forest-bg.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-blend-mode: overlay;
+  }
+
+  .forest-panel {
+    @apply bg-opacity-90 bg-forest-900 backdrop-blur-sm;
+  }
+
+  .tab-active {
+    @apply border-b-3 border-accent;
+  }
+}
+
+@layer components {
+  /* Component styles go here */
+}
+
+:root {
+  --background: 158 47% 14%;
+  --foreground: 0 0% 98%;
+  --card: 158 40% 18%;
+  --card-foreground: 0 0% 98%;
+  --popover: 158 40% 18%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 54 100% 61%;
+  --primary-foreground: 158 47% 14%;
+  --secondary: 158 40% 28%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 158 30% 20%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 54 100% 61%;
+  --accent-foreground: 158 47% 14%;
+  --destructive: 0 85% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 158 30% 24%;
+  --input: 158 30% 24%;
+  --ring: 54 100% 61%;
+
+  --forest-900: #1A402B;
+  --forest-800: #22543D;
+  --forest-700: #2D694E;
+  --forest-600: #3C825F;
+  --forest-500: #4B9872;
+  --accent: #FFEB3B;
+  --accent-dark: #FFC107;
+}
