@@ -200,6 +200,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Entirely new route with fixed HTML for Safari users
   app.get("/finalversion", (req: Request, res: Response) => {
+    // Redirect to timestamped URL to bypass Safari caching
+    const timestamp = Date.now();
+    res.redirect(`/finalversion-ts/${timestamp}`);
+  });
+  
+  // Version with timestamp to force Safari to reload
+  app.get("/finalversion-ts/:timestamp", (req: Request, res: Response) => {
     // Add extreme cache-busting headers for Safari
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
     res.setHeader('Pragma', 'no-cache');
