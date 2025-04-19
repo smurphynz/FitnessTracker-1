@@ -226,6 +226,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Send the completely new implementation file with timestamp in the filename
     res.sendFile(path.resolve(process.cwd(), "server/public/fresh_version_1682325444.html"));
   });
+  
+  // Serve the forest background image directly
+  app.get("/forest-bg.png", (req: Request, res: Response) => {
+    // Set cache control headers
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.sendFile(path.resolve(process.cwd(), "server/public/forest-background.png"));
+  });
 
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
