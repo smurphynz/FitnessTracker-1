@@ -216,6 +216,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/final_fresh.html"));
   });
   
+  // New completely fresh version with timestamp in filename to bypass cache
+  app.get("/absolute-fresh", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    
+    // Send the completely new implementation file with timestamp in the filename
+    res.sendFile(path.resolve(process.cwd(), "server/public/fresh_version_1682325444.html"));
+  });
+
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
     // Add extreme cache-busting headers for Safari
