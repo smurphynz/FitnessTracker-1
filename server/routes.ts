@@ -233,6 +233,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.sendFile(path.resolve(process.cwd(), "server/public/forest-background.png"));
   });
+  
+  // New ultra-fresh Safari version with inline styles 
+  app.get("/safari-fix", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for Safari
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    
+    // Send the completely new implementation file with timestamp in the filename
+    res.sendFile(path.resolve(process.cwd(), "server/public/fresh_safari_fix.html"));
+  });
 
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
