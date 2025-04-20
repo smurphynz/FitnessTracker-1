@@ -277,6 +277,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Send the completely new implementation file
     res.sendFile(path.resolve(process.cwd(), "server/public/fresh_exercises_1745110685.html"));
   });
+  
+  // Extreme anti-cache version with indicators to show it's fresh
+  app.get("/nocache-1745111110", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for all browsers
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    
+    // Add a unique header to verify freshness
+    res.setHeader('X-Fresh-Load', Date.now().toString());
+    
+    // Send the completely new implementation file
+    res.sendFile(path.resolve(process.cwd(), "server/public/nocache_version_1745111110.html"));
+  });
 
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
