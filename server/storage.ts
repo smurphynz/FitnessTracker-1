@@ -56,14 +56,16 @@ export class DatabaseStorage implements IStorage {
 
   async createWorkout(workout: Workout): Promise<Workout> {
     // Map the workout to database format
+    console.log("Saving workout:", JSON.stringify(workout, null, 2));
+    
     const insertData = {
       date: workout.date,
-      weight: workout.weight || null,
-      mobilityDay: workout.mobility.dayNumber || null,
-      mobilityCompletion: workout.mobility.completion,
-      handstandExercises: workout.handstand.exercises,
-      strengthDay: workout.strength.dayNumber || null,
-      strengthExercises: workout.strength.exercises
+      weight: workout.weight || '',
+      mobility_day: workout.mobility.dayNumber || null,
+      mobility_completion: workout.mobility.completion,
+      handstand_exercises: workout.handstand.exercises,
+      strength_day: workout.strength.dayNumber || null,
+      strength_exercises: workout.strength.exercises
     };
     
     // Insert workout into database
@@ -85,8 +87,8 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(workouts.date));
     
     // Find the first one with a mobility day
-    const workoutWithMobilityDay = allWorkouts.find(w => w.mobilityDay !== null);
-    return workoutWithMobilityDay?.mobilityDay || undefined;
+    const workoutWithMobilityDay = allWorkouts.find(w => w.mobility_day !== null);
+    return workoutWithMobilityDay?.mobility_day || undefined;
   }
 
   async getLastStrengthDay(): Promise<number | undefined> {
@@ -97,26 +99,27 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(workouts.date));
     
     // Find the first one with a strength day
-    const workoutWithStrengthDay = allWorkouts.find(w => w.strengthDay !== null);
-    return workoutWithStrengthDay?.strengthDay || undefined;
+    const workoutWithStrengthDay = allWorkouts.find(w => w.strength_day !== null);
+    return workoutWithStrengthDay?.strength_day || undefined;
   }
 
   // Helper method to map database workout format to application workout format
   private mapDBWorkoutToWorkout(dbWorkout: any): Workout {
+    console.log("DB Workout:", dbWorkout);
     return {
       id: dbWorkout.id,
       date: dbWorkout.date,
       weight: dbWorkout.weight || undefined,
       mobility: {
-        dayNumber: dbWorkout.mobilityDay || undefined,
-        completion: dbWorkout.mobilityCompletion as 'not-completed' | 'half-session' | 'full-session'
+        dayNumber: dbWorkout.mobility_day || undefined,
+        completion: dbWorkout.mobility_completion as 'not-completed' | 'half-session' | 'full-session'
       },
       handstand: {
-        exercises: dbWorkout.handstandExercises as string[]
+        exercises: dbWorkout.handstand_exercises as string[]
       },
       strength: {
-        dayNumber: dbWorkout.strengthDay || undefined,
-        exercises: dbWorkout.strengthExercises as Exercise[]
+        dayNumber: dbWorkout.strength_day || undefined,
+        exercises: dbWorkout.strength_exercises as Exercise[]
       }
     };
   }

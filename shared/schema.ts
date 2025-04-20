@@ -53,11 +53,11 @@ export const workouts = pgTable("workouts", {
   id: serial("id").primaryKey(),
   date: text("date").notNull(),
   weight: text("weight"),
-  mobilityDay: integer("mobility_day"),
-  mobilityCompletion: text("mobility_completion").notNull(),
-  handstandExercises: jsonb("handstand_exercises").notNull().$type<string[]>(),
-  strengthDay: integer("strength_day"),
-  strengthExercises: jsonb("strength_exercises").notNull().$type<Exercise[]>(),
+  mobility_day: integer("mobility_day"),
+  mobility_completion: text("mobility_completion").notNull(),
+  handstand_exercises: jsonb("handstand_exercises").notNull().$type<string[]>(),
+  strength_day: integer("strength_day"),
+  strength_exercises: jsonb("strength_exercises").notNull().$type<Exercise[]>(),
 });
 
 // Export schemas for insert operations
