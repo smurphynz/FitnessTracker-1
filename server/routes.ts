@@ -255,6 +255,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Send the completely new implementation file with timestamp in the filename
     res.sendFile(path.resolve(process.cwd(), "server/public/safari_fix_1745108499.html"));
   });
+  
+  // Brand new route with current timestamp to ensure Chrome doesn't cache it
+  app.get("/exercises-1745110099", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for all browsers
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    
+    // Send the completely new implementation file
+    res.sendFile(path.resolve(process.cwd(), "server/public/safari_fix_1745108499.html"));
+  });
 
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
