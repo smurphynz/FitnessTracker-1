@@ -31,7 +31,7 @@ export const handstandSchema = z.object({
 export type Handstand = z.infer<typeof handstandSchema>;
 
 export const strengthSchema = z.object({
-  dayNumber: z.number().optional(),
+  dayNumber: z.number().nullable().optional(),
   exercises: z.array(exerciseSchema),
 });
 
