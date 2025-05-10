@@ -102,6 +102,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Admin endpoint to clear all workout data (password protected)
+  app.post("/api/admin/clear-workouts", async (req: Request, res: Response) => {
+    try {
+      // Simple password protection
+      const { password } = req.body;
+      if (password !== "clearallworkouts") {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
+      // Import necessary dependencies for database operations
+      const { db } = await import("./db");
+      const { workouts } = await import("@shared/schema");
+      
+      // Delete all workouts
+      await db.delete(workouts);
+      res.json({ success: true, message: "All workout data has been cleared" });
+    } catch (error) {
+      console.error('Error clearing workout data:', error);
+      res.status(500).json({ message: "Failed to clear workout data" });
+    }
+  });
+  
   // Serve the forest app as the main app
   app.get("/forest-app", (req: Request, res: Response) => {
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
@@ -337,6 +359,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     // Send the index file with all new exercise options
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
+  });
+
+  // Admin page for clearing data
+  app.get("/admin", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/admin.html"));
   });
 
   // Also serve the forest app at the root route with higher priority than Vite
