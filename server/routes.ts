@@ -92,6 +92,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get last Calimove strength day (even if recent workouts were freestyle)
+  app.get("/api/last-calimove-strength-day", async (req: Request, res: Response) => {
+    try {
+      const result = await storage.getLastCalimoveStrengthDay();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch last Calimove strength day" });
+    }
+  });
+  
   // Serve the forest app as the main app
   app.get("/forest-app", (req: Request, res: Response) => {
     res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));

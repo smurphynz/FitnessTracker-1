@@ -17,6 +17,7 @@ export interface IStorage {
   // Last day tracking methods
   getLastMobilityDay(): Promise<number | undefined>;
   getLastStrengthDay(): Promise<number | undefined>;
+  getLastCalimoveStrengthDay(): Promise<{ day: number | null, isRecent: boolean }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -132,9 +133,47 @@ export class DatabaseStorage implements IStorage {
       .from(workouts)
       .orderBy(desc(workouts.date));
     
-    // Find the first one with a strength day
+    // Find the first one with a non-null strength day (program day, not freestyle)
     const workoutWithStrengthDay = allWorkouts.find(w => w.strength_day !== null);
     return workoutWithStrengthDay?.strength_day || undefined;
+  }
+  
+  // Get the last strength day even if recent workouts were freestyle days
+  async getLastCalimoveStrengthDay(): Promise<{ day: number | null, isRecent: boolean }> {
+    // Get all workouts ordered by date, most recent first
+    const allWorkouts = await db
+      .select()
+      .from(workouts)
+      .orderBy(desc(workouts.date));
+    
+    // If there are no workouts, return null
+    if (allWorkouts.length === 0) {
+      return { day: null, isRecent: false };
+    }
+    
+    // Find the most recent workout
+    const mostRecentWorkout = allWorkouts[0];
+    
+    // If the most recent workout has a strength day, return it
+    if (mostRecentWorkout.strength_day !== null) {
+      return { 
+        day: mostRecentWorkout.strength_day, 
+        isRecent: true 
+      };
+    }
+    
+    // Otherwise, look for the most recent workout with a strength day
+    const workoutWithStrengthDay = allWorkouts.find(w => w.strength_day !== null);
+    
+    if (workoutWithStrengthDay) {
+      return { 
+        day: workoutWithStrengthDay.strength_day, 
+        isRecent: false // This means this was not the most recent workout
+      };
+    }
+    
+    // If no workout with a strength day is found, return null
+    return { day: null, isRecent: false };
   }
   
   // Check if a workout already exists for the given date
