@@ -292,11 +292,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Send the completely new implementation file
     res.sendFile(path.resolve(process.cwd(), "server/public/nocache_version_1745111110.html"));
   });
+  
+  // Ultra fresh version for seeing the new exercise options - new timestamp to force load
+  app.get("/fresh-exercises-options", (req: Request, res: Response) => {
+    // Generate unique timestamp
+    const timestamp = Date.now();
+    res.redirect(`/fresh-exercises-options/${timestamp}`);
+  });
+  
+  // Timestamped route to absolutely force browser refresh
+  app.get("/fresh-exercises-options/:timestamp", (req: Request, res: Response) => {
+    // Add extreme cache-busting headers for all browsers
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '-1');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    
+    // Add a unique header to verify freshness on each load
+    res.setHeader('X-Fresh-Load', req.params.timestamp);
+    
+    // Send the index file with all new exercise options
+    res.sendFile(path.resolve(process.cwd(), "server/public/index.html"));
+  });
 
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
-    // Redirect to our improved nocache version with better styling
-    res.redirect("/nocache-1745111110");
+    // Redirect to our ultra-fresh version with new exercise options
+    res.redirect("/fresh-exercises-options");
   });
   
   // Emergency Save API endpoint - can be accessed directly through a browser
