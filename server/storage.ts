@@ -12,6 +12,7 @@ export interface IStorage {
   getWorkouts(): Promise<Workout[]>;
   getWorkout(id: number): Promise<Workout | undefined>;
   createWorkout(workout: Workout): Promise<Workout>;
+  checkDuplicateWorkout(date: string): Promise<boolean>;
   
   // Last day tracking methods
   getLastMobilityDay(): Promise<number | undefined>;
@@ -58,6 +59,39 @@ export class DatabaseStorage implements IStorage {
     // Map the workout to database format
     console.log("Saving workout:", JSON.stringify(workout, null, 2));
     
+    // First check if we already have a workout with this date
+    const isDuplicate = await this.checkDuplicateWorkout(workout.date);
+    if (isDuplicate) {
+      // If it's a duplicate, we'll update the existing workout instead of creating a new one
+      const existingWorkouts = await db
+        .select()
+        .from(workouts)
+        .where(eq(workouts.date, workout.date));
+      
+      const existingWorkout = existingWorkouts[0];
+      
+      // Prepare update data
+      const updateData = {
+        weight: workout.weight || '',
+        mobility_day: workout.mobility.dayNumber || null,
+        mobility_completion: workout.mobility.completion,
+        handstand_exercises: workout.handstand.exercises,
+        strength_day: workout.strength.dayNumber || null,
+        strength_exercises: workout.strength.exercises
+      };
+      
+      // Update the existing workout
+      const [updatedWorkout] = await db
+        .update(workouts)
+        .set(updateData)
+        .where(eq(workouts.id, existingWorkout.id))
+        .returning();
+      
+      console.log("Updated existing workout instead of creating duplicate");
+      return this.mapDBWorkoutToWorkout(updatedWorkout);
+    }
+    
+    // If not a duplicate, proceed with regular insert
     const insertData = {
       date: workout.date,
       weight: workout.weight || '',
@@ -101,6 +135,17 @@ export class DatabaseStorage implements IStorage {
     // Find the first one with a strength day
     const workoutWithStrengthDay = allWorkouts.find(w => w.strength_day !== null);
     return workoutWithStrengthDay?.strength_day || undefined;
+  }
+  
+  // Check if a workout already exists for the given date
+  async checkDuplicateWorkout(date: string): Promise<boolean> {
+    const existingWorkouts = await db
+      .select()
+      .from(workouts)
+      .where(eq(workouts.date, date));
+    
+    // Return true if we found any workouts with the same date
+    return existingWorkouts.length > 0;
   }
 
   // Helper method to map database workout format to application workout format
