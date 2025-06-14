@@ -24,7 +24,7 @@ export function ProtectedRoute({
   if (!user) {
     return (
       <Route path={path}>
-        <Redirect to="/direct-access" />
+        <Redirect to="/simple-login.html" />
       </Route>
     );
   }
