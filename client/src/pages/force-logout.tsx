@@ -8,18 +8,26 @@ export default function ForceLogoutPage() {
   const { logoutMutation } = useAuth();
   const [, setLocation] = useLocation();
 
-  const handleForceLogout = () => {
-    // Clear localStorage
-    localStorage.clear();
-    sessionStorage.clear();
-    
-    // Call logout API
-    logoutMutation.mutate();
-    
-    // Force redirect to auth page
-    setTimeout(() => {
-      window.location.href = '/auth';
-    }, 500);
+  const handleForceLogout = async () => {
+    try {
+      // Clear all storage
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Clear cookies
+      document.cookie.split(";").forEach(function(c) { 
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+      });
+      
+      // Call logout API
+      await fetch('/api/logout', { method: 'POST' });
+      
+      // Hard redirect to auth page
+      window.location.replace('/auth');
+    } catch (error) {
+      console.error('Logout error:', error);
+      window.location.replace('/auth');
+    }
   };
 
   return (

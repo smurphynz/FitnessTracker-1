@@ -103,25 +103,11 @@ export default function Home() {
           <strong>Good news:</strong> Your 11 workouts are safely stored in the database.
         </p>
         <div className="flex gap-2 mt-2">
-          <Link href="/auth">
-            <Button variant="outline" size="sm">
-              Create New User Account
+          <Link href="/force-logout">
+            <Button variant="destructive" size="sm">
+              Clear Session & Create New Users
             </Button>
           </Link>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => {
-              // Force logout and redirect
-              logoutMutation.mutate();
-              setTimeout(() => {
-                window.location.href = '/auth';
-              }, 1000);
-            }}
-            disabled={logoutMutation.isPending}
-          >
-            Force Logout & Access Registration
-          </Button>
         </div>
       </div>
 

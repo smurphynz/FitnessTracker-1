@@ -111,11 +111,14 @@ export default function AuthPage() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <Dumbbell className="h-8 w-8 text-primary mr-2" />
-              <h1 className="text-2xl font-bold">Multi-User Fitness Tracker</h1>
+              <h1 className="text-2xl font-bold">Sean's Fitness Tracker</h1>
             </div>
             <p className="text-muted-foreground">
-              Create accounts for up to 4 users to track individual progress
+              Create separate accounts for family members to track individual progress
             </p>
+            <div className="mt-2 p-2 bg-green-900/30 rounded text-sm text-green-200">
+              Your 11 existing workouts are preserved and accessible
+            </div>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
