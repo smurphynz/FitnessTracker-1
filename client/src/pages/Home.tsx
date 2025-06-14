@@ -74,6 +74,7 @@ export default function Home() {
           <span className="font-medium">{user?.display_name}</span>
         </div>
         <div className="flex items-center space-x-2">
+          <ThemeToggle />
           <Link href="/settings">
             <Button variant="outline" size="sm" className="flex items-center space-x-1">
               <Settings className="h-4 w-4" />

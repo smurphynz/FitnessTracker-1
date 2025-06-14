@@ -2,7 +2,7 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { workoutSchema, Workout, updateUserPreferencesSchema } from "@shared/schema";
+import { workoutSchema, Workout, updateUserPreferencesSchema, insertWorkoutTemplateSchema, insertProgressPhotoSchema } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
 import fs from "fs";
@@ -133,6 +133,108 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating user preferences:", error);
       res.status(500).json({ message: "Failed to update preferences" });
+    }
+  });
+
+  // Workout Templates API routes
+  app.get("/api/workout-templates", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user!.id;
+      const templates = await storage.getWorkoutTemplates(userId);
+      res.json(templates);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch workout templates" });
+    }
+  });
+
+  app.post("/api/workout-templates", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validationResult = insertWorkoutTemplateSchema.safeParse(req.body);
+      
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid template data", 
+          errors: validationResult.error.errors 
+        });
+      }
+      
+      const userId = req.user!.id;
+      const template = await storage.createWorkoutTemplate(validationResult.data, userId);
+      res.status(201).json(template);
+    } catch (error) {
+      console.error("Error creating workout template:", error);
+      res.status(500).json({ message: "Failed to create workout template" });
+    }
+  });
+
+  app.delete("/api/workout-templates/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid template ID" });
+      }
+      
+      const userId = req.user!.id;
+      const success = await storage.deleteWorkoutTemplate(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      
+      res.json({ message: "Template deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete workout template" });
+    }
+  });
+
+  // Progress Photos API routes
+  app.get("/api/progress-photos", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user!.id;
+      const photos = await storage.getProgressPhotos(userId);
+      res.json(photos);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch progress photos" });
+    }
+  });
+
+  app.post("/api/progress-photos", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validationResult = insertProgressPhotoSchema.safeParse(req.body);
+      
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid photo data", 
+          errors: validationResult.error.errors 
+        });
+      }
+      
+      const userId = req.user!.id;
+      const photo = await storage.createProgressPhoto(validationResult.data, userId);
+      res.status(201).json(photo);
+    } catch (error) {
+      console.error("Error creating progress photo:", error);
+      res.status(500).json({ message: "Failed to create progress photo" });
+    }
+  });
+
+  app.delete("/api/progress-photos/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid photo ID" });
+      }
+      
+      const userId = req.user!.id;
+      const success = await storage.deleteProgressPhoto(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Photo not found" });
+      }
+      
+      res.json({ message: "Photo deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete progress photo" });
     }
   });
   

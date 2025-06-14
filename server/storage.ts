@@ -1,4 +1,4 @@
-import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise } from "@shared/schema";
+import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise, workoutTemplates, WorkoutTemplateDB, InsertWorkoutTemplate, progressPhotos, ProgressPhotoDB, InsertProgressPhoto } from "@shared/schema";
 import { db, pool } from "./db";
 import { eq, desc, and } from "drizzle-orm";
 import session from "express-session";
@@ -8,8 +8,12 @@ export interface IStorage {
   // User methods (keeping original methods)
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByResetToken(token: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserPreferences(id: number, preferences: Partial<User>): Promise<User>;
+  setPasswordResetToken(userId: number, token: string, expires: string): Promise<void>;
+  resetPassword(userId: number, hashedPassword: string): Promise<void>;
   
   // Workout methods
   getWorkouts(userId: number): Promise<Workout[]>;
@@ -21,6 +25,17 @@ export interface IStorage {
   getLastMobilityDay(userId: number): Promise<number | undefined>;
   getLastStrengthDay(userId: number): Promise<number | undefined>;
   getLastCalimoveStrengthDay(userId: number): Promise<{ day: number | null, isRecent: boolean }>;
+
+  // Workout templates
+  getWorkoutTemplates(userId: number): Promise<WorkoutTemplateDB[]>;
+  getWorkoutTemplate(id: number, userId: number): Promise<WorkoutTemplateDB | undefined>;
+  createWorkoutTemplate(template: InsertWorkoutTemplate, userId: number): Promise<WorkoutTemplateDB>;
+  deleteWorkoutTemplate(id: number, userId: number): Promise<boolean>;
+
+  // Progress photos
+  getProgressPhotos(userId: number): Promise<ProgressPhotoDB[]>;
+  createProgressPhoto(photo: InsertProgressPhoto, userId: number): Promise<ProgressPhotoDB>;
+  deleteProgressPhoto(id: number, userId: number): Promise<boolean>;
 
   sessionStore: any;
 }
@@ -63,6 +78,51 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async getUserByResetToken(token: string): Promise<User | undefined> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(and(
+        eq(users.reset_token, token),
+        // Token should not be expired (expires field should be in the future)
+        // For simplicity, we'll just check if token exists
+      ));
+    
+    if (!user || !user.reset_token_expires) return undefined;
+    
+    // Check if token is expired
+    const expiresAt = new Date(user.reset_token_expires);
+    if (expiresAt < new Date()) return undefined;
+    
+    return user;
+  }
+
+  async setPasswordResetToken(userId: number, token: string, expires: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ 
+        reset_token: token, 
+        reset_token_expires: expires 
+      })
+      .where(eq(users.id, userId));
+  }
+
+  async resetPassword(userId: number, hashedPassword: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ 
+        password: hashedPassword,
+        reset_token: null,
+        reset_token_expires: null
+      })
+      .where(eq(users.id, userId));
   }
 
   // Workout methods
@@ -217,6 +277,62 @@ export class DatabaseStorage implements IStorage {
       .limit(1);
     
     return !!existingWorkout;
+  }
+
+  // Workout Templates methods
+  async getWorkoutTemplates(userId: number): Promise<WorkoutTemplateDB[]> {
+    return await db
+      .select()
+      .from(workoutTemplates)
+      .where(eq(workoutTemplates.user_id, userId))
+      .orderBy(desc(workoutTemplates.created_at));
+  }
+
+  async getWorkoutTemplate(id: number, userId: number): Promise<WorkoutTemplateDB | undefined> {
+    const [template] = await db
+      .select()
+      .from(workoutTemplates)
+      .where(and(eq(workoutTemplates.id, id), eq(workoutTemplates.user_id, userId)));
+    return template || undefined;
+  }
+
+  async createWorkoutTemplate(template: InsertWorkoutTemplate, userId: number): Promise<WorkoutTemplateDB> {
+    const [newTemplate] = await db
+      .insert(workoutTemplates)
+      .values({ ...template, user_id: userId })
+      .returning();
+    return newTemplate;
+  }
+
+  async deleteWorkoutTemplate(id: number, userId: number): Promise<boolean> {
+    const result = await db
+      .delete(workoutTemplates)
+      .where(and(eq(workoutTemplates.id, id), eq(workoutTemplates.user_id, userId)));
+    return result.rowCount > 0;
+  }
+
+  // Progress Photos methods
+  async getProgressPhotos(userId: number): Promise<ProgressPhotoDB[]> {
+    return await db
+      .select()
+      .from(progressPhotos)
+      .where(eq(progressPhotos.user_id, userId))
+      .orderBy(desc(progressPhotos.taken_at));
+  }
+
+  async createProgressPhoto(photo: InsertProgressPhoto, userId: number): Promise<ProgressPhotoDB> {
+    const [newPhoto] = await db
+      .insert(progressPhotos)
+      .values({ ...photo, user_id: userId })
+      .returning();
+    return newPhoto;
+  }
+
+  async deleteProgressPhoto(id: number, userId: number): Promise<boolean> {
+    const result = await db
+      .delete(progressPhotos)
+      .where(and(eq(progressPhotos.id, id), eq(progressPhotos.user_id, userId)));
+    return result.rowCount > 0;
   }
 
   // Helper method to map database workout format to application workout format

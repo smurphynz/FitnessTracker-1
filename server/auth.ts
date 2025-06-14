@@ -142,6 +142,66 @@ export function setupAuth(app: Express) {
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     const user = req.user!;
-    res.json({ id: user.id, username: user.username, display_name: user.display_name });
+    res.json({ id: user.id, username: user.username, display_name: user.display_name, theme: user.theme });
+  });
+
+  // Password reset request
+  app.post("/api/password-reset-request", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        // Don't reveal if email exists
+        return res.json({ message: "If the email exists, a reset link has been sent" });
+      }
+
+      const resetToken = randomBytes(32).toString("hex");
+      const resetTokenExpires = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutes
+
+      await storage.setPasswordResetToken(user.id, resetToken, resetTokenExpires);
+
+      // In a real app, you'd send an email here
+      // For now, we'll just return the token for testing
+      res.json({ 
+        message: "If the email exists, a reset link has been sent",
+        // Remove this in production - only for testing
+        resetToken: resetToken 
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to process reset request" });
+    }
+  });
+
+  // Password reset
+  app.post("/api/password-reset", async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ message: "Token and new password are required" });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+
+      const user = await storage.getUserByResetToken(token);
+      if (!user) {
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+
+      // Update password and clear reset token
+      const hashedPassword = await hashPassword(newPassword);
+      await storage.resetPassword(user.id, hashedPassword);
+
+      res.json({ message: "Password reset successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to reset password" });
+    }
   });
 }
