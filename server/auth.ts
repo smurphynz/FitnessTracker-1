@@ -65,13 +65,23 @@ export function setupAuth(app: Express) {
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
+        console.log("LocalStrategy checking user:", username);
         const user = await storage.getUserByUsername(username);
-        if (!user || !(await comparePasswords(password, user.password))) {
+        console.log("Found user:", user ? user.username : "not found");
+        if (!user) {
+          console.log("User not found in database");
           return done(null, false);
-        } else {
-          return done(null, user);
         }
+        const passwordMatch = await comparePasswords(password, user.password);
+        console.log("Password match:", passwordMatch);
+        if (!passwordMatch) {
+          console.log("Password does not match");
+          return done(null, false);
+        }
+        console.log("Authentication successful for:", user.username);
+        return done(null, user);
       } catch (error) {
+        console.log("LocalStrategy error:", error);
         return done(error);
       }
     }),
@@ -120,14 +130,23 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
+    console.log("Login attempt:", req.body.username);
     passport.authenticate("local", (err: any, user: any, info: any) => {
-      if (err) return next(err);
+      if (err) {
+        console.log("Login error:", err);
+        return next(err);
+      }
       if (!user) {
+        console.log("Login failed for user:", req.body.username);
         return res.status(401).json({ message: "Invalid username or password" });
       }
       
       req.login(user, (err: any) => {
-        if (err) return next(err);
+        if (err) {
+          console.log("Session error:", err);
+          return next(err);
+        }
+        console.log("Login successful for user:", user.username);
         res.status(200).json({ id: user.id, username: user.username, display_name: user.display_name });
       });
     })(req, res, next);
