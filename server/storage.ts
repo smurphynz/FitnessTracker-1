@@ -41,33 +41,36 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Workout methods
-  async getWorkouts(): Promise<Workout[]> {
+  async getWorkouts(userId: number): Promise<Workout[]> {
     // Get workouts sorted by date in descending order (newest first)
-    const workoutsFromDB = await db.select().from(workouts).orderBy(desc(workouts.date));
+    const workoutsFromDB = await db.select().from(workouts)
+      .where(eq(workouts.user_id, userId))
+      .orderBy(desc(workouts.date));
     
     // Convert database workout format to application workout format
     return workoutsFromDB.map(workout => this.mapDBWorkoutToWorkout(workout));
   }
 
-  async getWorkout(id: number): Promise<Workout | undefined> {
-    const [workout] = await db.select().from(workouts).where(eq(workouts.id, id));
+  async getWorkout(id: number, userId: number): Promise<Workout | undefined> {
+    const [workout] = await db.select().from(workouts)
+      .where(and(eq(workouts.id, id), eq(workouts.user_id, userId)));
     if (!workout) return undefined;
     
     return this.mapDBWorkoutToWorkout(workout);
   }
 
-  async createWorkout(workout: Workout): Promise<Workout> {
+  async createWorkout(workout: Workout, userId: number): Promise<Workout> {
     // Map the workout to database format
     console.log("Saving workout:", JSON.stringify(workout, null, 2));
     
     // First check if we already have a workout with this date
-    const isDuplicate = await this.checkDuplicateWorkout(workout.date);
+    const isDuplicate = await this.checkDuplicateWorkout(workout.date, userId);
     if (isDuplicate) {
       // If it's a duplicate, we'll update the existing workout instead of creating a new one
       const existingWorkouts = await db
         .select()
         .from(workouts)
-        .where(eq(workouts.date, workout.date));
+        .where(and(eq(workouts.date, workout.date), eq(workouts.user_id, userId)));
       
       const existingWorkout = existingWorkouts[0];
       
@@ -94,6 +97,7 @@ export class DatabaseStorage implements IStorage {
     
     // If not a duplicate, proceed with regular insert
     const insertData = {
+      user_id: userId,
       date: workout.date,
       weight: workout.weight || '',
       mobility_day: workout.mobility.dayNumber || null,
@@ -114,11 +118,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Last day tracking methods
-  async getLastMobilityDay(): Promise<number | undefined> {
+  async getLastMobilityDay(userId: number): Promise<number | undefined> {
     // Get all workouts ordered by date
     const allWorkouts = await db
       .select()
       .from(workouts)
+      .where(eq(workouts.user_id, userId))
       .orderBy(desc(workouts.date));
     
     // Find the first one with a mobility day
@@ -126,11 +131,12 @@ export class DatabaseStorage implements IStorage {
     return workoutWithMobilityDay?.mobility_day || undefined;
   }
 
-  async getLastStrengthDay(): Promise<number | undefined> {
+  async getLastStrengthDay(userId: number): Promise<number | undefined> {
     // Get all workouts ordered by date
     const allWorkouts = await db
       .select()
       .from(workouts)
+      .where(eq(workouts.user_id, userId))
       .orderBy(desc(workouts.date));
     
     // Find the first one with a non-null strength day (program day, not freestyle)
@@ -139,11 +145,12 @@ export class DatabaseStorage implements IStorage {
   }
   
   // Get the last strength day even if recent workouts were freestyle days
-  async getLastCalimoveStrengthDay(): Promise<{ day: number | null, isRecent: boolean }> {
+  async getLastCalimoveStrengthDay(userId: number): Promise<{ day: number | null, isRecent: boolean }> {
     // Get all workouts ordered by date, most recent first
     const allWorkouts = await db
       .select()
       .from(workouts)
+      .where(eq(workouts.user_id, userId))
       .orderBy(desc(workouts.date));
     
     // If there are no workouts, return null
@@ -177,11 +184,11 @@ export class DatabaseStorage implements IStorage {
   }
   
   // Check if a workout already exists for the given date
-  async checkDuplicateWorkout(date: string): Promise<boolean> {
+  async checkDuplicateWorkout(date: string, userId: number): Promise<boolean> {
     const existingWorkouts = await db
       .select()
       .from(workouts)
-      .where(eq(workouts.date, date));
+      .where(and(eq(workouts.date, date), eq(workouts.user_id, userId)));
     
     // Return true if we found any workouts with the same date
     return existingWorkouts.length > 0;
