@@ -38,28 +38,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
       const res = await apiRequest("POST", "/api/login", credentials);
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || "Login failed");
+      }
       return await res.json();
     },
-    onSuccess: async (user: SelectUser) => {
-      // Clear old cache and set new user data
-      queryClient.removeQueries({ queryKey: ["/api/user"] });
+    onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
-      queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
       
-      // Show success toast
       toast({
         title: "Welcome back!",
         description: `Signed in as ${user.display_name}`,
       });
       
-      // Comprehensive redirect strategy
-      console.log("Login successful, redirecting:", user);
-      
-      // Clear any cached authentication state
-      localStorage.removeItem('auth-redirect-attempted');
-      
-      // Force immediate page navigation
-      window.location.assign("/");
+      // Simple redirect to home page
+      window.location.href = "/";
     },
     onError: (error: Error) => {
       toast({

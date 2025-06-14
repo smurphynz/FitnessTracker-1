@@ -117,10 +117,10 @@ export default function AuthPage() {
               <h1 className="text-2xl font-bold">Sean's Fitness Tracker</h1>
             </div>
             <p className="text-muted-foreground">
-              Create separate accounts for family members to track individual progress
+              Try logging in as "Da Rock" or create a new account
             </p>
-            <div className="mt-2 p-2 bg-green-900/30 rounded text-sm text-green-200">
-              Your 11 existing workouts are preserved and accessible
+            <div className="mt-2 p-2 bg-blue-900/30 rounded text-sm text-blue-200">
+              Test account: Username "test" / Password "test123" 
             </div>
           </div>
 
