@@ -52,6 +52,7 @@ export type Workout = z.infer<typeof workoutSchema>;
 // Database table definition
 export const workouts = pgTable("workouts", {
   id: serial("id").primaryKey(),
+  user_id: integer("user_id").notNull().references(() => users.id),
   date: text("date").notNull(),
   weight: text("weight"),
   mobility_day: integer("mobility_day"),
@@ -69,16 +70,19 @@ export const insertWorkoutSchema = createInsertSchema(workouts).omit({
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>;
 export type WorkoutDB = typeof workouts.$inferSelect;
 
-// Users table (keeping this from the original schema)
+// Users table with enhanced multi-user support
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  display_name: text("display_name").notNull(),
+  created_at: text("created_at").notNull().default("CURRENT_TIMESTAMP"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  display_name: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
