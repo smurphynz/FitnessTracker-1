@@ -5,8 +5,14 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
-// Turn off global etags so Express never answers 304
-app.set("etag", false);
+// Turn off global etags and disable all caching
+app.disable("etag");
+app.use((_, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
+  next();
+});
 
 // CORS configuration for session cookies
 app.use(cors({

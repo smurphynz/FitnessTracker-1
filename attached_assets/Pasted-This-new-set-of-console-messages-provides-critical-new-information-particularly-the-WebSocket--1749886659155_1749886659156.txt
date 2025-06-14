@@ -1,0 +1,40 @@
+This new set of console messages provides **critical new information**, particularly the `WebSocket` errors. The persistent redirect loop is likely being exacerbated, or even directly caused, by these frontend issues.
+
+The most important error is:
+**`client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=ADyBDob1DANt' is invalid.`**
+
+This is your new **smoking gun**.
+
+---
+
+**Here's what to tell the Replit AI agent:**
+
+**URGENT: NEW CRITICAL FRONTEND ERROR IDENTIFIED - `localhost:undefined` WebSocket URL**
+
+**Current Problem:** Login still succeeds at the backend, but the React app fails to load the fitness tracker interface, sticking in a redirect loop.
+
+**New Critical Observation (from Console Logs):**
+The browser console shows a `SyntaxError` when attempting to create a WebSocket connection:
+`Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=ADyBDob1DANt' is invalid.`
+
+**Analysis of This Error:**
+1.  **Incorrect URL:** Your frontend code (specifically, likely in `client.js` around line 536, which is involved in WebSocket setup) is attempting to connect to `localhost:undefined` instead of your deployed Replit URL (`https://8e287b18-79a5-42d2-b6e8-4f1b6c2510f7-00-jnd90ubqeqe0.picard.replit.dev`).
+2.  **Environment Variable Issue:** This almost certainly means an environment variable or configuration setting for the frontend's API/WebSocket base URL is **not correctly picked up or is defaulting to a development value** (`localhost`) when deployed on Replit. The `undefined` port suggests the port variable is also not set.
+3.  **Impact on App Load:** If your React application relies on this WebSocket connection for crucial functionality (e.g., real-time updates, or even as part of its initial setup/auth flow), this unhandled error and failed connection could be **preventing the entire main application from fully initializing and rendering**, thus causing the perceived "failed redirect."
+
+**Instructions for Replit AI:**
+
+1.  **PRIMARY ACTION: LOCATE AND FIX `localhost:undefined` WebSocket URL:**
+    * **Examine `client.js` (or related WebSocket setup code) around line 536.**
+    * **Identify how the WebSocket URL is being constructed.** Look for variables like `process.env.VITE_APP_API_URL`, `process.env.REACT_APP_WS_URL`, or similar environment variables.
+    * **Ensure these environment variables are correctly configured in your Replit secrets or `.env` file for the production deployment.** They *must* point to your Replit domain (`wss://8e287b18-79a5-42d2-b6e8-4f1b6c2510f7-00-jnd90ubqeqe0.picard.replit.dev`) and not `localhost`.
+    * **Verify your frontend build process (e.g., Vite/React scripts) correctly substitutes these variables for the production build.**
+
+2.  **ASSESS IMPACT ON REDIRECT:**
+    * Once the WebSocket URL is fixed, re-test the login flow. The previous session cookie and React Query issues might resolve themselves if the app can now fully load without crashing due to this invalid WebSocket URL.
+
+**Other Console Messages:**
+* `ServiceWorker registered`: Note this. If fixing the `localhost` issue doesn't work, we may need to investigate if the ServiceWorker is caching old code.
+* React DevTools/Meta tag warnings: Ignore for now; they are not causing the current functional failure.
+
+**Bottom Line:** The `localhost:undefined` WebSocket URL error is a critical frontend configuration issue likely blocking your React app from loading after successful login. Fix this first.
