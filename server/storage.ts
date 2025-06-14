@@ -1,6 +1,8 @@
 import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise } from "@shared/schema";
-import { db } from "./db";
+import { db, pool } from "./db";
 import { eq, desc, and } from "drizzle-orm";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
 
 export interface IStorage {
   // User methods (keeping original methods)
@@ -19,9 +21,22 @@ export interface IStorage {
   getLastMobilityDay(userId: number): Promise<number | undefined>;
   getLastStrengthDay(userId: number): Promise<number | undefined>;
   getLastCalimoveStrengthDay(userId: number): Promise<{ day: number | null, isRecent: boolean }>;
+
+  sessionStore: session.SessionStore;
 }
 
+const PostgresSessionStore = connectPg(session);
+
 export class DatabaseStorage implements IStorage {
+  sessionStore: session.SessionStore;
+
+  constructor() {
+    this.sessionStore = new PostgresSessionStore({ 
+      pool, 
+      createTableIfMissing: true 
+    });
+  }
+
   // User methods
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
