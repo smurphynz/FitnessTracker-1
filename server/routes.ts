@@ -500,8 +500,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/admin.html"));
   });
 
+  // Direct logout route that clears session completely
+  app.get("/logout-now", (req: Request, res: Response) => {
+    req.logout((err) => {
+      if (err) console.error("Logout error:", err);
+    });
+    req.session.destroy((err) => {
+      if (err) console.error("Session destroy error:", err);
+    });
+    res.clearCookie('connect.sid');
+    res.redirect('/auth');
+  });
+
   // Let Vite handle the root route for the React app
-  // Remove this redirect to allow React routing to work properly
   
   // Emergency Save API endpoint - can be accessed directly through a browser
   app.get("/emergency-save", async (req: Request, res: Response) => {
