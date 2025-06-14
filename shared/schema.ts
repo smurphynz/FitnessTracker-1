@@ -5,6 +5,7 @@ import { z } from "zod";
 // Core types needed for the fitness app
 export const exerciseSetSchema = z.object({
   value: z.number().positive(),
+  weight: z.number().optional(), // Optional weight for gym exercises
 });
 
 export type ExerciseSet = z.infer<typeof exerciseSetSchema>;
