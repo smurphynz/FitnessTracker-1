@@ -65,11 +65,20 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Set up Vite development server for proper module loading
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
+  // In production, serve static files and handle client-side routing
+  if (process.env.NODE_ENV === "production") {
+    // Serve built static files from dist/public
+    app.use(express.static(path.resolve("dist/public")));
+    
+    // Handle client-side routing - serve index.html for all non-API routes
+    app.get("*", (req: Request, res: Response) => {
+      if (!req.path.startsWith("/api")) {
+        res.sendFile(path.resolve("dist/public", "index.html"));
+      }
+    });
   } else {
-    serveStatic(app);
+    // Set up Vite development server
+    await setupVite(app, server);
   }
 
   // ALWAYS serve the app on port 5000
