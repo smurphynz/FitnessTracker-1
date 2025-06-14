@@ -89,22 +89,26 @@ export default function WorkoutTab({
 
   return (
     <div id="workout-content" className="flex flex-col space-y-4 pb-20" style={{ overflow: "visible" }}>
-      {/* Mobility Section */}
-      <MobilitySection 
-        lastMobilityDay={lastMobilityDay}
-        mobilityDay={mobilityDay}
-        setMobilityDay={setMobilityDay}
-        mobilityCompletion={mobilityCompletion}
-        setMobilityCompletion={setMobilityCompletion}
-      />
+      {/* Mobility Section - conditionally shown */}
+      {user?.show_mobility && (
+        <MobilitySection 
+          lastMobilityDay={lastMobilityDay}
+          mobilityDay={mobilityDay}
+          setMobilityDay={setMobilityDay}
+          mobilityCompletion={mobilityCompletion}
+          setMobilityCompletion={setMobilityCompletion}
+        />
+      )}
       
-      {/* Handstand Section */}
-      <HandstandSection 
-        handstandExercises={handstandExercises}
-        setHandstandExercises={setHandstandExercises}
-      />
+      {/* Handstand Section - conditionally shown */}
+      {user?.show_handstand && (
+        <HandstandSection 
+          handstandExercises={handstandExercises}
+          setHandstandExercises={setHandstandExercises}
+        />
+      )}
       
-      {/* Strength Section */}
+      {/* Strength Section - always shown */}
       <StrengthSection 
         lastStrengthDay={lastStrengthDay}
         strengthDay={strengthDay}
