@@ -158,7 +158,7 @@ export default function WorkoutTemplates({ onLoadTemplate, currentWorkout, onSav
                   {template.mobility_day && `Mobility Day ${template.mobility_day}`}
                   {template.mobility_day && template.strength_day && " • "}
                   {template.strength_day && `Strength Day ${template.strength_day}`}
-                  {(template.handstand_exercises?.length || 0) > 0 && ` • ${template.handstand_exercises?.length || 0} handstand exercises`}
+                  {(template.handstand_exercises && template.handstand_exercises.length > 0) && ` • ${template.handstand_exercises.length} handstand exercises`}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-0">

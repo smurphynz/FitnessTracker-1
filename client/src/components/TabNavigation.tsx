@@ -10,17 +10,31 @@ export default function TabNavigation({ activeTab, setActiveTab }: TabNavigation
         <div className="flex">
           <button 
             id="tab-workout" 
-            className={`flex-1 py-3 font-medium text-center ${activeTab === "workout" ? "tab-active" : "opacity-75"}`}
+            className={`flex-1 py-3 font-medium text-center text-sm ${activeTab === "workout" ? "tab-active" : "opacity-75"}`}
             onClick={() => setActiveTab("workout")}
           >
-            Log Workout
+            Workout
           </button>
           <button 
             id="tab-progress" 
-            className={`flex-1 py-3 font-medium text-center ${activeTab === "progress" ? "tab-active" : "opacity-75"}`}
+            className={`flex-1 py-3 font-medium text-center text-sm ${activeTab === "progress" ? "tab-active" : "opacity-75"}`}
             onClick={() => setActiveTab("progress")}
           >
             Progress
+          </button>
+          <button 
+            id="tab-templates" 
+            className={`flex-1 py-3 font-medium text-center text-sm ${activeTab === "templates" ? "tab-active" : "opacity-75"}`}
+            onClick={() => setActiveTab("templates")}
+          >
+            Templates
+          </button>
+          <button 
+            id="tab-photos" 
+            className={`flex-1 py-3 font-medium text-center text-sm ${activeTab === "photos" ? "tab-active" : "opacity-75"}`}
+            onClick={() => setActiveTab("photos")}
+          >
+            Photos
           </button>
         </div>
       </div>

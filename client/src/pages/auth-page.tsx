@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Loader2, Dumbbell, Users } from "lucide-react";
-import PasswordResetForm from "@/components/PasswordResetForm";
+import PasswordResetFormComponent from "@/components/PasswordResetForm";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -96,7 +96,7 @@ export default function AuthPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <PasswordResetForm onBack={() => setShowPasswordReset(false)} onTokenReceived={setResetToken} />
+            <PasswordResetFormComponent onBack={() => setShowPasswordReset(false)} onTokenReceived={setResetToken} />
           </CardContent>
         </Card>
       </div>
@@ -171,6 +171,15 @@ export default function AuthPage() {
                         )}
                         Sign In
                       </Button>
+                      
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="w-full text-sm"
+                        onClick={() => setShowPasswordReset(true)}
+                      >
+                        Forgot Password?
+                      </Button>
                     </form>
                   </Form>
                 </CardContent>
@@ -223,6 +232,23 @@ export default function AuthPage() {
                             <FormControl>
                               <Input {...field} type="password" placeholder="Choose a password" />
                             </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={registerForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email (Optional)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="email" placeholder="your.email@example.com" />
+                            </FormControl>
+                            <FormDescription>
+                              For password recovery (optional)
+                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
