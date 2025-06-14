@@ -52,7 +52,7 @@ export function setupAuth(app: Express) {
     cookie: {
       httpOnly: true,
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Required for HTTPS domains like Replit
       maxAge: 1000 * 60 * 60 * 24 // 24 hours
     }
   };

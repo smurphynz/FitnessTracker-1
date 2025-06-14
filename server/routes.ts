@@ -514,7 +514,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.redirect('/direct-auth');
   });
 
-  // Legacy routes removed - using React SPA authentication only
+  // Debug session cookies (temporary)
+  app.get("/debug-session", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/debug-session.html"));
+  });
 
   // Let Vite handle the root route for the React app
   
