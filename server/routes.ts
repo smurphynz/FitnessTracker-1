@@ -505,11 +505,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     req.logout((err) => {
       if (err) console.error("Logout error:", err);
     });
-    req.session.destroy((err) => {
-      if (err) console.error("Session destroy error:", err);
-    });
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) console.error("Session destroy error:", err);
+      });
+    }
     res.clearCookie('connect.sid');
-    res.redirect('/auth');
+    res.redirect('/direct-auth');
+  });
+
+  // Simple HTML auth page that bypasses React
+  app.get("/direct-auth", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/direct-auth.html"));
   });
 
   // Let Vite handle the root route for the React app

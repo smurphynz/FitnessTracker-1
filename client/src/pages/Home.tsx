@@ -106,9 +106,9 @@ export default function Home() {
           <Button 
             variant="destructive" 
             size="sm"
-            onClick={() => window.location.href = '/logout-now'}
+            onClick={() => window.location.href = '/direct-auth'}
           >
-            Force Logout & Access Registration
+            Create New User Accounts
           </Button>
         </div>
       </div>
