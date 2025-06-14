@@ -15,11 +15,11 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
+      <Route path="/auth" component={AuthPage} />
+      <Route path="/login" component={AuthPage} />
       <ProtectedRoute path="/" component={Home} />
       <ProtectedRoute path="/save" component={SavePage} />
       <ProtectedRoute path="/settings" component={SettingsPage} />
-      <Route path="/auth" component={AuthPage} />
-
       <Route path="/force-logout" component={ForceLogoutPage} />
       <Route component={NotFound} />
     </Switch>
