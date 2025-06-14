@@ -1,0 +1,82 @@
+################################################################
+# 👟  FITNESS-TRACKER – FINAL REDIRECT FIX
+# Purpose:  Remove PWA/Service-Worker + dev WebSocket +
+#           serve a real production bundle behind Express.
+################################################################
+
+
+############################
+# 1. NIX PWA / SERVICE-WORKER
+############################
+# a) Delete these files if they exist
+rm -f public/sw.js src/sw.js src/service-worker.js
+
+# b) Strip every SW registration line
+#    (keep the grep to show you where it was)
+grep -R "serviceWorker" -n src | cut -d: -f1 | uniq
+# → open each file & DELETE any:
+#     navigator.serviceWorker.register(...)
+#     registerSW(...)
+#     import 'virtual:pwa-register'
+
+# c) Hard-unregister any SW on next load
+#    src/main.jsx  – add just after ReactDOM.createRoot(...)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then(regs => regs.forEach(r => r.unregister()));
+}
+
+############################
+# 2. DISABLE VITE DEV SOCKET
+############################
+# a) vite.config.* – comment-out / delete:
+#     import { VitePWA } from 'vite-plugin-pwa'
+#     plugins: [react(), VitePWA({...})]
+# b) Ensure no “@vite/client” script tags in index.html
+
+############################
+# 3. BUILD + SERVE PROD BUNDLE
+############################
+# a) package.json
+jq '.scripts += {
+  "build": "vite build",
+  "serve": "node server/index.js"
+}' package.json > tmp.$$.json && mv tmp.$$.json package.json
+
+# b) server/index.js  (top)
+import path from "path";
+app.use(express.static(path.resolve("dist")));
+app.get("*", (_,res) => res.sendFile(path.resolve("dist","index.html")));
+
+############################
+# 4. FORCE REDIRECT AFTER LOGIN
+############################
+# src/pages/Login.jsx  (handleSubmit)
+await api.post("/login",{ username, password });
+window.location.replace("/");          // hard, no SPA race
+
+############################
+# 5. REPLIT RUN COMMAND
+############################
+# .replit
+run = "npm run build && npm run serve"
+
+############################
+# 6. REDEPLOY CLEAN
+############################
+rm -rf dist          # fresh build
+npm install          # just in case
+npm run build
+npm run serve        # local smoke-test, then:
+# In the Replit UI → Deploy → Redeploy
+
+############################
+# 7. BROWSER HARD RESET
+############################
+Chrome dev-tools → Application → Clear storage (tick all, incl. SW) → Clear
+Full refresh (Ctrl/Cmd+Shift+R) → /login → log in as “Da Rock”
+Should land on blue dashboard.  No SW & no wss://localhost errors.
+
+################################################################
+# END – SW gone, dev socket gone, prod bundle served, redirect works
+################################################################

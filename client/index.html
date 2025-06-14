@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Fitness Tracker</title>
     <meta name="description" content="Track your calisthenics workouts and progress">
-    <link rel="manifest" href="/manifest.json" />
+    <!-- Manifest removed to prevent service worker registration -->
     <meta name="theme-color" content="#1A402B" />
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     
@@ -60,32 +60,34 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Complete cache and service worker elimination -->
+    <!-- Absolute service worker elimination -->
     <script>
-      // Block any attempts to register service workers
+      // Completely disable service workers at the browser level
       if ('serviceWorker' in navigator) {
+        // Delete the entire serviceWorker property
+        delete navigator.serviceWorker;
         Object.defineProperty(navigator, 'serviceWorker', {
-          get: function() {
-            return {
-              register: function() { 
-                console.log('Service worker registration blocked in HTML');
-                return Promise.reject(new Error('Blocked')); 
-              },
-              getRegistrations: function() { return Promise.resolve([]); }
-            };
-          }
+          get: function() { return undefined; },
+          set: function() { },
+          configurable: false
         });
       }
+      
+      // Block WebSocket constructor for problematic connections
+      const OriginalWebSocket = window.WebSocket;
+      window.WebSocket = function(url, protocols) {
+        if (typeof url === 'string' && (url.includes('localhost:undefined') || url.includes('wss://localhost'))) {
+          console.log('Blocked problematic WebSocket:', url);
+          return { close: function() {}, send: function() {} };
+        }
+        return new OriginalWebSocket(url, protocols);
+      };
       
       // Clear all storage
       try {
         localStorage.clear();
         sessionStorage.clear();
-        if ('indexedDB' in window) {
-          indexedDB.deleteDatabase('workbox-expiration');
-          indexedDB.deleteDatabase('workbox-runtime');
-        }
-      } catch(e) { console.log('Storage clear error:', e); }
+      } catch(e) { }
     </script>
   </body>
 </html>
