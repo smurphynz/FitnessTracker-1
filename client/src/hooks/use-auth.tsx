@@ -41,6 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
+      queryClient.removeQueries({ queryKey: ["/api/user"] }); // Ditch stale 304
       queryClient.setQueryData(["/api/user"], user);
       queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
       toast({

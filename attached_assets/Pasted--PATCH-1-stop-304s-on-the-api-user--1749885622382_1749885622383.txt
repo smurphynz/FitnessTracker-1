@@ -1,0 +1,59 @@
+############################################################
+# PATCH 1 – stop 304s on the /api/user check
+############################################################
+1. In server/index.js add **before** any routes:
+
+   // turn off global etags so Express never answers 304
+   app.set("etag", false);
+
+2. In routes/auth.js (or wherever /api/user lives) replace
+      router.get("/user", ...)
+   with:
+
+   router.get("/user", (req, res) => {
+     if (!req.isAuthenticated()) return res.sendStatus(401);
+     // never let the browser cache this
+     res.set("Cache-Control", "no-store, must-revalidate, private");
+     res.json(req.user);          // always 200, never 304
+   });
+
+############################################################
+# PATCH 2 – force React to re-check auth instantly
+############################################################
+3. In src/hooks/useAuth.tsx (or wherever you run TanStack Query)
+
+   // after a successful login call:
+   await api.post("/login", { username, password });
+   queryClient.removeQueries(["/api/user"]);   // <– ditch stale 304
+   navigate("/");
+
+############################################################
+# PATCH 3 – still belt-and-braces on Axios
+############################################################
+4. In src/lib/api.js make sure it reads:
+
+   export const api = axios.create({
+     baseURL: "/api",
+     withCredentials: true,
+     // treat 304 like 200 so queries don’t blow up
+     validateStatus: s => (s >= 200 && s < 300) || s === 304,
+   });
+
+############################################################
+# PATCH 4 – rebuild & redeploy
+############################################################
+5. npm run build     # frontend
+6. npm run start     # backend – confirm “Server running…”
+7. Deploy ▸ Redeploy
+
+############################################################
+# SMOKE TEST
+############################################################
+8. Normal browser (not incognito) ▸ /login
+9. Log in as “Da Rock” ▸ should land on blue dashboard, NOT loop
+10. DevTools ▸ Network:
+      /api/user → 200 (never 304)
+      Cookie “fitness.session” present
+
+# Done – the redirect loop dies when /api/user is always 200.
+############################################################

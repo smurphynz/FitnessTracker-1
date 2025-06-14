@@ -5,6 +5,9 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
+// Turn off global etags so Express never answers 304
+app.set("etag", false);
+
 // CORS configuration for session cookies
 app.use(cors({
   origin: true,

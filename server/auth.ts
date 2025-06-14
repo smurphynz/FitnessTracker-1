@@ -142,6 +142,8 @@ export function setupAuth(app: Express) {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
+    // Never let the browser cache this
+    res.set("Cache-Control", "no-store, must-revalidate, private");
     const user = req.user!;
     res.json({ id: user.id, username: user.username, display_name: user.display_name, theme: user.theme });
   });
