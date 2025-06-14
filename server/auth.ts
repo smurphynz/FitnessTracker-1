@@ -40,7 +40,7 @@ export function setupAuth(app: Express) {
   const PostgresSessionStore = connectPg(session);
   
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || 'fitness-tracker-secret-' + Date.now(),
+    secret: process.env.SESSION_SECRET || 'fitness-tracker-secret-2024',
     resave: false,
     saveUninitialized: false,
     store: new PostgresSessionStore({ 
@@ -49,11 +49,12 @@ export function setupAuth(app: Express) {
       tableName: 'session'
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax'
-    }
+    },
+    name: 'fitness.session'
   };
 
   app.set("trust proxy", 1);

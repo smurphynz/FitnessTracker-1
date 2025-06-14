@@ -533,6 +533,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/url-helper.html"));
   });
 
+  // Session clear page - fixes incognito-only access issue
+  app.get("/session-clear", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/session-clear.html"));
+  });
+
   // Let Vite handle the root route for the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser

@@ -108,18 +108,26 @@ export default function Home() {
               variant="destructive" 
               size="sm" 
               className="w-full"
-              onClick={() => window.location.href = '/simple-register.html'}
+              onClick={() => window.location.href = '/session-clear'}
             >
-              Create New User Account
+              Fix Access Issues (Clear Session)
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="w-full" 
-              onClick={() => window.location.href = '/simple-login.html'}
-            >
-              Switch to Different User
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => window.location.href = '/simple-register.html'}
+              >
+                New Account
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => window.location.href = '/simple-login.html'}
+              >
+                Login
+              </Button>
+            </div>
           </div>
         </div>
       </div>
