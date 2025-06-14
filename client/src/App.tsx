@@ -19,6 +19,7 @@ function Router() {
       <ProtectedRoute path="/save" component={SavePage} />
       <ProtectedRoute path="/settings" component={SettingsPage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/login" component={() => { window.location.href = '/direct-login'; return null; }} />
       <Route path="/force-logout" component={ForceLogoutPage} />
       <Route component={NotFound} />
     </Switch>

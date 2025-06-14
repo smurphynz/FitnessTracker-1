@@ -543,6 +543,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/emergency-access.html"));
   });
 
+  // Direct login for existing Da Rock account
+  app.get("/direct-login", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/direct-login.html"));
+  });
+
   // Let Vite handle the root route for the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser
