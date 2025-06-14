@@ -500,11 +500,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/admin.html"));
   });
 
-  // Also serve the forest app at the root route with higher priority than Vite
-  app.get("/", (req: Request, res: Response) => {
-    // Redirect to our ultra-fresh version with new exercise options
-    res.redirect("/fresh-exercises-options");
-  });
+  // Let Vite handle the root route for the React app
+  // Remove this redirect to allow React routing to work properly
   
   // Emergency Save API endpoint - can be accessed directly through a browser
   app.get("/emergency-save", async (req: Request, res: Response) => {

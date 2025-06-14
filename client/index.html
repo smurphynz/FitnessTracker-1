@@ -11,12 +11,14 @@
     
     <!-- Safari PWA specific meta tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CaliTracker">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Fitness Tracker">
     
-    <!-- Prevent zoom and improve mobile experience -->
+    <!-- Security and mobile optimization -->
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src 'self' https:; img-src 'self' data: blob:;">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     
     <style>
       html, body {

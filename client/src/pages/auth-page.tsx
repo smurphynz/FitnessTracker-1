@@ -111,17 +111,17 @@ export default function AuthPage() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <Dumbbell className="h-8 w-8 text-primary mr-2" />
-              <h1 className="text-2xl font-bold">Sean's Cali Fitness</h1>
+              <h1 className="text-2xl font-bold">Multi-User Fitness Tracker</h1>
             </div>
             <p className="text-muted-foreground">
-              Track your calisthenics journey with friends
+              Create accounts for up to 4 users to track individual progress
             </p>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="register">Create Account</TabsTrigger>
               <TabsTrigger value="login">Sign In</TabsTrigger>
-              <TabsTrigger value="register">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
@@ -189,9 +189,9 @@ export default function AuthPage() {
             <TabsContent value="register">
               <Card>
                 <CardHeader>
-                  <CardTitle>Create Account</CardTitle>
+                  <CardTitle>Create New User Account</CardTitle>
                   <CardDescription>
-                    Join the fitness community and start tracking
+                    Set up personalized tracking for each family member or friend
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
