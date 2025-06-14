@@ -41,15 +41,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: async (user: SelectUser) => {
-      queryClient.removeQueries({ queryKey: ["/api/user"] }); // Ditch stale 304
+      // Clear old cache and set new user data
+      queryClient.removeQueries({ queryKey: ["/api/user"] });
       queryClient.setQueryData(["/api/user"], user);
       queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
+      
+      // Show success toast
       toast({
         title: "Welcome back!",
         description: `Signed in as ${user.display_name}`,
       });
-      // Force navigation with page reload to ensure fresh auth state
-      window.location.href = "/";
+      
+      // Force immediate navigation with logging
+      console.log("Login successful, attempting redirect:", user);
+      setTimeout(() => {
+        console.log("Executing redirect to /");
+        window.location.replace("/");
+      }, 500);
     },
     onError: (error: Error) => {
       toast({
