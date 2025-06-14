@@ -58,6 +58,24 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 pt-6 pb-24 max-w-md" style={{height: "auto", overflow: "visible", position: "relative"}}>
+      {/* User Header */}
+      <div className="flex items-center justify-between mb-4 p-3 bg-white rounded-lg shadow-sm border">
+        <div className="flex items-center space-x-2">
+          <User className="h-5 w-5 text-primary" />
+          <span className="font-medium">{user?.display_name}</span>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => logoutMutation.mutate()}
+          disabled={logoutMutation.isPending}
+          className="flex items-center space-x-1"
+        >
+          <LogOut className="h-4 w-4" />
+          <span>Sign Out</span>
+        </Button>
+      </div>
+
       <Header
         date={date}
         setDate={setDate}

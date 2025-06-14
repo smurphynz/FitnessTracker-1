@@ -403,8 +403,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         strength: { exercises: [] }
       };
       
+      // For emergency save, create a default user if none exists
+      let userId = 1; // Default to user ID 1
+      
       // Save to database
-      const savedWorkout = await storage.createWorkout(workout);
+      const savedWorkout = await storage.createWorkout(workout, userId);
       
       // Return ultra-minimal HTML response for Safari compatibility
       res.send(`
