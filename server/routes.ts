@@ -519,6 +519,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/direct-auth.html"));
   });
 
+  // Even simpler registration page for Safari compatibility
+  app.get("/simple-register.html", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/simple-register.html"));
+  });
+
+  app.get("/simple-login.html", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/simple-login.html"));
+  });
+
   // Let Vite handle the root route for the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser
