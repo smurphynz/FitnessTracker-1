@@ -41,6 +41,15 @@ export default function WorkoutTab({
   
   // Save workout handler
   const handleSaveWorkout = () => {
+    if (!date.trim()) {
+      toast({
+        title: "Date required",
+        description: "Please select a valid date",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newWorkout: Workout = {
       date,
       weight: weight || undefined,

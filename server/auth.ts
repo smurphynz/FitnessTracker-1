@@ -24,7 +24,13 @@ async function hashPassword(password: string) {
 }
 
 async function comparePasswords(supplied: string, stored: string) {
+  if (!stored || !stored.includes('.')) {
+    return false;
+  }
   const [hashed, salt] = stored.split(".");
+  if (!hashed || !salt) {
+    return false;
+  }
   const hashedBuf = Buffer.from(hashed, "hex");
   const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
   return timingSafeEqual(hashedBuf, suppliedBuf);
@@ -34,17 +40,19 @@ export function setupAuth(app: Express) {
   const PostgresSessionStore = connectPg(session);
   
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
+    secret: process.env.SESSION_SECRET || 'fitness-tracker-secret-' + Date.now(),
     resave: false,
     saveUninitialized: false,
     store: new PostgresSessionStore({ 
       pool, 
-      createTableIfMissing: true 
+      createTableIfMissing: true,
+      tableName: 'session'
     }),
     cookie: {
-      secure: false, // Set to true in production with HTTPS
+      secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      sameSite: 'lax'
     }
   };
 
@@ -81,6 +89,14 @@ export function setupAuth(app: Express) {
   app.post("/api/register", async (req, res, next) => {
     try {
       const { username, password, display_name } = req.body;
+      
+      if (!username || !password || !display_name) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+
+      if (username.length < 3 || password.length < 6) {
+        return res.status(400).json({ message: "Username must be 3+ characters, password 6+ characters" });
+      }
       
       const existingUser = await storage.getUserByUsername(username);
       if (existingUser) {

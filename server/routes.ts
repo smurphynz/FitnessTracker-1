@@ -55,7 +55,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a new workout (or update if date exists)
   app.post("/api/workouts", requireAuth, async (req: Request, res: Response) => {
     try {
-      // Validate the request body
       const validatedWorkout = workoutSchema.safeParse(req.body);
       
       if (!validatedWorkout.success) {
@@ -66,22 +65,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const userId = req.user!.id;
-      
-      // Check if this is a duplicate
       const isDuplicate = await storage.checkDuplicateWorkout(validatedWorkout.data.date, userId);
-      
-      // Create/update workout
       const workout = await storage.createWorkout(validatedWorkout.data, userId);
       
-      // Return appropriate status code and message
-      if (isDuplicate) {
-        res.status(200).json({
-          ...workout,
-          message: "Updated existing workout for this date"
-        });
-      } else {
-        res.status(201).json(workout);
-      }
+      res.status(isDuplicate ? 200 : 201).json(workout);
     } catch (error) {
       console.error("Error creating/updating workout:", error);
       res.status(500).json({ message: "Failed to save workout" });

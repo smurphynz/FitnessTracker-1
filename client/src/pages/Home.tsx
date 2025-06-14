@@ -27,7 +27,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"workout" | "progress">("workout");
 
   // Get all workouts
-  const { data: workouts = [] } = useQuery({
+  const { data: workouts = [], isLoading: workoutsLoading, error: workoutsError } = useQuery({
     queryKey: ["/api/workouts"],
     select: (data) => {
       try {

@@ -210,13 +210,13 @@ export class DatabaseStorage implements IStorage {
   
   // Check if a workout already exists for the given date
   async checkDuplicateWorkout(date: string, userId: number): Promise<boolean> {
-    const existingWorkouts = await db
-      .select()
+    const [existingWorkout] = await db
+      .select({ id: workouts.id })
       .from(workouts)
-      .where(and(eq(workouts.date, date), eq(workouts.user_id, userId)));
+      .where(and(eq(workouts.date, date), eq(workouts.user_id, userId)))
+      .limit(1);
     
-    // Return true if we found any workouts with the same date
-    return existingWorkouts.length > 0;
+    return !!existingWorkout;
   }
 
   // Helper method to map database workout format to application workout format
