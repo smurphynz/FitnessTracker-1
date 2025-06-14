@@ -50,11 +50,11 @@ export default function AuthPage() {
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [resetToken, setResetToken] = useState("");
 
-  // Don't auto-redirect if logged in - let user access registration for multi-user setup
-  // if (user) {
-  //   setLocation("/");
-  //   return null;
-  // }
+  // Auto-redirect if already logged in
+  if (user) {
+    setLocation("/");
+    return null;
+  }
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),

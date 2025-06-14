@@ -47,6 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Welcome back!",
         description: `Signed in as ${user.display_name}`,
       });
+      // Force navigation to main app after successful login
+      window.location.href = "/";
     },
     onError: (error: Error) => {
       toast({
