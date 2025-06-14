@@ -46,7 +46,7 @@ type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
 export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [location, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState("login");
+  const [activeTab, setActiveTab] = useState("register");
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [resetToken, setResetToken] = useState("");
 

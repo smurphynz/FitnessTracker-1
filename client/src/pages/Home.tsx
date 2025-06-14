@@ -71,10 +71,10 @@ export default function Home() {
       </div>
 
       {/* User Header */}
-      <div className="flex items-center justify-between mb-4 p-3 bg-white rounded-lg shadow-sm border">
+      <div className="flex items-center justify-between mb-4 p-3 forest-panel rounded-lg shadow-sm">
         <div className="flex items-center space-x-2">
           <User className="h-5 w-5 text-primary" />
-          <span className="font-medium">{user?.display_name}</span>
+          <span className="font-medium text-white">{user?.display_name}</span>
         </div>
         <div className="flex items-center space-x-2">
           <ThemeToggle />
@@ -85,7 +85,7 @@ export default function Home() {
             </Button>
           </Link>
           <Button
-            variant="outline"
+            variant="destructive"
             size="sm"
             onClick={() => logoutMutation.mutate()}
             disabled={logoutMutation.isPending}
@@ -95,6 +95,14 @@ export default function Home() {
             <span>Sign Out</span>
           </Button>
         </div>
+      </div>
+
+      {/* Data Recovery Notice */}
+      <div className="mb-4 p-3 bg-green-900/50 border border-green-700 rounded-lg">
+        <p className="text-sm text-green-200">
+          <strong>Good news:</strong> Your 11 workouts are safely stored in the database. 
+          Use "Sign Out" above to create new user accounts or switch users.
+        </p>
       </div>
 
       <Header
