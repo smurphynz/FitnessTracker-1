@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { LogOut, User } from "lucide-react";
 import Header from "@/components/Header";
 import TabNavigation from "@/components/TabNavigation";
 import WorkoutTab from "@/components/WorkoutTab";
@@ -17,6 +20,7 @@ interface LastDayResponse {
 const workoutsArraySchema = z.array(workoutSchema);
 
 export default function Home() {
+  const { user, logoutMutation } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [weight, setWeight] = useState("70");
   const [activeTab, setActiveTab] = useState<"workout" | "progress">("workout");
