@@ -514,44 +514,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.redirect('/direct-auth');
   });
 
-  // Simple HTML auth page that bypasses React
-  app.get("/direct-auth", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/direct-auth.html"));
-  });
-
-  // Even simpler registration page for Safari compatibility
-  app.get("/simple-register.html", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/simple-register.html"));
-  });
-
-  app.get("/simple-login.html", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/simple-login.html"));
-  });
-
-  // URL helper page
-  app.get("/url-helper", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/url-helper.html"));
-  });
-
-  // Session clear page - fixes incognito-only access issue
-  app.get("/session-clear", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/session-clear.html"));
-  });
-
-  // Emergency access page for certificate issues
-  app.get("/emergency-access", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/emergency-access.html"));
-  });
-
-  // Direct login for existing Da Rock account
-  app.get("/direct-login", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/direct-login.html"));
-  });
-
-  // Direct access page that bypasses React auth issues
-  app.get("/direct-access", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/direct-access.html"));
-  });
+  // Legacy routes removed - using React SPA authentication only
 
   // Let Vite handle the root route for the React app
   

@@ -48,13 +48,13 @@ export function setupAuth(app: Express) {
       createTableIfMissing: true,
       tableName: 'session'
     }),
+    name: 'fitness.session',
     cookie: {
-      secure: false,
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'lax'
-    },
-    name: 'fitness.session'
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    }
   };
 
   app.set("trust proxy", 1);
