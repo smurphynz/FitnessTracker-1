@@ -308,7 +308,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(workoutTemplates)
       .where(and(eq(workoutTemplates.id, id), eq(workoutTemplates.user_id, userId)));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   // Progress Photos methods
@@ -332,7 +332,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(progressPhotos)
       .where(and(eq(progressPhotos.id, id), eq(progressPhotos.user_id, userId)));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   // Helper method to map database workout format to application workout format

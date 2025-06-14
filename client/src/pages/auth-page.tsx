@@ -22,18 +22,32 @@ const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   display_name: z.string().min(2, "Display name must be at least 2 characters"),
+  email: z.string().email("Valid email required").optional(),
   show_mobility: z.boolean().default(true),
   show_handstand: z.boolean().default(true),
   app_title: z.string().optional(),
 });
 
+const passwordResetSchema = z.object({
+  email: z.string().email("Valid email required"),
+});
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token required"),
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+});
+
 type LoginForm = z.infer<typeof loginSchema>;
 type RegisterForm = z.infer<typeof registerSchema>;
+type PasswordResetForm = z.infer<typeof passwordResetSchema>;
+type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
 
 export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [location, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("login");
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const [resetToken, setResetToken] = useState("");
 
   // Redirect if already logged in
   if (user) {
@@ -55,6 +69,7 @@ export default function AuthPage() {
       username: "",
       password: "",
       display_name: "",
+      email: "",
       show_mobility: true,
       show_handstand: true,
       app_title: "",
@@ -68,6 +83,24 @@ export default function AuthPage() {
   const onRegister = (data: RegisterForm) => {
     registerMutation.mutate(data);
   };
+
+  if (showPasswordReset) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">Reset Password</CardTitle>
+            <CardDescription className="text-center">
+              Enter your email to receive a reset link
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PasswordResetForm onBack={() => setShowPasswordReset(false)} onTokenReceived={setResetToken} />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex">
