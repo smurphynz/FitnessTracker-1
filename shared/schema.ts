@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, date, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, date, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -76,19 +76,21 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   display_name: text("display_name").notNull(),
+  email: text("email"),
   show_mobility: boolean("show_mobility").notNull().default(true),
   show_handstand: boolean("show_handstand").notNull().default(true),
   app_title: text("app_title"), // Custom app title, defaults to display_name + " Fitness Tracker"
+  theme: text("theme").default("light"),
+  reset_token: text("reset_token"),
+  reset_token_expires: text("reset_token_expires"),
   created_at: text("created_at").notNull().default("CURRENT_TIMESTAMP"),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-  display_name: true,
-  show_mobility: true,
-  show_handstand: true,
-  app_title: true,
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  reset_token: true,
+  reset_token_expires: true,
+  created_at: true,
 });
 
 export const updateUserPreferencesSchema = createInsertSchema(users).pick({
@@ -96,7 +98,56 @@ export const updateUserPreferencesSchema = createInsertSchema(users).pick({
   show_mobility: true,
   show_handstand: true,
   app_title: true,
+  theme: true,
 });
+
+export const workoutTemplates = pgTable("workout_templates", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").references(() => users.id).notNull(),
+  name: text("name").notNull(),
+  mobility_day: integer("mobility_day"),
+  mobility_completion: text("mobility_completion"),
+  handstand_exercises: text("handstand_exercises").array(),
+  strength_day: integer("strength_day"),
+  strength_exercises: jsonb("strength_exercises"),
+  created_at: text("created_at").notNull().default("CURRENT_TIMESTAMP"),
+});
+
+export const progressPhotos = pgTable("progress_photos", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").references(() => users.id).notNull(),
+  photo_url: text("photo_url").notNull(),
+  caption: text("caption"),
+  taken_at: text("taken_at").notNull().default("CURRENT_TIMESTAMP"),
+  weight: text("weight"),
+});
+
+export const workoutTemplateSchema = z.object({
+  id: z.number().optional(),
+  name: z.string().min(1, "Template name is required"),
+  mobility: mobilitySchema.optional(),
+  handstand: handstandSchema.optional(),
+  strength: strengthSchema.optional(),
+});
+
+export type WorkoutTemplate = z.infer<typeof workoutTemplateSchema>;
+
+export const insertWorkoutTemplateSchema = createInsertSchema(workoutTemplates).omit({
+  id: true,
+  user_id: true,
+  created_at: true,
+});
+
+export const insertProgressPhotoSchema = createInsertSchema(progressPhotos).omit({
+  id: true,
+  user_id: true,
+  taken_at: true,
+});
+
+export type InsertWorkoutTemplate = z.infer<typeof insertWorkoutTemplateSchema>;
+export type InsertProgressPhoto = z.infer<typeof insertProgressPhotoSchema>;
+export type WorkoutTemplateDB = typeof workoutTemplates.$inferSelect;
+export type ProgressPhotoDB = typeof progressPhotos.$inferSelect;
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
