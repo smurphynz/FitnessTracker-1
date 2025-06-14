@@ -100,9 +100,23 @@ export default function Home() {
       {/* Data Recovery Notice */}
       <div className="mb-4 p-3 bg-green-900/50 border border-green-700 rounded-lg">
         <p className="text-sm text-green-200">
-          <strong>Good news:</strong> Your 11 workouts are safely stored in the database. 
-          Use "Sign Out" above to create new user accounts or switch users.
+          <strong>Good news:</strong> Your 11 workouts are safely stored in the database.
         </p>
+        <div className="flex gap-2 mt-2">
+          <Link href="/auth">
+            <Button variant="outline" size="sm">
+              Create New User Account
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => logoutMutation.mutate()}
+            disabled={logoutMutation.isPending}
+          >
+            Sign Out Current User
+          </Button>
+        </div>
       </div>
 
       <Header
