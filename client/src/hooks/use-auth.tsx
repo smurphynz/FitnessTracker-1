@@ -52,32 +52,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         description: `Signed in as ${user.display_name}`,
       });
       
-      // Force immediate navigation with multiple strategies
-      console.log("Login successful, attempting redirect:", user);
+      // Comprehensive redirect strategy
+      console.log("Login successful, redirecting:", user);
       
-      // Strategy 1: Immediate redirect
-      try {
-        window.location.href = "/";
-        console.log("Strategy 1: window.location.href executed");
-      } catch (e) {
-        console.error("Strategy 1 failed:", e);
-      }
+      // Clear any cached authentication state
+      localStorage.removeItem('auth-redirect-attempted');
       
-      // Strategy 2: Delayed replace as backup
-      setTimeout(() => {
-        try {
-          console.log("Strategy 2: Executing window.location.replace");
-          window.location.replace("/");
-        } catch (e) {
-          console.error("Strategy 2 failed:", e);
-        }
-      }, 100);
-      
-      // Strategy 3: Force reload as final backup
-      setTimeout(() => {
-        console.log("Strategy 3: Force reload");
-        window.location.reload();
-      }, 1000);
+      // Force immediate page navigation
+      window.location.assign("/");
     },
     onError: (error: Error) => {
       toast({

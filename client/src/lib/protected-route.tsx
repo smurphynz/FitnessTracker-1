@@ -22,6 +22,8 @@ export function ProtectedRoute({
   }
 
   if (!user) {
+    // Clear any stale redirect flags
+    localStorage.removeItem('auth-redirect-attempted');
     return (
       <Route path={path}>
         <Redirect to="/auth" />

@@ -52,11 +52,12 @@ export default function AuthPage() {
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    if (user) {
+    if (user && !localStorage.getItem('auth-redirect-attempted')) {
       console.log("User detected, redirecting to main app:", user);
-      setLocation("/");
+      localStorage.setItem('auth-redirect-attempted', 'true');
+      window.location.assign("/");
     }
-  }, [user, setLocation]);
+  }, [user]);
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
