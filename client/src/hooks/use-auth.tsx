@@ -39,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
+      queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
       toast({
         title: "Welcome back!",
         description: `Signed in as ${user.display_name}`,
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onError: (error: Error) => {
       toast({
         title: "Login failed",
-        description: error.message,
+        description: "Invalid username or password",
         variant: "destructive",
       });
     },
@@ -60,9 +61,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: SelectUser) => {
       queryClient.setQueryData(["/api/user"], user);
+      queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
       toast({
-        title: "Account created!",
-        description: `Welcome to Sean's Cali Fitness Tracker, ${user.display_name}!`,
+        title: "Welcome!",
+        description: `Account created for ${user.display_name}`,
       });
     },
     onError: (error: Error) => {
@@ -80,11 +82,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/user"], null);
-      // Invalidate all queries to clear cached data
-      queryClient.invalidateQueries();
+      queryClient.clear();
       toast({
         title: "Signed out",
-        description: "You've been successfully signed out",
+        description: "You have been successfully signed out",
       });
     },
     onError: (error: Error) => {

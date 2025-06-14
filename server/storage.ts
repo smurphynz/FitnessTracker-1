@@ -221,7 +221,6 @@ export class DatabaseStorage implements IStorage {
 
   // Helper method to map database workout format to application workout format
   private mapDBWorkoutToWorkout(dbWorkout: any): Workout {
-    console.log("DB Workout:", dbWorkout);
     return {
       id: dbWorkout.id,
       date: dbWorkout.date,

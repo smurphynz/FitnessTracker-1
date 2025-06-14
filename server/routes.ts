@@ -137,15 +137,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Admin endpoint to clear all workout data (password protected)
-  app.post("/api/admin/clear-workouts", async (req: Request, res: Response) => {
+  app.post("/api/admin/clear-workouts", requireAuth, async (req: Request, res: Response) => {
     try {
-      // Simple password protection
       const { password } = req.body;
       if (password !== "clearallworkouts") {
         return res.status(401).json({ message: "Unauthorized" });
       }
       
-      // Import necessary dependencies for database operations
       const { db } = await import("./db");
       const { workouts } = await import("@shared/schema");
       
