@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 import MobilitySection from "./MobilitySection";
 import HandstandSection from "./HandstandSection";
 import StrengthSection from "./StrengthSection";
@@ -20,6 +21,7 @@ export default function WorkoutTab({
   lastStrengthDay,
   onSaveWorkout 
 }: WorkoutTabProps) {
+  const { user } = useAuth();
   const { toast } = useToast();
   
   // Mobility state

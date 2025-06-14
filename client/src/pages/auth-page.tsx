@@ -4,12 +4,13 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Loader2, Dumbbell, Users } from "lucide-react";
 
 const loginSchema = z.object({
@@ -21,6 +22,9 @@ const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   display_name: z.string().min(2, "Display name must be at least 2 characters"),
+  show_mobility: z.boolean().default(true),
+  show_handstand: z.boolean().default(true),
+  app_title: z.string().optional(),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -51,6 +55,9 @@ export default function AuthPage() {
       username: "",
       password: "",
       display_name: "",
+      show_mobility: true,
+      show_handstand: true,
+      app_title: "",
     },
   });
 

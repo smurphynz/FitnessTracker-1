@@ -4,6 +4,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
 import Home from "@/pages/Home";
 import AuthPage from "@/pages/auth-page";
+import SettingsPage from "@/pages/settings-page";
 import NotFound from "@/pages/not-found";
 import SavePage from "@/pages/SavePage";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,6 +16,7 @@ function Router() {
     <Switch>
       <ProtectedRoute path="/" component={Home} />
       <ProtectedRoute path="/save" component={SavePage} />
+      <ProtectedRoute path="/settings" component={SettingsPage} />
       <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>

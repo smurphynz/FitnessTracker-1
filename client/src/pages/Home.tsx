@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Settings } from "lucide-react";
+import { Link } from "wouter";
 import Header from "@/components/Header";
 import TabNavigation from "@/components/TabNavigation";
 import WorkoutTab from "@/components/WorkoutTab";
@@ -58,22 +59,37 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 pt-6 pb-24 max-w-md" style={{height: "auto", overflow: "visible", position: "relative"}}>
+      {/* App Title */}
+      <div className="text-center mb-4">
+        <h1 className="text-2xl font-bold text-primary">
+          {user?.app_title || `${user?.display_name}'s Fitness Tracker`}
+        </h1>
+      </div>
+
       {/* User Header */}
       <div className="flex items-center justify-between mb-4 p-3 bg-white rounded-lg shadow-sm border">
         <div className="flex items-center space-x-2">
           <User className="h-5 w-5 text-primary" />
           <span className="font-medium">{user?.display_name}</span>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => logoutMutation.mutate()}
-          disabled={logoutMutation.isPending}
-          className="flex items-center space-x-1"
-        >
-          <LogOut className="h-4 w-4" />
-          <span>Sign Out</span>
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Link href="/settings">
+            <Button variant="outline" size="sm" className="flex items-center space-x-1">
+              <Settings className="h-4 w-4" />
+              <span>Settings</span>
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => logoutMutation.mutate()}
+            disabled={logoutMutation.isPending}
+            className="flex items-center space-x-1"
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Sign Out</span>
+          </Button>
+        </div>
       </div>
 
       <Header
