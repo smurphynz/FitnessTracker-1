@@ -17,27 +17,26 @@ export default function SaveWorkoutButton() {
           zIndex: "9999999"
         }}
       >
-        <Link href="/save">
-          <a 
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "16px 0",
-              backgroundColor: "#FF0000",
-              color: "white",
-              fontSize: "24px",
-              fontWeight: "bold",
-              textAlign: "center",
-              textTransform: "uppercase",
-              border: "4px solid white",
-              borderRadius: "8px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
-              textDecoration: "none"
-            }}
-          >
-            Save Workout
-          </a>
-        </Link>
+        <button
+          onClick={() => window.location.href = "/save"}
+          style={{
+            display: "block",
+            width: "100%",
+            padding: "16px 0",
+            backgroundColor: "#FF0000",
+            color: "white",
+            fontSize: "24px",
+            fontWeight: "bold",
+            textAlign: "center",
+            textTransform: "uppercase",
+            border: "4px solid white",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+            cursor: "pointer"
+          }}
+        >
+          Save Workout
+        </button>
       </div>
       
       {/* Fallback button with onclick handler in case the Link doesn't work */}
