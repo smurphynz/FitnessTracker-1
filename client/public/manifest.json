@@ -7,16 +7,21 @@
   "background_color": "#1A402B",
   "theme_color": "#1A402B",
   "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["fitness", "health"],
+  "lang": "en",
   "icons": [
     {
       "src": "/icon-192x192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "maskable any"
     },
     {
       "src": "/icon-512x512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "maskable any"
     }
   ]
 }
