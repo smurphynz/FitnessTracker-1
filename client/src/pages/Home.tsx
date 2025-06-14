@@ -103,13 +103,24 @@ export default function Home() {
           <strong>Good news:</strong> Your 11 workouts are safely stored in the database.
         </p>
         <div className="flex gap-2 mt-2">
-          <Button 
-            variant="destructive" 
-            size="sm"
-            onClick={() => window.location.href = '/direct-auth'}
-          >
-            Create New User Accounts
-          </Button>
+          <div className="space-y-2">
+            <Button 
+              variant="destructive" 
+              size="sm" 
+              className="w-full"
+              onClick={() => window.location.href = '/simple-register.html'}
+            >
+              Create New User Account
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="w-full" 
+              onClick={() => window.location.href = '/simple-login.html'}
+            >
+              Switch to Different User
+            </Button>
+          </div>
         </div>
       </div>
 
