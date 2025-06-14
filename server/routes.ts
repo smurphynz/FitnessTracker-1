@@ -2,7 +2,7 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { workoutSchema, Workout } from "@shared/schema";
+import { workoutSchema, Workout, updateUserPreferencesSchema } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
 import fs from "fs";
@@ -118,6 +118,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch last Calimove strength day" });
+    }
+  });
+
+  // Update user preferences
+  app.patch("/api/user/preferences", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user!.id;
+      const validationResult = updateUserPreferencesSchema.safeParse(req.body);
+      
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid preferences data", 
+          errors: validationResult.error.errors 
+        });
+      }
+      
+      const updatedUser = await storage.updateUserPreferences(userId, validationResult.data);
+      res.json({ 
+        id: updatedUser.id, 
+        username: updatedUser.username, 
+        display_name: updatedUser.display_name,
+        show_mobility: updatedUser.show_mobility,
+        show_handstand: updatedUser.show_handstand,
+        app_title: updatedUser.app_title
+      });
+    } catch (error) {
+      console.error("Error updating user preferences:", error);
+      res.status(500).json({ message: "Failed to update preferences" });
     }
   });
   

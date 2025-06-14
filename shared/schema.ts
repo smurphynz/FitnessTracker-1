@@ -70,12 +70,15 @@ export const insertWorkoutSchema = createInsertSchema(workouts).omit({
 export type InsertWorkout = z.infer<typeof insertWorkoutSchema>;
 export type WorkoutDB = typeof workouts.$inferSelect;
 
-// Users table with enhanced multi-user support
+// Users table with enhanced multi-user support and preferences
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   display_name: text("display_name").notNull(),
+  show_mobility: boolean("show_mobility").notNull().default(true),
+  show_handstand: boolean("show_handstand").notNull().default(true),
+  app_title: text("app_title"), // Custom app title, defaults to display_name + " Fitness Tracker"
   created_at: text("created_at").notNull().default("CURRENT_TIMESTAMP"),
 });
 
@@ -83,6 +86,16 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   display_name: true,
+  show_mobility: true,
+  show_handstand: true,
+  app_title: true,
+});
+
+export const updateUserPreferencesSchema = createInsertSchema(users).pick({
+  display_name: true,
+  show_mobility: true,
+  show_handstand: true,
+  app_title: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
