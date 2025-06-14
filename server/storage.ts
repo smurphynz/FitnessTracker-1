@@ -22,13 +22,13 @@ export interface IStorage {
   getLastStrengthDay(userId: number): Promise<number | undefined>;
   getLastCalimoveStrengthDay(userId: number): Promise<{ day: number | null, isRecent: boolean }>;
 
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 const PostgresSessionStore = connectPg(session);
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 
