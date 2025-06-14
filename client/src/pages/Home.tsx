@@ -109,12 +109,18 @@ export default function Home() {
             </Button>
           </Link>
           <Button
-            variant="outline"
+            variant="destructive"
             size="sm"
-            onClick={() => logoutMutation.mutate()}
+            onClick={() => {
+              // Force logout and redirect
+              logoutMutation.mutate();
+              setTimeout(() => {
+                window.location.href = '/auth';
+              }, 1000);
+            }}
             disabled={logoutMutation.isPending}
           >
-            Sign Out Current User
+            Force Logout & Access Registration
           </Button>
         </div>
       </div>
