@@ -11,6 +11,8 @@ import TabNavigation from "@/components/TabNavigation";
 import WorkoutTab from "@/components/WorkoutTab";
 import ProgressTab from "@/components/ProgressTab";
 import SaveWorkoutButton from "@/components/SaveWorkoutButton";
+import WorkoutTemplates from "@/components/WorkoutTemplates";
+import ProgressPhotos from "@/components/ProgressPhotos";
 import { workoutSchema, type Workout } from "@shared/schema";
 import { localStorageAPI } from "@/lib/storage";
 
@@ -25,7 +27,8 @@ export default function Home() {
   const { user, logoutMutation } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [weight, setWeight] = useState("70");
-  const [activeTab, setActiveTab] = useState<"workout" | "progress">("workout");
+  const [activeTab, setActiveTab] = useState<"workout" | "progress" | "templates" | "photos">("workout");
+  const [currentWorkout, setCurrentWorkout] = useState(null);
 
   // Get all workouts
   const { data: workouts = [], isLoading: workoutsLoading, error: workoutsError } = useQuery({
@@ -103,7 +106,7 @@ export default function Home() {
 
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {activeTab === "workout" ? (
+      {activeTab === "workout" && (
         <WorkoutTab
           date={date}
           weight={weight}
@@ -111,9 +114,25 @@ export default function Home() {
           lastStrengthDay={lastStrengthDay}
           onSaveWorkout={handleSaveWorkout}
         />
-      ) : (
-        <ProgressTab workouts={workouts} />
       )}
+      
+      {activeTab === "progress" && <ProgressTab workouts={workouts} />}
+      
+      {activeTab === "templates" && (
+        <WorkoutTemplates
+          onLoadTemplate={(template) => {
+            // Load template data into current workout
+            console.log("Loading template:", template);
+          }}
+          currentWorkout={currentWorkout}
+          onSaveAsTemplate={() => {
+            // Save current workout as template
+            console.log("Saving as template");
+          }}
+        />
+      )}
+      
+      {activeTab === "photos" && <ProgressPhotos />}
 
       {activeTab === "workout" && <SaveWorkoutButton />}
     </div>

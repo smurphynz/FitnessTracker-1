@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Loader2, Dumbbell, Users } from "lucide-react";
+import PasswordResetForm from "@/components/PasswordResetForm";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),

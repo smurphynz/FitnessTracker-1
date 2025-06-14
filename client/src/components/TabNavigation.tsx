@@ -1,6 +1,6 @@
 interface TabNavigationProps {
-  activeTab: "workout" | "progress";
-  setActiveTab: (tab: "workout" | "progress") => void;
+  activeTab: "workout" | "progress" | "templates" | "photos";
+  setActiveTab: (tab: "workout" | "progress" | "templates" | "photos") => void;
 }
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
