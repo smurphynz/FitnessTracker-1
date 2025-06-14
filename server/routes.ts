@@ -538,6 +538,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/session-clear.html"));
   });
 
+  // Emergency access page for certificate issues
+  app.get("/emergency-access", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/emergency-access.html"));
+  });
+
   // Let Vite handle the root route for the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser
