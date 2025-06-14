@@ -548,6 +548,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/direct-login.html"));
   });
 
+  // Direct access page that bypasses React auth issues
+  app.get("/direct-access", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(process.cwd(), "server/public/direct-access.html"));
+  });
+
   // Let Vite handle the root route for the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser
