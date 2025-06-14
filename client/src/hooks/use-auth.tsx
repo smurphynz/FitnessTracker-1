@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await apiRequest("POST", "/api/login", credentials);
       return await res.json();
     },
-    onSuccess: (user: SelectUser) => {
+    onSuccess: async (user: SelectUser) => {
       queryClient.removeQueries({ queryKey: ["/api/user"] }); // Ditch stale 304
       queryClient.setQueryData(["/api/user"], user);
       queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Welcome back!",
         description: `Signed in as ${user.display_name}`,
       });
-      // Force navigation to main app after successful login
+      // Force navigation with page reload to ensure fresh auth state
       window.location.href = "/";
     },
     onError: (error: Error) => {
