@@ -52,7 +52,7 @@ export type Workout = z.infer<typeof workoutSchema>;
 // Database table definition
 export const workouts = pgTable("workouts", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").notNull().references(() => users.id),
+  user_id: integer("user_id").references(() => users.id),
   date: text("date").notNull(),
   weight: text("weight"),
   mobility_day: integer("mobility_day"),

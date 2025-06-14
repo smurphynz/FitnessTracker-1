@@ -1,6 +1,6 @@
 import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 
 export interface IStorage {
   // User methods (keeping original methods)
@@ -9,15 +9,15 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   
   // Workout methods
-  getWorkouts(): Promise<Workout[]>;
-  getWorkout(id: number): Promise<Workout | undefined>;
-  createWorkout(workout: Workout): Promise<Workout>;
-  checkDuplicateWorkout(date: string): Promise<boolean>;
+  getWorkouts(userId: number): Promise<Workout[]>;
+  getWorkout(id: number, userId: number): Promise<Workout | undefined>;
+  createWorkout(workout: Workout, userId: number): Promise<Workout>;
+  checkDuplicateWorkout(date: string, userId: number): Promise<boolean>;
   
   // Last day tracking methods
-  getLastMobilityDay(): Promise<number | undefined>;
-  getLastStrengthDay(): Promise<number | undefined>;
-  getLastCalimoveStrengthDay(): Promise<{ day: number | null, isRecent: boolean }>;
+  getLastMobilityDay(userId: number): Promise<number | undefined>;
+  getLastStrengthDay(userId: number): Promise<number | undefined>;
+  getLastCalimoveStrengthDay(userId: number): Promise<{ day: number | null, isRecent: boolean }>;
 }
 
 export class DatabaseStorage implements IStorage {
