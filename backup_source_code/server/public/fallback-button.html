@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultra Minimal Fallback</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    h1 {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .mega-button {
+      width: 100%;
+      max-width: 600px;
+      height: 200px;
+      background-color: #ff0000;
+      border: 10px solid #fff;
+      border-radius: 30px;
+      font-size: 40px;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      cursor: pointer;
+      box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 40px;
+    }
+    
+    .mega-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 70px rgba(255, 0, 0, 0.9);
+    }
+    
+    .mega-button:active {
+      transform: scale(0.98);
+    }
+    
+    .message {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      max-width: 600px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .status {
+      font-size: 24px;
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #333;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .home-link {
+      margin-top: 40px;
+      padding: 15px 30px;
+      background-color: #1A402B;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      border: 2px solid #FFEB3B;
+    }
+    
+    .success {
+      color: #4CAF50;
+    }
+    
+    .error {
+      color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <h1>EMERGENCY SAVE FUNCTION</h1>
+  
+  <button id="saveButton" class="mega-button">
+    SAVE WORKOUT NOW
+  </button>
+  
+  <div id="status" class="status">Ready to save...</div>
+  
+  <div class="message">
+    This button will save a minimal workout record to the database. 
+    Use this if the normal save functionality is not working.
+  </div>
+  
+  <a href="/" class="home-link">Return to App</a>
+  
+  <script>
+    document.getElementById('saveButton').addEventListener('click', function() {
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = 'Saving...';
+      statusElement.className = 'status';
+      
+      // Create minimal but valid workout data
+      const workout = {
+        date: new Date().toISOString().split('T')[0],
+        weight: '70',
+        mobility: { completion: 'full-session' },
+        handstand: { exercises: [] },
+        strength: { exercises: [] }
+      };
+      
+      // Send to backend API
+      fetch('/api/workouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(workout)
+      })
+      .then(response => {
+        if (response.ok) {
+          statusElement.textContent = 'SUCCESS! Workout saved.';
+          statusElement.className = 'status success';
+          return response.json();
+        } else {
+          statusElement.textContent = 'ERROR: Failed to save workout.';
+          statusElement.className = 'status error';
+          throw new Error('Failed to save workout');
+        }
+      })
+      .then(data => {
+        console.log('Workout saved successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        statusElement.textContent = `ERROR: ${error.message}`;
+        statusElement.className = 'status error';
+      });
+    });
+  </script>
+</body>
+</html>

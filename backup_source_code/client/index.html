@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sean's Cali Fitness Tracker</title>
+    <meta name="description" content="Track your calisthenics workouts and progress">
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1A402B" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Load emergency CSS that overrides everything -->
+    <link rel="stylesheet" href="/emergency.css">
+    
+    <!-- Inline critical styles -->
+    <style>
+      /* Ensure nothing can hide our buttons */
+      html, body {
+        overflow: visible !important;
+        height: auto !important;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: white;
+        background-color: #1A402B; /* Fallback color */
+      }
+      
+      /* Background container with image approach that works in Safari */
+      #background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      
+      img.background {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      #root {
+        position: relative !important;
+        z-index: 1 !important;
+        min-height: 100vh;
+        padding-bottom: 100px; /* Space for save button */
+      }
+      
+      .absolute-link {
+        position: fixed !important;
+        top: 10px !important;
+        left: 10px !important;
+        z-index: 2147483647 !important;
+        background-color: black !important;
+        color: yellow !important;
+        padding: 10px !important;
+        border: 3px solid yellow !important;
+        border-radius: 5px !important;
+        font-weight: bold !important;
+        text-decoration: none !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 16px !important;
+        box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.7) !important;
+      }
+      
+      /* Forest-themed save button */
+      .forest-save-button {
+        position: fixed !important; 
+        bottom: 40px !important; 
+        left: 50% !important; 
+        transform: translateX(-50%) !important;
+        width: 90% !important;
+        max-width: 400px !important;
+        padding: 20px 0 !important;
+        font-size: 24px !important;
+        
+        /* Forest theme colors */
+        background: linear-gradient(145deg, #3C825F, #22543D) !important;
+        color: #FFEB3B !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        
+        text-transform: uppercase !important;
+        font-weight: 900 !important;
+        letter-spacing: 2px !important;
+        border: 4px solid #FFEB3B !important;
+        border-radius: 12px !important;
+        box-shadow: 
+          0 0 0 2px rgba(60, 130, 95, 0.5) !important,
+          0 8px 30px rgba(0, 0, 0, 0.6) !important,
+          0 0 15px 5px rgba(255, 235, 59, 0.3) !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        z-index: 2147483647 !important;
+        
+        /* Make it even more visible */
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Direct embedding of background with image tag -->
+    <div id="background-container">
+      <img src="/forest-background.png" class="background" alt="Forest">
+    </div>
+    
+    <!-- Links to test pages -->
+    <a href="/react-style.html" class="absolute-link" style="font-size: 16px !important; padding: 12px 20px !important; top: 10px !important; background-color: #4CAF50 !important;">🌳 OPEN FULL FOREST APP 🌳</a>
+    
+    <div id="root"></div>
+    
+    <!-- Emergency fixed button outside of React with forest styling -->
+    <button 
+      id="emergency-save-button"
+      class="forest-save-button"
+      onclick="saveEmergencyWorkout()"
+    >
+      SAVE WORKOUT
+    </button>
+    
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Vanilla JavaScript for image loading and emergency save -->
+    <script>
+      // Log the image loading status to help debug
+      window.addEventListener('load', function() {
+        const backgroundImg = document.querySelector('.background');
+        if (backgroundImg) {
+          console.log('Background image found, setting up event listeners');
+          
+          backgroundImg.addEventListener('load', function() {
+            console.log('Forest background loaded successfully!');
+          });
+          
+          backgroundImg.addEventListener('error', function(e) {
+            console.error('Error loading background image:', e);
+            // Try alternative URL as fallback
+            this.src = '/images/forest-background.png';
+          });
+        } else {
+          console.error('Background image element not found');
+        }
+      });
+      
+      function saveEmergencyWorkout() {
+        alert('Attempting to save workout...');
+        
+        // Create a basic workout object
+        const workout = {
+          date: new Date().toISOString().split('T')[0],
+          weight: '70',
+          mobility: { completion: 'full-session' },
+          handstand: { exercises: [] },
+          strength: { exercises: [] }
+        };
+        
+        // Send to API with basic fetch
+        fetch('/api/workouts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(workout)
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('SUCCESS: Workout saved!');
+          } else {
+            alert('ERROR: Failed to save workout');
+          }
+        })
+        .catch(error => {
+          alert('ERROR: ' + error.message);
+        });
+      }
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+              console.log('ServiceWorker registered: ', registration);
+            })
+            .catch(error => {
+              console.log('ServiceWorker registration failed: ', error);
+            });
+        });
+      }
+    </script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+  </body>
+</html>
