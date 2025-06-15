@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handstand Exercises Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f0f8f0;
+    }
+    h1 {
+      color: #226644;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    .exercises {
+      margin-top: 20px;
+    }
+    .exercise-item {
+      background-color: #ddeedd;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      padding: 5px 10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #add-button {
+      padding: 10px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Handstand Exercises</h1>
+  
+  <select id="exercise-selector">
+    <option value="">Select handstand exercise</option>
+  </select>
+  
+  <button id="add-button">Add Exercise</button>
+  
+  <div id="selected-exercises" class="exercises">
+    <!-- Selected exercises will appear here -->
+  </div>
+  
+  <script>
+    // Define the exercises array
+    const handstandExercises = [
+      "Back to Wall Hold",
+      "Box Hold",
+      "Face to Wall Hold",
+      "Freestanding Practice",
+      "Kick Ups",
+      "Mexican",
+      "Shape Changes",
+      "Shoulder Taps",
+      "Splits",
+      "Uneven Hands",
+      "Wall Walk",
+      "Wrist Prep"
+    ];
+    
+    // Sort the array alphabetically
+    handstandExercises.sort();
+    
+    // Output to console for debugging
+    console.log("Handstand exercises:", handstandExercises);
+    
+    // Get DOM elements
+    const selector = document.getElementById('exercise-selector');
+    const addButton = document.getElementById('add-button');
+    const selectedExercisesDiv = document.getElementById('selected-exercises');
+    
+    // Populate the dropdown with options
+    handstandExercises.forEach(exercise => {
+      const option = document.createElement('option');
+      option.value = exercise;
+      option.textContent = exercise;
+      selector.appendChild(option);
+    });
+    
+    // Store selected exercises
+    const selectedExercises = [];
+    
+    // Update the display of selected exercises
+    function updateSelectedExercises() {
+      selectedExercisesDiv.innerHTML = '';
+      
+      if (selectedExercises.length === 0) {
+        selectedExercisesDiv.innerHTML = '<p>No exercises selected</p>';
+        return;
+      }
+      
+      selectedExercises.forEach((exercise, index) => {
+        const div = document.createElement('div');
+        div.className = 'exercise-item';
+        div.innerHTML = `
+          <span>${exercise}</span>
+          <button data-index="${index}">Remove</button>
+        `;
+        selectedExercisesDiv.appendChild(div);
+      });
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.exercise-item button').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = parseInt(button.getAttribute('data-index'));
+          selectedExercises.splice(index, 1);
+          updateSelectedExercises();
+        });
+      });
+    }
+    
+    // Initialize the display
+    updateSelectedExercises();
+    
+    // Add button click handler
+    addButton.addEventListener('click', () => {
+      const exercise = selector.value;
+      if (exercise && !selectedExercises.includes(exercise)) {
+        selectedExercises.push(exercise);
+        updateSelectedExercises();
+        selector.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
