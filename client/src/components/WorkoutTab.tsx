@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
 import MobilitySection from "./MobilitySection";
 import HandstandSection from "./HandstandSection";
 import StrengthSection from "./StrengthSection";
@@ -21,7 +20,6 @@ export default function WorkoutTab({
   lastStrengthDay,
   onSaveWorkout 
 }: WorkoutTabProps) {
-  const { user } = useAuth();
   const { toast } = useToast();
   
   // Mobility state
@@ -41,15 +39,6 @@ export default function WorkoutTab({
   
   // Save workout handler
   const handleSaveWorkout = () => {
-    if (!date.trim()) {
-      toast({
-        title: "Date required",
-        description: "Please select a valid date",
-        variant: "destructive",
-      });
-      return;
-    }
-
     const newWorkout: Workout = {
       date,
       weight: weight || undefined,
@@ -98,26 +87,22 @@ export default function WorkoutTab({
 
   return (
     <div id="workout-content" className="flex flex-col space-y-4 pb-20" style={{ overflow: "visible" }}>
-      {/* Mobility Section - conditionally shown */}
-      {user?.show_mobility && (
-        <MobilitySection 
-          lastMobilityDay={lastMobilityDay}
-          mobilityDay={mobilityDay}
-          setMobilityDay={setMobilityDay}
-          mobilityCompletion={mobilityCompletion}
-          setMobilityCompletion={setMobilityCompletion}
-        />
-      )}
+      {/* Mobility Section */}
+      <MobilitySection 
+        lastMobilityDay={lastMobilityDay}
+        mobilityDay={mobilityDay}
+        setMobilityDay={setMobilityDay}
+        mobilityCompletion={mobilityCompletion}
+        setMobilityCompletion={setMobilityCompletion}
+      />
       
-      {/* Handstand Section - conditionally shown */}
-      {user?.show_handstand && (
-        <HandstandSection 
-          handstandExercises={handstandExercises}
-          setHandstandExercises={setHandstandExercises}
-        />
-      )}
+      {/* Handstand Section */}
+      <HandstandSection 
+        handstandExercises={handstandExercises}
+        setHandstandExercises={setHandstandExercises}
+      />
       
-      {/* Strength Section - always shown */}
+      {/* Strength Section */}
       <StrengthSection 
         lastStrengthDay={lastStrengthDay}
         strengthDay={strengthDay}

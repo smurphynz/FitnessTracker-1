@@ -14,12 +14,9 @@ export async function apiRequest(
 ): Promise<Response> {
   const res = await fetch(url, {
     method,
-    headers: {
-      ...(data ? { "Content-Type": "application/json" } : {}),
-      "Cache-Control": "no-cache" // Prevent caching issues
-    },
+    headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
-    credentials: "include", // Critical: Include session cookies
+    credentials: "include",
   });
 
   await throwIfResNotOk(res);
@@ -33,10 +30,7 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const res = await fetch(queryKey[0] as string, {
-      credentials: "include", // Critical: Include session cookies
-      headers: {
-        "Cache-Control": "no-cache" // Prevent 304 responses
-      }
+      credentials: "include",
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
@@ -52,13 +46,12 @@ export const queryClient = new QueryClient({
     queries: {
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
-      refetchOnWindowFocus: true, // Refetch on focus to catch auth changes
-      staleTime: 0, // Always fresh for auth-sensitive data
-      gcTime: 10 * 60 * 1000, // 10 minutes
-      retry: 1,
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+      retry: false,
     },
     mutations: {
-      retry: 1,
+      retry: false,
     },
   },
 });

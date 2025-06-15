@@ -1,31 +1,18 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import { setupAuth } from "./auth";
 import { storage } from "./storage";
-import { workoutSchema, Workout, updateUserPreferencesSchema, insertWorkoutTemplateSchema, insertProgressPhotoSchema } from "@shared/schema";
+import { workoutSchema, Workout } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
 import fs from "fs";
 
-// Middleware to check if user is authenticated
-function requireAuth(req: Request, res: Response, next: any) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Authentication required" });
-  }
-  next();
-}
-
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup authentication routes
-  setupAuth(app);
-  
   // API routes for the fitness tracker
   
   // Get all workouts
-  app.get("/api/workouts", requireAuth, async (req: Request, res: Response) => {
+  app.get("/api/workouts", async (req: Request, res: Response) => {
     try {
-      const userId = req.user!.id;
-      const workouts = await storage.getWorkouts(userId);
+      const workouts = await storage.getWorkouts();
       res.json(workouts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch workouts" });
@@ -33,15 +20,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get a specific workout
-  app.get("/api/workouts/:id", requireAuth, async (req: Request, res: Response) => {
+  app.get("/api/workouts/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
         return res.status(400).json({ message: "Invalid workout ID" });
       }
       
-      const userId = req.user!.id;
-      const workout = await storage.getWorkout(id, userId);
+      const workout = await storage.getWorkout(id);
       if (!workout) {
         return res.status(404).json({ message: "Workout not found" });
       }
@@ -53,8 +39,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create a new workout (or update if date exists)
-  app.post("/api/workouts", requireAuth, async (req: Request, res: Response) => {
+  app.post("/api/workouts", async (req: Request, res: Response) => {
     try {
+      // Validate the request body
       const validatedWorkout = workoutSchema.safeParse(req.body);
       
       if (!validatedWorkout.success) {
@@ -64,11 +51,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      const userId = req.user!.id;
-      const isDuplicate = await storage.checkDuplicateWorkout(validatedWorkout.data.date, userId);
-      const workout = await storage.createWorkout(validatedWorkout.data, userId);
+      // Check if this is a duplicate
+      const isDuplicate = await storage.checkDuplicateWorkout(validatedWorkout.data.date);
       
-      res.status(isDuplicate ? 200 : 201).json(workout);
+      // Create/update workout
+      const workout = await storage.createWorkout(validatedWorkout.data);
+      
+      // Return appropriate status code and message
+      if (isDuplicate) {
+        res.status(200).json({
+          ...workout,
+          message: "Updated existing workout for this date"
+        });
+      } else {
+        res.status(201).json(workout);
+      }
     } catch (error) {
       console.error("Error creating/updating workout:", error);
       res.status(500).json({ message: "Failed to save workout" });
@@ -76,10 +73,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get last mobility day
-  app.get("/api/last-mobility-day", requireAuth, async (req: Request, res: Response) => {
+  app.get("/api/last-mobility-day", async (req: Request, res: Response) => {
     try {
-      const userId = req.user!.id;
-      const lastDay = await storage.getLastMobilityDay(userId);
+      const lastDay = await storage.getLastMobilityDay();
       res.json({ lastDay });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch last mobility day" });
@@ -87,10 +83,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get last strength day
-  app.get("/api/last-strength-day", requireAuth, async (req: Request, res: Response) => {
+  app.get("/api/last-strength-day", async (req: Request, res: Response) => {
     try {
-      const userId = req.user!.id;
-      const lastDay = await storage.getLastStrengthDay(userId);
+      const lastDay = await storage.getLastStrengthDay();
       res.json({ lastDay });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch last strength day" });
@@ -98,154 +93,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Get last Calimove strength day (even if recent workouts were freestyle)
-  app.get("/api/last-calimove-strength-day", requireAuth, async (req: Request, res: Response) => {
+  app.get("/api/last-calimove-strength-day", async (req: Request, res: Response) => {
     try {
-      const userId = req.user!.id;
-      const result = await storage.getLastCalimoveStrengthDay(userId);
+      const result = await storage.getLastCalimoveStrengthDay();
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch last Calimove strength day" });
     }
   });
-
-  // Update user preferences
-  app.patch("/api/user/preferences", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const userId = req.user!.id;
-      const validationResult = updateUserPreferencesSchema.safeParse(req.body);
-      
-      if (!validationResult.success) {
-        return res.status(400).json({ 
-          message: "Invalid preferences data", 
-          errors: validationResult.error.errors 
-        });
-      }
-      
-      const updatedUser = await storage.updateUserPreferences(userId, validationResult.data);
-      res.json({ 
-        id: updatedUser.id, 
-        username: updatedUser.username, 
-        display_name: updatedUser.display_name,
-        show_mobility: updatedUser.show_mobility,
-        show_handstand: updatedUser.show_handstand,
-        app_title: updatedUser.app_title
-      });
-    } catch (error) {
-      console.error("Error updating user preferences:", error);
-      res.status(500).json({ message: "Failed to update preferences" });
-    }
-  });
-
-  // Workout Templates API routes
-  app.get("/api/workout-templates", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const userId = req.user!.id;
-      const templates = await storage.getWorkoutTemplates(userId);
-      res.json(templates);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch workout templates" });
-    }
-  });
-
-  app.post("/api/workout-templates", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const validationResult = insertWorkoutTemplateSchema.safeParse(req.body);
-      
-      if (!validationResult.success) {
-        return res.status(400).json({ 
-          message: "Invalid template data", 
-          errors: validationResult.error.errors 
-        });
-      }
-      
-      const userId = req.user!.id;
-      const template = await storage.createWorkoutTemplate(validationResult.data, userId);
-      res.status(201).json(template);
-    } catch (error) {
-      console.error("Error creating workout template:", error);
-      res.status(500).json({ message: "Failed to create workout template" });
-    }
-  });
-
-  app.delete("/api/workout-templates/:id", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid template ID" });
-      }
-      
-      const userId = req.user!.id;
-      const success = await storage.deleteWorkoutTemplate(id, userId);
-      
-      if (!success) {
-        return res.status(404).json({ message: "Template not found" });
-      }
-      
-      res.json({ message: "Template deleted successfully" });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete workout template" });
-    }
-  });
-
-  // Progress Photos API routes
-  app.get("/api/progress-photos", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const userId = req.user!.id;
-      const photos = await storage.getProgressPhotos(userId);
-      res.json(photos);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch progress photos" });
-    }
-  });
-
-  app.post("/api/progress-photos", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const validationResult = insertProgressPhotoSchema.safeParse(req.body);
-      
-      if (!validationResult.success) {
-        return res.status(400).json({ 
-          message: "Invalid photo data", 
-          errors: validationResult.error.errors 
-        });
-      }
-      
-      const userId = req.user!.id;
-      const photo = await storage.createProgressPhoto(validationResult.data, userId);
-      res.status(201).json(photo);
-    } catch (error) {
-      console.error("Error creating progress photo:", error);
-      res.status(500).json({ message: "Failed to create progress photo" });
-    }
-  });
-
-  app.delete("/api/progress-photos/:id", requireAuth, async (req: Request, res: Response) => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid photo ID" });
-      }
-      
-      const userId = req.user!.id;
-      const success = await storage.deleteProgressPhoto(id, userId);
-      
-      if (!success) {
-        return res.status(404).json({ message: "Photo not found" });
-      }
-      
-      res.json({ message: "Photo deleted successfully" });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to delete progress photo" });
-    }
-  });
   
   // Admin endpoint to clear all workout data (password protected)
-  app.post("/api/admin/clear-workouts", requireAuth, async (req: Request, res: Response) => {
+  app.post("/api/admin/clear-workouts", async (req: Request, res: Response) => {
     try {
+      // Simple password protection
       const { password } = req.body;
       if (password !== "clearallworkouts") {
         return res.status(401).json({ message: "Unauthorized" });
       }
       
+      // Import necessary dependencies for database operations
       const { db } = await import("./db");
       const { workouts } = await import("@shared/schema");
       
@@ -500,26 +366,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/admin.html"));
   });
 
-  // Direct logout route that clears session completely
-  app.get("/logout-now", (req: Request, res: Response) => {
-    req.logout((err) => {
-      if (err) console.error("Logout error:", err);
-    });
-    if (req.session) {
-      req.session.destroy((err) => {
-        if (err) console.error("Session destroy error:", err);
-      });
-    }
-    res.clearCookie('connect.sid');
-    res.redirect('/direct-auth');
+  // Also serve the forest app at the root route with higher priority than Vite
+  app.get("/", (req: Request, res: Response) => {
+    // Redirect to our ultra-fresh version with new exercise options
+    res.redirect("/fresh-exercises-options");
   });
-
-  // Debug session cookies (temporary)
-  app.get("/debug-session", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(process.cwd(), "server/public/debug-session.html"));
-  });
-
-  // Let Vite handle the root route for the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser
   app.get("/emergency-save", async (req: Request, res: Response) => {
@@ -533,11 +384,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         strength: { exercises: [] }
       };
       
-      // For emergency save, create a default user if none exists
-      let userId = 1; // Default to user ID 1
-      
       // Save to database
-      const savedWorkout = await storage.createWorkout(workout, userId);
+      const savedWorkout = await storage.createWorkout(workout);
       
       // Return ultra-minimal HTML response for Safari compatibility
       res.send(`

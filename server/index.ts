@@ -1,26 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
-import cors from "cors";
-import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-
-// Turn off global etags and disable all caching
-app.disable("etag");
-app.use((_, res, next) => {
-  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
-  res.set("Pragma", "no-cache");
-  res.set("Expires", "0");
-  next();
-});
-
-// CORS configuration for session cookies
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -65,20 +47,17 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // In production, serve static files and handle client-side routing
-  if (process.env.NODE_ENV === "production") {
-    // Serve built static files from dist/public
-    app.use(express.static(path.resolve("dist/public")));
-    
-    // Handle client-side routing - serve index.html for all non-API routes
-    app.get("*", (req: Request, res: Response) => {
-      if (!req.path.startsWith("/api")) {
-        res.sendFile(path.resolve("dist/public", "index.html"));
-      }
-    });
-  } else {
-    // Set up Vite development server
+  // Always serve static files first
+  app.use(express.static('server/public'));
+  
+  // importantly only setup vite in development and after
+  // setting up all the other routes so the catch-all route
+  // doesn't interfere with the other routes
+  if (app.get("env") === "development") {
+    // Customize the setupVite to not override our main route
     await setupVite(app, server);
+  } else {
+    serveStatic(app);
   }
 
   // ALWAYS serve the app on port 5000

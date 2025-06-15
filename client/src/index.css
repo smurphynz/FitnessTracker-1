@@ -2,65 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Critical override for Tailwind - must be after imports */
+@layer utilities {
+  .emergency-visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: fixed !important;
+    z-index: 9999999 !important;
+  }
+}
+
+/* Global override to ensure fixed elements are visible */
+html, body {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Remove any backdrop filters or blurs */
+* {
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
 
-  html {
-    font-size: 16px;
-    -webkit-text-size-adjust: 100%;
+  html, body {
+    overflow: visible !important;
   }
 
   body {
     @apply font-sans antialiased text-white;
-    background: linear-gradient(135deg, #1A402B 0%, #2D5A42 50%, #1A402B 100%);
-    background-attachment: scroll; /* Better for mobile Safari */
-    min-height: 100vh;
+    background-color: #1A402B; /* Fallback color */
+    background-image: url('/images/forest-background.png'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     position: relative;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
   }
 
   .forest-panel {
-    background-color: rgba(34, 84, 61, 0.9);
-    border: 1px solid rgba(255, 235, 59, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(34, 84, 61, 0.8); /* Semi-transparent green */
+    border: 1px solid rgba(255, 235, 59, 0.5);
     box-shadow: 0 0 15px rgba(255, 235, 59, 0.2);
-    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     position: relative;
-  }
-
-  .tab-active {
-    background-color: rgba(255, 235, 59, 0.2);
-    color: #FFEB3B;
-    border-bottom: 2px solid #FFEB3B;
-  }
-
-  /* Safari mobile specific fixes */
-  input, textarea, select {
-    font-size: 16px; /* Prevents zoom on iOS */
-    -webkit-appearance: none;
-    border-radius: 6px;
-  }
-
-  button {
-    -webkit-appearance: none;
-    cursor: pointer;
-    touch-action: manipulation;
-  }
-
-  /* Improved scrolling for Safari */
-  .scroll-smooth {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-  }
-
-  /* Fix for iOS Safari viewport height issues */
-  .min-h-screen {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    z-index: 1;
+    border-radius: 8px;
   }
 
   .tab-active {
@@ -69,6 +62,8 @@
 }
 
 @layer components {
+  /* Component styles go here */
+  
   @keyframes pulse {
     0%, 100% {
       opacity: 0.6;
