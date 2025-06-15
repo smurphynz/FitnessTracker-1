@@ -368,6 +368,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Also serve the forest app at the root route with higher priority than Vite
   app.get("/", (req: Request, res: Response) => {
+    // Set cache control headers to prevent caching issues
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     // Redirect to our ultra-fresh version with new exercise options
     res.redirect("/fresh-exercises-options");
   });

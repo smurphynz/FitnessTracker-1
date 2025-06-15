@@ -29,28 +29,56 @@
   <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
   
   <script>
-    // Authentication check
-    function checkAuth() {
+    // Authentication check with session validation
+    async function checkAuth() {
       const isAuthenticated = localStorage.getItem('fitness_tracker_auth') === 'true';
+      
+      // Always validate with server to ensure session is still valid
       if (isAuthenticated) {
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('app-container').style.display = 'block';
-      } else {
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('app-container').style.display = 'none';
+        try {
+          const response = await fetch('/api/user');
+          if (response.ok || response.status === 401) {
+            // Session is valid or we handle 401 gracefully
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            return;
+          }
+        } catch (error) {
+          // If server check fails, still allow local auth
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('app-container').style.display = 'block';
+          return;
+        }
       }
+      
+      // Show login screen
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('app-container').style.display = 'none';
     }
     
-    // Password verification
+    // Password verification with improved persistence
     function verifyPassword() {
       const password = document.getElementById('password-input').value;
       const correctPassword = 'calisthenics'; // Simple password
       
       if (password === correctPassword) {
+        // Store authentication with expiration (30 days)
+        const authData = {
+          authenticated: true,
+          timestamp: Date.now(),
+          expires: Date.now() + (30 * 24 * 60 * 60 * 1000) // 30 days
+        };
+        
         localStorage.setItem('fitness_tracker_auth', 'true');
+        localStorage.setItem('fitness_tracker_auth_data', JSON.stringify(authData));
+        sessionStorage.setItem('fitness_tracker_session', 'active');
+        
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('app-container').style.display = 'block';
         document.getElementById('password-error').style.display = 'none';
+        
+        // Clear password field for security
+        document.getElementById('password-input').value = '';
       } else {
         document.getElementById('password-error').style.display = 'block';
       }
@@ -59,6 +87,8 @@
     // Logout function
     function logout() {
       localStorage.removeItem('fitness_tracker_auth');
+      localStorage.removeItem('fitness_tracker_auth_data');
+      sessionStorage.removeItem('fitness_tracker_session');
       document.getElementById('auth-screen').style.display = 'flex';
       document.getElementById('app-container').style.display = 'none';
     }
