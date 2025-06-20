@@ -1,80 +1,49 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Exercise } from "@shared/schema";
+import { Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { WorkoutExercise } from "@/types";
 
-interface ExerciseCardProps {
-  exercise: Exercise;
-  onAddSet: () => void;
-  onRemoveSet: (setIndex: number) => void;
-  onUpdateSetValue: (setIndex: number, value: number) => void;
-  onRemoveExercise: () => void;
+interface Props {
+  exercise: WorkoutExercise;
+  setIndex: number;
+  onDelete: () => void;
 }
 
-export default function ExerciseCard({
-  exercise,
-  onAddSet,
-  onRemoveSet,
-  onUpdateSetValue,
-  onRemoveExercise
-}: ExerciseCardProps) {
+export default function ExerciseCard({ exercise, setIndex, onDelete }: Props) {
   return (
-    <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="font-medium text-[#FFEB3B]">{exercise.name}</h3>
-        <span className={`text-xs px-2 py-1 rounded-full border ${exercise.isTimeBased 
-          ? 'bg-green-500/70 backdrop-blur-sm border-green-400' 
-          : 'bg-blue-500/70 backdrop-blur-sm border-blue-400'}`}>
-          {exercise.isTimeBased ? 'Time-based' : 'Rep-based'}
-        </span>
-      </div>
-      
-      {/* Sets */}
-      <div className="space-y-2 mb-3">
-        {exercise.sets.map((set, setIndex) => (
-          <div key={setIndex} className="flex items-center space-x-2">
-            <span className="text-sm text-[#FFEB3B]">Set {setIndex + 1}:</span>
-            <Input 
-              type="number" 
-              className="bg-forest-700 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 w-16 rounded p-1 text-sm" 
-              value={set.value}
-              onChange={(e) => onUpdateSetValue(setIndex, parseInt(e.target.value) || 0)}
-              min={1}
-            />
-            <span className="text-sm">{exercise.isTimeBased ? 'seconds' : 'reps'}</span>
-            {exercise.sets.length > 1 && (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-6 w-6 text-red-400 hover:text-red-300 hover:bg-transparent p-0"
-                onClick={() => onRemoveSet(setIndex)}
-              >
-                <span className="sr-only">Remove set</span>
-                ✕
-              </Button>
-            )}
-          </div>
+    <div className="bg-primary-700/80 backdrop-blur-sm border border-primary-600/30 rounded-lg p-3 shadow-md">
+      <h3 className="font-medium text-primary-300">{exercise.name}</h3>
+
+      <div className="mt-2 flex flex-wrap gap-2">
+        {exercise.sets.map((set, i) => (
+          <span
+            key={i}
+            className="bg-primary-700/70 backdrop-blur-sm border border-primary-600/30 w-16 rounded p-1 text-sm text-white text-center"
+          >
+            {set.reps ?? set.seconds}s
+          </span>
         ))}
       </div>
-      
-      {/* Add/Remove Set Buttons */}
-      <div className="flex justify-between">
-        <Button 
-          variant="outline"
-          size="sm"
-          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium border border-[#FFEB3B]/50" 
-          onClick={onAddSet}
+
+      <div className="mt-3 flex items-center gap-2">
+        <span className="text-sm text-primary-300">Set {setIndex + 1}:</span>
+
+        <button
+          onClick={onDelete}
+          className={cn(
+            "h-6 w-6 text-red-400 hover:text-red-300 p-0",
+            "hover:bg-transparent focus:outline-none"
+          )}
         >
-          + Add Set
-        </Button>
-        <Button 
-          variant="ghost"
-          size="sm"
-          className="text-red-400 hover:text-red-300 hover:bg-transparent text-xs h-7" 
-          onClick={onRemoveExercise}
-        >
-          Remove Exercise
-        </Button>
+          <Trash2 className="h-full w-full" />
+        </button>
       </div>
+
+      <button
+        className="mt-4 w-full bg-primary-600 hover:bg-primary-700 text-white text-xs h-7 font-medium border border-primary-700/50 rounded"
+        onClick={onDelete}
+      >
+        Remove Exercise
+      </button>
     </div>
   );
 }

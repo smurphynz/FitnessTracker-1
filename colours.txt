@@ -1,0 +1,227 @@
+client/index.html:    <a href="/react-style.html" class="absolute-link" style="font-size: 16px !important; padding: 12px 20px !important; top: 10px !important; background-color: #4CAF50 !important;">🌳 OPEN FULL FOREST APP 🌳</a>
+client/index.html:        background-color: #1A402B; /* Fallback color */
+client/index.html:        background: linear-gradient(145deg, #3C825F, #22543D) !important;
+client/index.html:        border: 4px solid #FFEB3B !important;
+client/index.html:        color: #FFEB3B !important;
+client/index.html:    <meta name="theme-color" content="#1A402B" />
+client/public/basic-dropdown.html:      background-color: #1A402B;
+client/public/basic-dropdown.html:      color: #FFC107;
+client/public/basic-dropdown.html:      color: #FFEB3B;
+client/public/direct-forest.html:      background-color: #1A402B;
+client/public/direct-forest.html:      background-color: #2196F3;
+client/public/direct-forest.html:      background-color: #4CAF50;
+client/public/direct-forest.html:      background-color: #F44336;
+client/public/direct-forest.html:      border-bottom: 2px solid #FFEB3B;
+client/public/direct-forest.html:      color: #FFEB3B;
+client/public/emergency.css:  background-color: #FF0000 !important;
+client/public/fallback-button.html:      background-color: #1A402B;
+client/public/fallback-button.html:      background-color: #ff0000;
+client/public/fallback-button.html:      border: 2px solid #FFEB3B;
+client/public/fallback-button.html:      color: #4CAF50;
+client/public/fallback-button.html:      color: #f44336;
+client/public/final.html:      background-color: #1A402B; /* Fallback color */
+client/public/final.html:      background: linear-gradient(145deg, #3C825F, #22543D);
+client/public/final.html:      background: linear-gradient(145deg, #4B9872, #2D694E);
+client/public/final.html:      border: 2px solid #FFEB3B;
+client/public/final.html:      border: 3px solid #FFEB3B;
+client/public/final.html:      border: 4px solid #FFEB3B;
+client/public/final.html:      color: #FFEB3B;
+client/public/fitness.html:      background-color: #1A402B; /* Fallback color */
+client/public/fitness.html:      background: linear-gradient(145deg, #3C825F, #22543D);
+client/public/fitness.html:      background: linear-gradient(145deg, #4B9872, #2D694E);
+client/public/fitness.html:      border: 2px solid #FFEB3B;
+client/public/fitness.html:      border: 3px solid #FFEB3B;
+client/public/fitness.html:      border: 4px solid #FFEB3B;
+client/public/fitness.html:      color: #FFEB3B;
+client/public/forest-app-clean.html:      background-color: #1A402B; /* Matches the forest-900 variable */
+client/public/forest-app-clean.html:      background-color: #4CAF50;
+client/public/forest-app-clean.html:      background-color: #F44336;
+client/public/forest-app-clean.html:      background: linear-gradient(145deg, #3C825F, #22543D);
+client/public/forest-app-clean.html:      background: linear-gradient(145deg, #4B9872, #2D694E);
+client/public/forest-app-clean.html:      border: 4px solid #FFEB3B;
+client/public/forest-app-clean.html:      border-bottom: 2px solid #FFEB3B;
+client/public/forest-app-clean.html:      color: #FFEB3B;
+client/public/forest-app-clean-new.html:      background-color: #1A402B; /* Darker forest green as fallback */
+client/public/forest-app-clean-new.html:      background-color: #1A402B; /* Matches the forest-900 variable */
+client/public/forest-app-clean-new.html:      background-color: #d4edda;
+client/public/forest-app-clean-new.html:      background-color: #f8d7da;
+client/public/forest-app-clean-new.html:      background-color: #FFEB3B;
+client/public/forest-app-clean-new.html:      border: 1px solid #c3e6cb;
+client/public/forest-app-clean-new.html:      border: 1px solid #f5c6cb;
+client/public/forest-app-clean-new.html:      color: #155724;
+client/public/forest-app-clean-new.html:      color: #721c24;
+client/public/forest-app-clean-new.html:      color: #FFC107;
+client/public/forest-app-clean-new.html:      color: #FFEB3B;
+client/public/forest-bg.svg:    <circle cx="100" cy="400" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="150" cy="380" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="200" cy="350" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="250" cy="410" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="300" cy="420" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="350" cy="370" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="400" cy="380" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="450" cy="400" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="500" cy="410" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="550" cy="390" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="600" cy="370" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="650" cy="420" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <circle cx="700" cy="430" r="1" fill="#FFEB3B" />
+client/public/forest-bg.svg:    <polygon points="0,500 100,300 200,480 300,200 400,450 500,300 600,400 700,250 800,500" fill="#1A402B" />
+client/public/forest-bg.svg:    <polygon points="0,700 30,600 60,700" fill="#22543D" />
+client/public/forest-bg.svg:    <polygon points="120,700 140,670 160,700" fill="#4B9872" />
+client/public/forest-bg.svg:    <polygon points="150,700 200,500 250,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="180,700 220,550 260,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="20,700 35,650 50,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="220,700 240,630 260,700" fill="#22543D" />
+client/public/forest-bg.svg:    <polygon points="250,700 300,600 350,700" fill="#2D694E" />
+client/public/forest-bg.svg:    <polygon points="280,700 320,630 360,700" fill="#22543D" />
+client/public/forest-bg.svg:    <polygon points="320,700 340,650 360,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="350,700 400,450 450,700" fill="#4B9872" />
+client/public/forest-bg.svg:    <polygon points="380,700 420,580 460,700" fill="#2D694E" />
+client/public/forest-bg.svg:    <polygon points="420,700 440,660 460,700" fill="#2D694E" />
+client/public/forest-bg.svg:    <polygon points="450,700 500,580 550,700" fill="#22543D" />
+client/public/forest-bg.svg:    <polygon points="480,700 520,650 560,700" fill="#4B9872" />
+client/public/forest-bg.svg:    <polygon points="50,700 100,550 150,700" fill="#4B9872" />
+client/public/forest-bg.svg:    <polygon points="520,700 540,640 560,700" fill="#4B9872" />
+client/public/forest-bg.svg:    <polygon points="550,700 600,520 650,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="580,700 620,500 660,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="620,700 640,650 660,700" fill="#22543D" />
+client/public/forest-bg.svg:    <polygon points="650,700 700,620 750,700" fill="#4B9872" />
+client/public/forest-bg.svg:    <polygon points="680,700 720,600 760,700" fill="#22543D" />
+client/public/forest-bg.svg:    <polygon points="720,700 740,670 760,700" fill="#3C825F" />
+client/public/forest-bg.svg:    <polygon points="80,700 110,620 140,700" fill="#2D694E" />
+client/public/full-forest-app.html:      background-color: #1A402B;
+client/public/full-forest-app.html:      background-color: #2196F3;
+client/public/full-forest-app.html:      background-color: #4CAF50;
+client/public/full-forest-app.html:      background-color: #F44336;
+client/public/full-forest-app.html:      border-bottom: 2px solid #FFEB3B;
+client/public/full-forest-app.html:      color: #FFEB3B;
+client/public/handstand-test.html:      background-color: #2ecc71;
+client/public/handstand-test.html:      background-color: #ddeedd;
+client/public/handstand-test.html:      background-color: #e74c3c;
+client/public/handstand-test.html:      background-color: #f0f8f0;
+client/public/handstand-test.html:      color: #226644;
+client/public/hub.html:      background-color: #2196F3;
+client/public/hub.html:      background-color: #22543D;
+client/public/hub.html:      background-color: #4CAF50;
+client/public/hub.html:      background-color: #F44336;
+client/public/hub.html:      background-color: #FDD835;
+client/public/hub.html:      background-color: #FFEB3B;
+client/public/hub.html:      border: 2px solid #FFEB3B;
+client/public/hub.html:      color: #FFEB3B;
+client/public/index-emergency.html:      background-color: #1A402B;
+client/public/index-emergency.html:      border: 4px solid #FFEB3B;
+client/public/index-emergency.html:      color: #FFEB3B;
+client/public/manifest.json:  "background_color": "#1A402B",
+client/public/manifest.json:  "theme_color": "#1A402B",
+client/public/react-style.html:      background-color: #1A402B; /* Matches the forest-900 variable */
+client/public/react-style.html:      background-color: #4CAF50;
+client/public/react-style.html:      background-color: #F44336;
+client/public/react-style.html:      background: linear-gradient(145deg, #3C825F, #22543D);
+client/public/react-style.html:      background: linear-gradient(145deg, #4B9872, #2D694E);
+client/public/react-style.html:      border: 4px solid #FFEB3B;
+client/public/react-style.html:      border-bottom: 2px solid #FFEB3B;
+client/public/react-style.html:      color: #FFEB3B;
+client/public/redirect-save.html:  <a href="/minimal.html" class="link" style="background-color: #4CAF50;">
+client/public/redirect-save.html:  <a href="/save-button.html" class="link" style="background-color: #2196F3;">
+client/public/redirect-save.html:      background-color: #22543D;
+client/public/redirect-save.html:      background-color: #FF0000;
+client/public/redirect-save.html:      color: #FFEB3B;
+client/public/safari-absolute.html:      background-color: #1A402B; /* Fallback color */
+client/public/safari-absolute.html:      background-color: #FF0000;
+client/public/safari-absolute.html:      background: linear-gradient(145deg, #3C825F, #22543D);
+client/public/safari-absolute.html:      border: 3px solid #FFEB3B;
+client/public/safari-absolute.html:      border: 4px solid #FFEB3B;
+client/public/safari-absolute.html:      color: #FFEB3B;
+client/public/safari-test.html:      background: #2D694E;
+client/public/safari-test.html:      background-color: #1A402B; /* Fallback */
+client/public/safari-test.html:      background-color: #FF0000;
+client/public/safari-test.html:      border: 3px solid #FFEB3B;
+client/public/safari-test.html:      color: #FFEB3B;
+client/public/save-button.html:<body style="background-color: #22543D; margin: 0; padding: 0; height: 100vh; width: 100vw;">
+client/src/App.tsx:          backgroundColor: "#FF0000",
+client/src/App.tsx:          color: "#FFFFFF",
+client/src/components/ExerciseCard.tsx:          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium border border-[#FFEB3B]/50" 
+client/src/components/ExerciseCard.tsx:              className="bg-forest-700 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 w-16 rounded p-1 text-sm" 
+client/src/components/ExerciseCard.tsx:    <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3">
+client/src/components/ExerciseCard.tsx:        <h3 className="font-medium text-[#FFEB3B]">{exercise.name}</h3>
+client/src/components/ExerciseCard.tsx:            <span className="text-sm text-[#FFEB3B]">Set {setIndex + 1}:</span>
+client/src/components/HandstandSection.tsx:            <Badge key={index} className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/20 text-white hover:bg-forest-700 rounded-full px-3 py-1 flex items-center">
+client/src/components/HandstandSection.tsx:              ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+client/src/components/HandstandSection.tsx:          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium border border-[#FFEB3B]/50" 
+client/src/components/HandstandSection.tsx:            <SelectTrigger id="handstand-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+client/src/components/HandstandSection.tsx:        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Handstand Training</span>
+client/src/components/Header.tsx:                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded px-2 py-1 text-sm h-auto w-auto" 
+client/src/components/Header.tsx:                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded w-16 px-2 py-1 text-sm h-auto" 
+client/src/components/Header.tsx:          <h1 className="text-2xl font-bold text-[#FFEB3B]">
+client/src/components/Header.tsx:    <header className="forest-panel sticky top-0 z-10 shadow-md border-b border-[#FFEB3B]/30">
+client/src/components/MobilitySection.tsx:                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+client/src/components/MobilitySection.tsx:            className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
+client/src/components/MobilitySection.tsx:      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
+client/src/components/MobilitySection.tsx:            <SelectTrigger id="mobility-completion" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+client/src/components/MobilitySection.tsx:        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Mobility Training</span>
+client/src/components/MobilitySection.tsx:          <span className="font-medium text-[#FFEB3B] ml-1">
+client/src/components/ProgressTab.tsx:          <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Workout History</span>
+client/src/components/SaveWorkoutButton.tsx:              backgroundColor: "#FF0000",
+client/src/components/StrengthSection.tsx:                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+client/src/components/StrengthSection.tsx:          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium py-6 border border-[#FFEB3B]/50"
+client/src/components/StrengthSection.tsx:          className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
+client/src/components/StrengthSection.tsx:      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
+client/src/components/StrengthSection.tsx:            <SelectTrigger id="strength-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+client/src/components/StrengthSection.tsx:        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">CaliMove Level 2</span>
+client/src/components/StrengthSection.tsx:          <span className="font-medium text-[#FFEB3B] ml-1">
+client/src/components/TabNavigation.tsx:    <div className="forest-panel border-b border-[#FFEB3B]/20 shadow-md mb-2">
+client/src/components/WorkoutCard.tsx:    <div className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3 shadow-md">
+client/src/components/WorkoutCard.tsx:        <h3 className="font-medium text-[#FFEB3B]">{formattedDate}</h3>
+client/src/index.css:  --accent-dark: #FFC107;
+client/src/index.css:  --accent: #FFEB3B;
+client/src/index.css:    background-color: #1A402B; /* Fallback color */
+client/src/index.css:  background: linear-gradient(145deg, #3C825F, #22543D);
+client/src/index.css:  background: linear-gradient(145deg, #4B9872, #2D694E);
+client/src/index.css:  border: 4px solid #FFEB3B;
+client/src/index.css:  color: #FFEB3B;
+client/src/index.css:  --forest-500: #4B9872;
+client/src/index.css:  --forest-600: #3C825F;
+client/src/index.css:  --forest-700: #2D694E;
+client/src/index.css:  --forest-800: #22543D;
+client/src/index.css:  --forest-900: #1A402B;
+client/src/components/ExerciseCard.tsx:          : 'bg-blue-500/70 backdrop-blur-sm border-blue-400'}`}>
+client/src/components/ExerciseCard.tsx:          ? 'bg-green-500/70 backdrop-blur-sm border-green-400' 
+client/src/components/ExerciseCard.tsx:          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium border border-[#FFEB3B]/50" 
+client/src/components/ExerciseCard.tsx:              className="bg-forest-700 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 w-16 rounded p-1 text-sm" 
+client/src/components/ExerciseCard.tsx:                className="h-6 w-6 text-red-400 hover:text-red-300 hover:bg-transparent p-0"
+client/src/components/ExerciseCard.tsx:          className="text-red-400 hover:text-red-300 hover:bg-transparent text-xs h-7" 
+client/src/components/ExerciseCard.tsx:    <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3">
+client/src/components/HandstandSection.tsx:            <Badge key={index} className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/20 text-white hover:bg-forest-700 rounded-full px-3 py-1 flex items-center">
+client/src/components/HandstandSection.tsx:              ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+client/src/components/HandstandSection.tsx:              : 'bg-forest-700 hover:bg-forest-600'
+client/src/components/HandstandSection.tsx:          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium border border-[#FFEB3B]/50" 
+client/src/components/HandstandSection.tsx:                className="h-5 w-5 ml-1 text-red-400 hover:text-red-300 hover:bg-transparent"
+client/src/components/HandstandSection.tsx:            <SelectContent className="bg-forest-800">
+client/src/components/HandstandSection.tsx:            <SelectTrigger id="handstand-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+client/src/components/Header.tsx:                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded px-2 py-1 text-sm h-auto w-auto" 
+client/src/components/Header.tsx:                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded w-16 px-2 py-1 text-sm h-auto" 
+client/src/components/MobilitySection.tsx:                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+client/src/components/MobilitySection.tsx:                : 'bg-forest-700 hover:bg-forest-600'
+client/src/components/MobilitySection.tsx:            className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
+client/src/components/MobilitySection.tsx:      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
+client/src/components/MobilitySection.tsx:            <SelectContent className="bg-forest-800">
+client/src/components/MobilitySection.tsx:            <SelectTrigger id="mobility-completion" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+client/src/components/StrengthSection.tsx:                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
+client/src/components/StrengthSection.tsx:                : 'bg-forest-700 hover:bg-forest-600'
+client/src/components/StrengthSection.tsx:          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium py-6 border border-[#FFEB3B]/50"
+client/src/components/StrengthSection.tsx:          className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
+client/src/components/StrengthSection.tsx:      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
+client/src/components/StrengthSection.tsx:            <SelectContent className="bg-forest-800">
+client/src/components/StrengthSection.tsx:            <SelectTrigger id="strength-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+client/src/components/ui/toast.tsx:      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
+client/src/components/WorkoutCard.tsx:    <div className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3 shadow-md">
+client/src/components/WorkoutCard.tsx:      <div className="mt-2 border-t border-forest-700 pt-2">
+client/src/index.css:    @apply border-b-2 border-yellow-300 text-yellow-300 font-semibold;
+client/src/index.css:  @apply font-semibold text-yellow-300 mb-2;
+client/src/pages/not-found.tsx:            <AlertCircle className="h-8 w-8 text-red-500" />
+client/src/pages/not-found.tsx:    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
+client/src/pages/not-found.tsx:            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
+client/src/pages/not-found.tsx:          <p className="mt-4 text-sm text-gray-600">
+client/src/pages/SavePage.tsx:            <a className="text-blue-400 underline">
+client/src/pages/SavePage.tsx:          className="w-full max-w-md py-6 px-4 bg-red-600 text-white font-bold text-xl rounded-lg mb-4 border-4 border-white"
+client/src/pages/SavePage.tsx:          <p className="text-green-500 text-2xl mb-4">
