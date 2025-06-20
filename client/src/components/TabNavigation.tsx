@@ -1,29 +1,35 @@
-interface TabNavigationProps {
-  activeTab: "workout" | "progress";
-  setActiveTab: (tab: "workout" | "progress") => void;
+import React from "react";
+
+interface Props {
+  current: string;
+  onSelect: (key: string) => void;
 }
 
-export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
+const tabs = [
+  { key: "workout", label: "Workout" },
+  { key: "progress", label: "Progress" },
+];
+
+export default function TabNavigation({ current, onSelect }: Props) {
   return (
-    <div className="forest-panel border-b border-[#FFEB3B]/20 shadow-md mb-2">
-      <div className="container mx-auto">
-        <div className="flex">
-          <button 
-            id="tab-workout" 
-            className={`flex-1 py-3 font-medium text-center ${activeTab === "workout" ? "tab-active" : "opacity-75"}`}
-            onClick={() => setActiveTab("workout")}
+    <nav className="bg-primary-900/80 backdrop-blur-sm border-b border-primary-700/40 shadow-md mb-2 flex">
+      {tabs.map((t) => {
+        const active = current === t.key;
+        return (
+          <button
+            key={t.key}
+            onClick={() => onSelect(t.key)}
+            className={[
+              "flex-1 py-3 text-sm font-medium",
+              active
+                ? "bg-primary-700 text-primary-50"
+                : "bg-transparent text-primary-300 hover:bg-primary-700/40",
+            ].join(" ")}
           >
-            Log Workout
+            {t.label}
           </button>
-          <button 
-            id="tab-progress" 
-            className={`flex-1 py-3 font-medium text-center ${activeTab === "progress" ? "tab-active" : "opacity-75"}`}
-            onClick={() => setActiveTab("progress")}
-          >
-            Progress
-          </button>
-        </div>
-      </div>
-    </div>
+        );
+      })}
+    </nav>
   );
 }
