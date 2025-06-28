@@ -72,13 +72,13 @@ export default function StrengthSection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">CaliMove Level 2</span>
+        <span className="border-b-2 border-primary-600 pb-1 text-primary-600 shadow-sm">CaliMove Level 2</span>
       </h2>
       
-      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
-        <p className="text-sm">
+      <div className="bg-primary-50/80 backdrop-blur-sm border border-primary-300/30 rounded-md mb-3 p-2 text-center">
+        <p className="text-sm text-primary-900">
           Last CaliMove Strength Day: 
-          <span className="font-medium text-[#FFEB3B] ml-1">
+          <span className="font-medium text-primary-600 ml-1">
             {lastStrengthDay !== null ? lastStrengthDay : "None"}
           </span>
         </p>
@@ -89,7 +89,7 @@ export default function StrengthSection({
         <Input 
           type="number" 
           id="strength-day" 
-          className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
+          className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded p-2 text-primary-900 focus:border-primary-600" 
           value={strengthDay === undefined ? '' : strengthDay}
           onChange={(e) => {
             const value = e.target.value;
