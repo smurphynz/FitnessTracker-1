@@ -45,11 +45,11 @@ export default function SavePage() {
         </button>
       ) : (
         <div className="text-center mb-8">
-          <p className="text-green-500 text-2xl mb-4">
+          <p className="text-primary-600 text-2xl mb-4">
             Workout saved successfully!
           </p>
           <Link to="/">
-            <a className="text-blue-400 underline">
+            <a className="text-primary-600 underline">
               Return to main page
             </a>
           </Link>

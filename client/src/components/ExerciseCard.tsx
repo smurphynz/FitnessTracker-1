@@ -22,7 +22,7 @@ export default function ExerciseCard({
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-medium text-primary-600">{exercise.name}</h3>
         <span className={`text-xs px-2 py-1 rounded-full border ${exercise.isTimeBased 
-          ? 'bg-success/70 backdrop-blur-sm border-success text-primary-900' 
+          ? 'bg-primary-500/70 backdrop-blur-sm border-primary-600 text-primary-50' 
           : 'bg-primary-300/70 backdrop-blur-sm border-primary-600 text-primary-900'}`}>
           {exercise.isTimeBased ? 'Time-based' : 'Rep-based'}
         </span>

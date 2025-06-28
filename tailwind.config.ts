@@ -58,7 +58,7 @@ export default {
         // Status colors
         success: "#10B981",
         error: "#EF4444",
-        warning: "#FFC107",
+        warning: "#F59E0B",
         // Neutral colors
         neutral: {
           text: "#111827",

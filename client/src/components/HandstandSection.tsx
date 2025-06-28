@@ -86,7 +86,7 @@ export default function HandstandSection({
         <Button 
           className={`w-full py-4 font-medium ${
             handstandCompleted 
-              ? 'bg-success hover:bg-success/90 text-primary-900' 
+              ? 'bg-primary-600 hover:bg-primary-700 text-primary-50' 
               : 'bg-primary-300 hover:bg-primary-600 text-primary-900 hover:text-primary-50'
           }`}
           onClick={() => setHandstandCompleted(!handstandCompleted)}
