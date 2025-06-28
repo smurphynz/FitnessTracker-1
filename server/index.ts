@@ -61,7 +61,7 @@ app.use((req, res, next) => {
    *  Listen on the first free port (default 5000).
    *  This prevents crashes if an old process is still bound to 5000
    * ---------------------------------------------------------------- */
-  const port = process.env.PORT ? Number(process.env.PORT) : 5001;
+  const port = process.env.PORT ? Number(process.env.PORT) : 5000;
 
   server.listen({ port, host: "0.0.0.0", reusePort: true }, () =>
     log(`serving on port ${port}`),
