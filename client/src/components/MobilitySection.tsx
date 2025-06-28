@@ -56,10 +56,10 @@ export default function MobilitySection({
               setMobilityCompletion(value)
             }
           >
-            <SelectTrigger id="mobility-completion" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+            <SelectTrigger id="mobility-completion" className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded text-primary-900 focus:border-primary-600">
               <SelectValue placeholder="Select completion level" />
             </SelectTrigger>
-            <SelectContent className="bg-forest-800">
+            <SelectContent className="bg-primary-50 border-primary-300">
               <SelectItem value="full-session">Full Session</SelectItem>
               <SelectItem value="half-session">Half Session</SelectItem>
               <SelectItem value="not-completed">Not Completed</SelectItem>
@@ -72,8 +72,8 @@ export default function MobilitySection({
           <Button 
             className={`w-full py-4 font-medium ${
               mobilityCompletion !== 'not-completed' 
-                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
-                : 'bg-forest-700 hover:bg-forest-600'
+                ? 'bg-success hover:bg-success/90 text-primary-900' 
+                : 'bg-primary-300 hover:bg-primary-600 text-primary-900 hover:text-primary-50'
             }`}
             onClick={() => {
               const nextState = mobilityCompletion === 'not-completed'
