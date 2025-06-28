@@ -17,11 +17,11 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
   }, [setDate]);
 
   return (
-    <header className="forest-panel sticky top-0 z-10 shadow-md border-b border-[#FFEB3B]/30">
+    <header className="forest-panel sticky top-0 z-10 shadow-md border-b border-primary-600/30">
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-col items-center">
-          <h1 className="text-2xl font-bold text-[#FFEB3B]">
-            Sean's Cali Fitness Tracker
+          <h1 className="text-2xl font-bold text-primary-600">
+            Calisthenics Fitness Tracker
           </h1>
           
           {/* Date and Weight tracking */}
@@ -32,7 +32,7 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
               <Input 
                 type="date" 
                 id="workout-date" 
-                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded px-2 py-1 text-sm h-auto w-auto" 
+                className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded px-2 py-1 text-sm h-auto w-auto text-primary-900 focus:border-primary-600" 
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
@@ -45,7 +45,7 @@ export default function Header({ date, setDate, weight, setWeight }: HeaderProps
                 type="number" 
                 id="weight-input" 
                 placeholder="kg" 
-                className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded w-16 px-2 py-1 text-sm h-auto" 
+                className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded w-16 px-2 py-1 text-sm h-auto text-primary-900 focus:border-primary-600" 
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 step="0.1"
