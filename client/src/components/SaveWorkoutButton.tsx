@@ -31,6 +31,8 @@ export default function SaveWorkoutButton({ workout, onSuccess }: SaveWorkoutBut
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/workouts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/summary"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/weight/current"] });
       toast({
         title: "Success!",
         description: "Workout saved successfully",

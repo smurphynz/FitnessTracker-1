@@ -120,6 +120,14 @@ Changelog:
   - Applied accessibility-focused contrast ratios for text and backgrounds
   - Success/error states now use semantic green (#10B981) and red (#EF4444) colors
   - Maintained yellow accent (#FFC107) sparingly for high-priority highlights only
+- June 28, 2025. Sprint 2: Summary Tab with Body-Weight Tracking Implementation
+  - Added body_weight table with unique constraints on user_id and date
+  - Extended workouts table with weight_kg snapshot column for historical data
+  - Implemented comprehensive storage layer with gap-filled weight series algorithm
+  - Created API endpoints: /api/weight (POST/GET), /api/summary, /api/summary/* routes
+  - Built Summary tab components: WeightBanner, WeeklyFrequencyChart, WeightTrendCard, PRBadges, StreakPanel
+  - Integrated Recharts for data visualization with 30-day spark lines and 7-day frequency bars
+  - Added React Query cache invalidation for real-time updates after workout saves
 ```
 
 ## User Preferences
