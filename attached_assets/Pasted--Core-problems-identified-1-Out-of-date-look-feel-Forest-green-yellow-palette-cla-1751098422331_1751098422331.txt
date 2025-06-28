@@ -1,0 +1,37 @@
+### Core problems identified
+
+1. **Out-of-date look & feel**
+
+   * Forest-green + yellow palette clashes; assorted hard-coded colours scattered through legacy HTML demos and React components.
+
+2. **Confusing “Save Workout” flow**
+
+   * No clear feedback; users sometimes tap twice → duplicate entries.
+
+3. **Progress & history glitches**
+
+   * Saved data occasionally doesn’t propagate to the Progress tab; layout is cramped.
+
+4. **Single-user limitation**
+
+   * App hard-codes “Sean’s Cali Fitness Tracker”; can’t register or log in multiple users.
+
+5. **Preview / dev-server pain**
+
+   * Replit preview kept defaulting to backend port 5000; front-end on 5173 was invisible, triggering the “Your app is not running” loop.
+   * Ghost Node processes left ports occupied → “EADDRINUSE 5000” and Vite hopping to 5174.
+
+---
+
+### What we want to achieve
+
+| Area                            | Desired amendment                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **UI theme (Sprint 1)**         | Replace every forest/-yellow colour with a consistent blue palette; verify live in the running app.                 |
+| **UX feedback (Sprint 2)**      | One sticky “Save Workout” button that shows a “Saving…” spinner and disables itself until the API confirms success. |
+| **Data integrity (Sprint 2.5)** | Ensure all workout fields save correctly and render in Progress / History; finalise exactly what should show there. |
+| **Multi-user (Sprint 3)**       | Add Register + Login pages, hashed passwords, per-user workout tables; allow custom app title per user.             |
+| **Optional extras**             | Hide/rename sections per user, add cardio logging, tidy charts (workout frequency colours).                         |
+| **Developer experience**        | Make Replit preview always load the front-end, kill orphan servers automatically, and prevent Vite port-hopping.    |
+
+That’s the concise list of problems and the fixes we set out to implement—no file content included.

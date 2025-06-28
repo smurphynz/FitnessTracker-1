@@ -36,19 +36,16 @@ html, body {
 
   body {
     @apply font-sans antialiased text-white;
-    background-color: #1A402B; /* Fallback color */
-    background-image: url('/images/forest-background.png'); 
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%);
     background-attachment: fixed;
     position: relative;
     min-height: 100vh;
   }
 
   .forest-panel {
-    background-color: rgba(34, 84, 61, 0.8); /* Semi-transparent green */
-    border: 1px solid rgba(255, 235, 59, 0.5);
-    box-shadow: 0 0 15px rgba(255, 235, 59, 0.2);
+    background-color: rgba(30, 58, 138, 0.8); /* Semi-transparent blue */
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     position: relative;
@@ -57,7 +54,7 @@ html, body {
   }
 
   .tab-active {
-    @apply border-b-2 border-yellow-300 text-yellow-300 font-semibold;
+    @apply border-b-2 border-blue-400 text-blue-400 font-semibold;
   }
 }
 
@@ -79,33 +76,33 @@ html, body {
 }
 
 :root {
-  --background: 158 47% 14%;
-  --foreground: 0 0% 98%;
-  --card: 158 40% 18%;
-  --card-foreground: 0 0% 98%;
-  --popover: 158 40% 18%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 54 100% 61%;
-  --primary-foreground: 158 47% 14%;
-  --secondary: 158 40% 28%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 158 30% 20%;
-  --muted-foreground: 0 0% 70%;
-  --accent: 54 100% 61%;
-  --accent-foreground: 158 47% 14%;
+  --background: 224 71% 4%;
+  --foreground: 210 40% 98%;
+  --card: 224 71% 10%;
+  --card-foreground: 210 40% 98%;
+  --popover: 224 71% 10%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 213 94% 68%;
+  --primary-foreground: 224 71% 4%;
+  --secondary: 215 32% 27%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 215 32% 20%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 213 94% 68%;
+  --accent-foreground: 224 71% 4%;
   --destructive: 0 85% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 158 30% 24%;
-  --input: 158 30% 24%;
-  --ring: 54 100% 61%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 215 28% 17%;
+  --input: 215 28% 17%;
+  --ring: 213 94% 68%;
 
-  --forest-900: #1A402B;
-  --forest-800: #22543D;
-  --forest-700: #2D694E;
-  --forest-600: #3C825F;
-  --forest-500: #4B9872;
-  --accent: #FFEB3B;
-  --accent-dark: #FFC107;
+  --blue-900: #1e3a8a;
+  --blue-800: #1e40af;
+  --blue-700: #1d4ed8;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
 }
 
 /* Additional custom styles with transparency */
@@ -113,16 +110,16 @@ html, body {
   margin: 1rem 0;
   padding: 1rem;
   border-radius: 0.5rem;
-  background-color: rgba(34, 84, 61, 0.7);
-  border: 1px solid rgba(96, 185, 112, 0.6);
+  background-color: rgba(30, 58, 138, 0.7);
+  border: 1px solid rgba(59, 130, 246, 0.6);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
 
 .forest-card {
-  background-color: rgba(34, 84, 61, 0.75);
-  border: 1px solid rgba(96, 185, 112, 0.6);
+  background-color: rgba(30, 58, 138, 0.75);
+  border: 1px solid rgba(59, 130, 246, 0.6);
   border-radius: 0.5rem;
   padding: 1rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -132,19 +129,19 @@ html, body {
 
 .tab-content {
   padding: 1rem;
-  background-color: rgba(34, 84, 61, 0.6);
+  background-color: rgba(30, 58, 138, 0.6);
   border-radius: 0.5rem;
-  border: 1px solid rgba(96, 185, 112, 0.5);
+  border: 1px solid rgba(59, 130, 246, 0.5);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
 
 .date-heading {
-  @apply font-semibold text-yellow-300 mb-2;
+  @apply font-semibold text-blue-300 mb-2;
 }
 
-/* Save workout button styling - forest theme */
+/* Save workout button styling - blue theme */
 .save-workout-btn {
   position: fixed;
   bottom: 40px;
@@ -155,20 +152,20 @@ html, body {
   padding: 20px 0;
   font-size: 24px;
   
-  /* Forest theme colors */
-  background: linear-gradient(145deg, #3C825F, #22543D);
-  color: #FFEB3B;
+  /* Blue theme colors */
+  background: linear-gradient(145deg, #2563eb, #1e40af);
+  color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   
   text-transform: uppercase;
   font-weight: 900;
   letter-spacing: 2px;
-  border: 4px solid #FFEB3B;
+  border: 4px solid #3b82f6;
   border-radius: 12px;
   box-shadow: 
-    0 0 0 2px rgba(60, 130, 95, 0.5),
+    0 0 0 2px rgba(37, 99, 235, 0.5),
     0 8px 30px rgba(0, 0, 0, 0.6),
-    0 0 15px 5px rgba(255, 235, 59, 0.3);
+    0 0 15px 5px rgba(59, 130, 246, 0.3);
   cursor: pointer;
   text-align: center;
   z-index: 9999999;
@@ -180,12 +177,23 @@ html, body {
 }
 
 .save-workout-btn:hover {
-  background: linear-gradient(145deg, #4B9872, #2D694E);
+  background: linear-gradient(145deg, #3b82f6, #2563eb);
   transform: translateX(-50%) scale(1.02);
   box-shadow: 
-    0 0 0 2px rgba(60, 130, 95, 0.5),
+    0 0 0 2px rgba(37, 99, 235, 0.5),
     0 8px 30px rgba(0, 0, 0, 0.6),
-    0 0 20px 10px rgba(255, 235, 59, 0.4);
+    0 0 20px 10px rgba(59, 130, 246, 0.4);
+}
+
+.save-workout-btn:disabled {
+  background: linear-gradient(145deg, #64748b, #475569);
+  color: #94a3b8;
+  border-color: #64748b;
+  cursor: not-allowed;
+  transform: translateX(-50%);
+  box-shadow: 
+    0 0 0 2px rgba(100, 116, 139, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* Ensure the save button container has enough space */
