@@ -61,7 +61,7 @@ export default function ExerciseCard({
         <Button 
           variant="outline"
           size="sm"
-          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium border border-[#FFEB3B]/50" 
+          className="bg-primary-600 hover:bg-primary-700 text-primary-50 text-xs h-7 font-medium border border-primary-300" 
           onClick={onAddSet}
         >
           + Add Set
