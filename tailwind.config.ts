@@ -47,12 +47,12 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        forest: {
-          "900": "#1A402B",
-          "800": "#22543D",
-          "700": "#2D694E",
-          "600": "#3C825F",
-          "500": "#4B9872",
+        ocean: {
+          "900": "#1e3a8a",
+          "800": "#1e40af",
+          "700": "#1d4ed8",
+          "600": "#2563eb",
+          "500": "#3b82f6",
         },
         chart: {
           "1": "hsl(var(--chart-1))",
