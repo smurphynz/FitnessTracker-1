@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Cache bust: 1751099743 - Blue theme update */
+
 /* Critical override for Tailwind - must be after imports */
 @layer utilities {
   .emergency-visible {
@@ -36,10 +38,12 @@ html, body {
 
   body {
     @apply font-sans antialiased text-white;
-    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%);
-    background-attachment: fixed;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
+    background-attachment: fixed !important;
     position: relative;
     min-height: 100vh;
+    /* Force blue theme override */
+    background-color: #1e3a8a !important;
   }
 
   .forest-panel {

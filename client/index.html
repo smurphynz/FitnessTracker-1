@@ -11,6 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta name="cache-bust" content="1751099743">
     
     <!-- Load emergency CSS that overrides everything -->
     <link rel="stylesheet" href="/emergency.css">
@@ -25,7 +26,21 @@
         padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         color: white;
-        background-color: #1e3a8a; /* Fallback color */
+        background-color: #1e3a8a !important; /* Fallback color */
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
+        background-attachment: fixed !important;
+      }
+      
+      /* Force blue theme override with timestamp */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
+        z-index: -2;
       }
       
       /* Background container with image approach that works in Safari */
@@ -124,7 +139,7 @@
       SAVE WORKOUT
     </button>
     
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx?v=1751099743"></script>
     
     <!-- Vanilla JavaScript for image loading and emergency save -->
     <script>
