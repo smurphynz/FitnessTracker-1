@@ -107,6 +107,12 @@ Changelog:
     * Fixed TypeScript errors and component integration
     * Resolved JavaScript errors preventing React app from loading
     * Implemented aggressive cache-busting to ensure theme updates display
+- June 28, 2025. Fixed critical caching issue preventing blue theme from displaying
+  - Identified and removed conflicting static HTML files in server/public and client/public
+  - These old files were overriding the React app and serving forest green theme
+  - React app with blue theme now loads correctly on port 5002
+  - Development servers running properly with Express (5002) and Vite (5173)
+  - Verified blue gradient background and updated app title are active
 ```
 
 ## User Preferences
