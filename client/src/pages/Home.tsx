@@ -5,9 +5,7 @@ import Header from "@/components/Header";
 import TabNavigation from "@/components/TabNavigation";
 import WorkoutTab from "@/components/WorkoutTab";
 import ProgressTab from "@/components/ProgressTab";
-import SaveWorkoutButton from "@/components/SaveWorkoutButton";
 import { workoutSchema, type Workout } from "@shared/schema";
-import { localStorageAPI } from "@/lib/storage";
 
 // Define API response types
 interface LastDayResponse {
@@ -46,11 +44,7 @@ export default function Home() {
   const lastMobilityDay = lastMobilityDayData?.lastDay ?? null;
   const lastStrengthDay = lastStrengthDayData?.lastDay ?? null;
 
-  const handleSaveWorkout = (newWorkout: Workout) => {
-    // Store the workout locally before syncing with server
-    localStorageAPI.addWorkout(newWorkout);
-    return true;
-  };
+
 
   return (
     <div className="container mx-auto px-4 pt-6 pb-24 max-w-md" style={{height: "auto", overflow: "visible", position: "relative"}}>
@@ -69,13 +63,10 @@ export default function Home() {
           weight={weight}
           lastMobilityDay={lastMobilityDay}
           lastStrengthDay={lastStrengthDay}
-          onSaveWorkout={handleSaveWorkout}
         />
       ) : (
         <ProgressTab workouts={workouts} />
       )}
-
-      {activeTab === "workout" && <SaveWorkoutButton />}
     </div>
   );
 }
