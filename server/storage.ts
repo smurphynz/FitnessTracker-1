@@ -1,6 +1,6 @@
-import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise } from "@shared/schema";
+import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise, bodyWeight, BodyWeight, InsertBodyWeight, Summary } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql, and, gte } from "drizzle-orm";
 
 export interface IStorage {
   // User methods (keeping original methods)
@@ -18,6 +18,18 @@ export interface IStorage {
   getLastMobilityDay(): Promise<number | undefined>;
   getLastStrengthDay(): Promise<number | undefined>;
   getLastCalimoveStrengthDay(): Promise<{ day: number | null, isRecent: boolean }>;
+  
+  // Body weight methods
+  logWeight(weight: InsertBodyWeight): Promise<BodyWeight>;
+  getCurrentWeight(userId: number): Promise<number | null>;
+  getWeightSeries(userId: number, days?: number): Promise<Array<{ date: string; weight: number }>>;
+  
+  // Summary methods
+  getSummary(userId: number): Promise<Summary>;
+  getWeeklyFrequency(userId: number): Promise<Array<{ day: string; count: number }>>;
+  getRecentWorkouts(userId: number, limit?: number): Promise<Workout[]>;
+  getPRBadges(userId: number): Promise<Array<{ exercise: string; value: number; unit: string }>>;
+  getWorkoutStreaks(userId: number): Promise<{ current: number; longest: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -187,9 +199,254 @@ export class DatabaseStorage implements IStorage {
     return existingWorkouts.length > 0;
   }
 
+  // Body weight methods
+  async logWeight(weight: InsertBodyWeight): Promise<BodyWeight> {
+    const [result] = await db
+      .insert(bodyWeight)
+      .values(weight)
+      .onConflictDoUpdate({
+        target: [bodyWeight.userId, bodyWeight.date],
+        set: {
+          weightKg: weight.weightKg,
+        }
+      })
+      .returning();
+    
+    return {
+      id: result.id,
+      userId: Number(result.userId),
+      date: result.date,
+      weightKg: Number(result.weightKg),
+    };
+  }
+
+  async getCurrentWeight(userId: number): Promise<number | null> {
+    const [result] = await db
+      .select()
+      .from(bodyWeight)
+      .where(eq(bodyWeight.userId, userId))
+      .orderBy(desc(bodyWeight.date))
+      .limit(1);
+    
+    return result ? Number(result.weightKg) : null;
+  }
+
+  async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - days + 1);
+
+    // Get all weight entries in the date range
+    const weights = await db
+      .select()
+      .from(bodyWeight)
+      .where(
+        and(
+          eq(bodyWeight.userId, userId),
+          gte(bodyWeight.date, startDate.toISOString().split('T')[0])
+        )
+      )
+      .orderBy(bodyWeight.date);
+
+    // Generate gap-filled series
+    const series: Array<{ date: string; weight: number }> = [];
+    let lastWeight: number | null = null;
+
+    for (let i = 0; i < days; i++) {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(startDate.getDate() + i);
+      const dateStr = currentDate.toISOString().split('T')[0];
+
+      // Check if we have a weight entry for this date
+      const weightEntry = weights.find(w => w.date === dateStr);
+      
+      if (weightEntry) {
+        lastWeight = Number(weightEntry.weightKg);
+        series.push({ date: dateStr, weight: lastWeight });
+      } else if (lastWeight !== null) {
+        // Use last known weight for missing dates
+        series.push({ date: dateStr, weight: lastWeight });
+      }
+    }
+
+    return series;
+  }
+
+  // Summary methods
+  async getSummary(userId: number): Promise<Summary> {
+    const [
+      weeklyFrequency,
+      recentWorkouts,
+      prBadges,
+      streaks,
+      currentWeight,
+      weightTrend
+    ] = await Promise.all([
+      this.getWeeklyFrequency(userId),
+      this.getRecentWorkouts(userId, 10),
+      this.getPRBadges(userId),
+      this.getWorkoutStreaks(userId),
+      this.getCurrentWeight(userId),
+      this.getWeightSeries(userId, 30)
+    ]);
+
+    return {
+      weeklyFrequency,
+      recentWorkouts,
+      prBadges,
+      streaks,
+      currentWeight,
+      weightTrend
+    };
+  }
+
+  async getWeeklyFrequency(userId: number): Promise<Array<{ day: string; count: number }>> {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - 6); // Last 7 days
+
+    const workoutCounts = await db
+      .select({
+        date: workouts.date,
+      })
+      .from(workouts)
+      .where(
+        gte(workouts.date, startDate.toISOString().split('T')[0])
+      );
+
+    // Count workouts by day
+    const dailyCounts: Record<string, number> = {};
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    // Initialize all days to 0
+    days.forEach(day => {
+      dailyCounts[day] = 0;
+    });
+
+    // Count actual workouts
+    workoutCounts.forEach(workout => {
+      const date = new Date(workout.date);
+      const dayName = days[date.getDay()];
+      dailyCounts[dayName]++;
+    });
+
+    return days.map(day => ({
+      day,
+      count: dailyCounts[day]
+    }));
+  }
+
+  async getRecentWorkouts(userId: number, limit: number = 10): Promise<Workout[]> {
+    const recentWorkouts = await db
+      .select()
+      .from(workouts)
+      .orderBy(desc(workouts.date))
+      .limit(limit);
+
+    return recentWorkouts.map(workout => this.mapDBWorkoutToWorkout(workout));
+  }
+
+  async getPRBadges(userId: number): Promise<Array<{ exercise: string; value: number; unit: string }>> {
+    const allWorkouts = await db.select().from(workouts);
+    
+    const exerciseRecords: Record<string, { value: number; unit: string }> = {};
+
+    allWorkouts.forEach(workout => {
+      const strengthExercises = workout.strength_exercises as Exercise[];
+      strengthExercises?.forEach(exercise => {
+        const maxSet = exercise.sets.reduce((max, set) => 
+          set.value > max.value ? set : max, { value: 0 });
+        
+        const unit = exercise.isTimeBased ? 'seconds' : 'reps';
+        const key = exercise.name;
+        
+        if (!exerciseRecords[key] || maxSet.value > exerciseRecords[key].value) {
+          exerciseRecords[key] = { value: maxSet.value, unit };
+        }
+      });
+    });
+
+    return Object.entries(exerciseRecords)
+      .sort(([,a], [,b]) => b.value - a.value)
+      .slice(0, 3)
+      .map(([exercise, record]) => ({
+        exercise,
+        value: record.value,
+        unit: record.unit
+      }));
+  }
+
+  async getWorkoutStreaks(userId: number): Promise<{ current: number; longest: number }> {
+    const allWorkouts = await db
+      .select({ date: workouts.date })
+      .from(workouts)
+      .orderBy(desc(workouts.date));
+
+    if (allWorkouts.length === 0) {
+      return { current: 0, longest: 0 };
+    }
+
+    const dates = allWorkouts.map(w => new Date(w.date));
+    dates.sort((a, b) => b.getTime() - a.getTime());
+
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Check current streak from today backwards
+    let checkDate = new Date(today);
+    for (const workoutDate of dates) {
+      const workout = new Date(workoutDate);
+      workout.setHours(0, 0, 0, 0);
+
+      if (workout.getTime() === checkDate.getTime()) {
+        currentStreak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      } else if (workout.getTime() < checkDate.getTime()) {
+        break;
+      }
+    }
+
+    // Calculate longest streak
+    for (let i = 0; i < dates.length; i++) {
+      const currentDate = new Date(dates[i]);
+      const nextDate = i + 1 < dates.length ? new Date(dates[i + 1]) : null;
+
+      tempStreak = 1;
+
+      if (nextDate) {
+        const dayDiff = Math.floor((currentDate.getTime() - nextDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (dayDiff === 1) {
+          // Consecutive day found, continue counting
+          let j = i + 1;
+          while (j < dates.length) {
+            const checkCurrent = new Date(dates[j - 1]);
+            const checkNext = new Date(dates[j]);
+            const diff = Math.floor((checkCurrent.getTime() - checkNext.getTime()) / (1000 * 60 * 60 * 24));
+            
+            if (diff === 1) {
+              tempStreak++;
+              j++;
+            } else {
+              break;
+            }
+          }
+          i = j - 1; // Skip ahead
+        }
+      }
+
+      longestStreak = Math.max(longestStreak, tempStreak);
+    }
+
+    return { current: currentStreak, longest: longestStreak };
+  }
+
   // Helper method to map database workout format to application workout format
   private mapDBWorkoutToWorkout(dbWorkout: any): Workout {
-    console.log("DB Workout:", dbWorkout);
     return {
       id: dbWorkout.id,
       date: dbWorkout.date,

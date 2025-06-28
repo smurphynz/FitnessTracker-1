@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, date, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, date, jsonb, decimal, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -54,6 +54,7 @@ export const workouts = pgTable("workouts", {
   id: serial("id").primaryKey(),
   date: text("date").notNull(),
   weight: text("weight"),
+  weight_kg: decimal("weight_kg", { precision: 5, scale: 2 }), // New snapshot column
   mobility_day: integer("mobility_day"),
   mobility_completion: text("mobility_completion").notNull(),
   handstand_exercises: jsonb("handstand_exercises").notNull().$type<string[]>(),
@@ -83,3 +84,54 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+// Body weight tracking table
+export const bodyWeight = pgTable("body_weight", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  date: date("date").notNull(),
+  weightKg: decimal("weight_kg", { precision: 5, scale: 2 }).notNull(),
+}, (table) => ({
+  userDateUnique: unique().on(table.userId, table.date),
+}));
+
+// Body weight schemas
+export const bodyWeightSchema = z.object({
+  id: z.number().optional(),
+  userId: z.number(),
+  date: z.string(),
+  weightKg: z.number(),
+});
+
+export const insertBodyWeightSchema = createInsertSchema(bodyWeight).omit({
+  id: true,
+});
+
+export type BodyWeight = z.infer<typeof bodyWeightSchema>;
+export type InsertBodyWeight = z.infer<typeof insertBodyWeightSchema>;
+export type BodyWeightDB = typeof bodyWeight.$inferSelect;
+
+// Summary types for API responses
+export const summarySchema = z.object({
+  weeklyFrequency: z.array(z.object({
+    day: z.string(),
+    count: z.number(),
+  })),
+  recentWorkouts: z.array(workoutSchema),
+  prBadges: z.array(z.object({
+    exercise: z.string(),
+    value: z.number(),
+    unit: z.string(),
+  })),
+  streaks: z.object({
+    current: z.number(),
+    longest: z.number(),
+  }),
+  currentWeight: z.number().nullable(),
+  weightTrend: z.array(z.object({
+    date: z.string(),
+    weight: z.number(),
+  })),
+});
+
+export type Summary = z.infer<typeof summarySchema>;
