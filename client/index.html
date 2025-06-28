@@ -121,19 +121,16 @@
   </head>
   <body>
     <!-- Direct embedding of background with image tag -->
-    <div id="background-container">
-      <img src="/forest-background.png" class="background" alt="Forest">
-    </div>
+    <!-- Blue gradient background applied via CSS -->
     
-    <!-- Links to test pages -->
-    <a href="/react-style.html" class="absolute-link" style="font-size: 16px !important; padding: 12px 20px !important; top: 10px !important; background-color: #4CAF50 !important;">🌳 OPEN FULL FOREST APP 🌳</a>
+    <!-- App navigation removed for clean interface -->
     
     <div id="root"></div>
     
-    <!-- Emergency fixed button outside of React with forest styling -->
+    <!-- Emergency save button with blue theme -->
     <button 
       id="emergency-save-button"
-      class="forest-save-button"
+      style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; z-index: 1000;"
       onclick="saveEmergencyWorkout()"
     >
       SAVE WORKOUT
@@ -141,27 +138,8 @@
     
     <script type="module" src="/src/main.tsx?v=1751099743"></script>
     
-    <!-- Vanilla JavaScript for image loading and emergency save -->
+    <!-- JavaScript for emergency save functionality -->
     <script>
-      // Log the image loading status to help debug
-      window.addEventListener('load', function() {
-        const backgroundImg = document.querySelector('.background');
-        if (backgroundImg) {
-          console.log('Background image found, setting up event listeners');
-          
-          backgroundImg.addEventListener('load', function() {
-            console.log('Forest background loaded successfully!');
-          });
-          
-          backgroundImg.addEventListener('error', function(e) {
-            console.error('Error loading background image:', e);
-            // Try alternative URL as fallback
-            this.src = '/images/forest-background.png';
-          });
-        } else {
-          console.error('Background image element not found');
-        }
-      });
       
       function saveEmergencyWorkout() {
         alert('Attempting to save workout...');
