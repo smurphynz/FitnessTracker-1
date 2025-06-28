@@ -2,204 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calisthenics Fitness Tracker</title>
     <meta name="description" content="Track your calisthenics workouts and progress">
-    <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#1e3a8a" />
-    <link rel="apple-touch-icon" href="/icon-192x192.png">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="cache-bust" content="1751099743">
-    
-    <!-- Load emergency CSS that overrides everything -->
-    <link rel="stylesheet" href="/emergency.css">
-    
-    <!-- Inline critical styles -->
     <style>
-      /* Force blue theme with maximum priority */
-      html {
-        background: #1e3a8a !important;
-        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
-        background-attachment: fixed !important;
-      }
-      
-      body {
-        margin: 0 !important;
-        padding: 0 !important;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-        color: white !important;
-        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
-        background-attachment: fixed !important;
-        min-height: 100vh !important;
-        overflow: visible !important;
-      }
-      
-      /* Force blue theme override with timestamp */
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
-        z-index: -2;
-      }
-      
-      /* Background container with image approach that works in Safari */
-      #background-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-      }
-      
-      img.background {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      /* Clean blue theme styles */
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: white;
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
       }
       
       #root {
-        position: relative !important;
-        z-index: 1 !important;
         min-height: 100vh;
-        padding-bottom: 100px; /* Space for save button */
-      }
-      
-      /* Force blue theme everywhere */
-      *, *::before, *::after {
-        box-sizing: border-box;
-      }
-      
-      html {
-        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%) !important;
-        background-attachment: fixed !important;
-      }
-      
-      .absolute-link {
-        position: fixed !important;
-        top: 10px !important;
-        left: 10px !important;
-        z-index: 2147483647 !important;
-        background-color: black !important;
-        color: yellow !important;
-        padding: 10px !important;
-        border: 3px solid yellow !important;
-        border-radius: 5px !important;
-        font-weight: bold !important;
-        text-decoration: none !important;
-        font-family: Arial, sans-serif !important;
-        font-size: 16px !important;
-        box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.7) !important;
-      }
-      
-      /* Forest-themed save button */
-      .forest-save-button {
-        position: fixed !important; 
-        bottom: 40px !important; 
-        left: 50% !important; 
-        transform: translateX(-50%) !important;
-        width: 90% !important;
-        max-width: 400px !important;
-        padding: 20px 0 !important;
-        font-size: 24px !important;
-        
-        /* Blue theme colors */
-        background: linear-gradient(145deg, #2563eb, #1e40af) !important;
-        color: #ffffff !important;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
-        
-        text-transform: uppercase !important;
-        font-weight: 900 !important;
-        letter-spacing: 2px !important;
-        border: 4px solid #3b82f6 !important;
-        border-radius: 12px !important;
-        box-shadow: 
-          0 0 0 2px rgba(37, 99, 235, 0.5) !important,
-          0 8px 30px rgba(0, 0, 0, 0.6) !important,
-          0 0 15px 5px rgba(59, 130, 246, 0.3) !important;
-        cursor: pointer !important;
-        text-align: center !important;
-        z-index: 2147483647 !important;
-        
-        /* Make it even more visible */
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        position: relative;
       }
     </style>
   </head>
   <body>
-    <!-- Direct embedding of background with image tag -->
-    <!-- Blue gradient background applied via CSS -->
-    
-    <!-- App navigation removed for clean interface -->
-    
     <div id="root"></div>
-    
-    <!-- Emergency save button with blue theme -->
-    <button 
-      id="emergency-save-button"
-      style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; z-index: 1000;"
-      onclick="saveEmergencyWorkout()"
-    >
-      SAVE WORKOUT
-    </button>
-    
-    <script type="module" src="/src/main.tsx?v=1751099743"></script>
-    
-    <!-- JavaScript for emergency save functionality -->
-    <script>
-      
-      function saveEmergencyWorkout() {
-        alert('Attempting to save workout...');
-        
-        // Create a basic workout object
-        const workout = {
-          date: new Date().toISOString().split('T')[0],
-          weight: '70',
-          mobility: { completion: 'full-session' },
-          handstand: { exercises: [] },
-          strength: { exercises: [] }
-        };
-        
-        // Send to API with basic fetch
-        fetch('/api/workouts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(workout)
-        })
-        .then(response => {
-          if (response.ok) {
-            alert('SUCCESS: Workout saved!');
-          } else {
-            alert('ERROR: Failed to save workout');
-          }
-        })
-        .catch(error => {
-          alert('ERROR: ' + error.message);
-        });
-      }
-    </script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-              console.log('ServiceWorker registered: ', registration);
-            })
-            .catch(error => {
-              console.log('ServiceWorker registration failed: ', error);
-            });
-        });
-      }
-    </script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

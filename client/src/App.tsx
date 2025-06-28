@@ -2,7 +2,6 @@ import { Switch, Route } from "wouter";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 import SavePage from "@/pages/SavePage";
-import { Toaster } from "@/components/ui/toaster";
 
 function Router() {
   return (
@@ -15,12 +14,7 @@ function Router() {
 }
 
 function App() {
-  return (
-    <>
-      <Router />
-      <Toaster />
-    </>
-  );
+  return <Router />;
 }
 
 export default App;

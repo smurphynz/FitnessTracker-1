@@ -3,18 +3,12 @@ import App from "./App";
 import "./index.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/toaster";
 
-// Only start React if we found the root element
 const rootElement = document.getElementById("root");
 if (rootElement) {
   createRoot(rootElement).render(
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <App />
-        <Toaster />
-      </TooltipProvider>
+      <App />
     </QueryClientProvider>
   );
 }
