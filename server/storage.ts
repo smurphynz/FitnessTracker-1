@@ -227,14 +227,27 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCurrentWeight(userId: number): Promise<number | null> {
-    const [result] = await db
+    // First try to get from body_weight table
+    const [bodyWeightResult] = await db
       .select()
       .from(bodyWeight)
       .where(eq(bodyWeight.userId, userId))
       .orderBy(desc(bodyWeight.date))
       .limit(1);
     
-    return result ? Number(result.weightKg) : null;
+    if (bodyWeightResult) {
+      return Number(bodyWeightResult.weightKg);
+    }
+    
+    // If no body weight entries, get from most recent workout
+    const [workoutResult] = await db
+      .select()
+      .from(workouts)
+      .where(sql`weight_kg IS NOT NULL`)
+      .orderBy(desc(workouts.date))
+      .limit(1);
+    
+    return workoutResult?.weight_kg ? Number(workoutResult.weight_kg) : null;
   }
 
   async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
@@ -249,7 +262,7 @@ export class DatabaseStorage implements IStorage {
         weight_kg: workouts.weight_kg
       })
       .from(workouts)
-      .where(sql`${workouts.weight_kg} IS NOT NULL`)
+      .where(sql`weight_kg IS NOT NULL`)
       .orderBy(workouts.date);
 
     // Also get from body_weight table for manual entries
@@ -278,31 +291,33 @@ export class DatabaseStorage implements IStorage {
     const series: Array<{ date: string; weight: number }> = [];
     let lastWeight: number | null = null;
 
-    // Get the earliest weight to start gap-filling from
-    if (allWeights.size > 0) {
-      const sortedDates = Array.from(allWeights.keys()).sort();
-      const earliestWeightDate = sortedDates[0];
-      const earliestWeight = allWeights.get(earliestWeightDate);
-      
-      if (earliestWeight && earliestWeightDate <= endDate.toISOString().split('T')[0]) {
-        lastWeight = earliestWeight;
+    // Sort all weight entries and use them to build the series
+    const sortedWeightEntries = Array.from(allWeights.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    
+    // If we have any weight data, build the series
+    if (sortedWeightEntries.length > 0) {
+      // Find the most recent weight before or during our date range
+      for (const [date, weight] of sortedWeightEntries) {
+        if (date <= endDate.toISOString().split('T')[0]) {
+          lastWeight = weight;
+        }
       }
-    }
 
-    for (let i = 0; i < days; i++) {
-      const currentDate = new Date(startDate);
-      currentDate.setDate(startDate.getDate() + i);
-      const dateStr = currentDate.toISOString().split('T')[0];
+      for (let i = 0; i < days; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+        const dateStr = currentDate.toISOString().split('T')[0];
 
-      // Check if we have a weight entry for this date
-      const weight = allWeights.get(dateStr);
-      
-      if (weight) {
-        lastWeight = weight;
-        series.push({ date: dateStr, weight: lastWeight });
-      } else if (lastWeight !== null) {
-        // Use last known weight for missing dates
-        series.push({ date: dateStr, weight: lastWeight });
+        // Check if we have a weight entry for this date
+        const weight = allWeights.get(dateStr);
+        
+        if (weight) {
+          lastWeight = weight;
+          series.push({ date: dateStr, weight: lastWeight });
+        } else if (lastWeight !== null) {
+          // Use last known weight for missing dates
+          series.push({ date: dateStr, weight: lastWeight });
+        }
       }
     }
 
