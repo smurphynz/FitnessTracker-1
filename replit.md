@@ -142,6 +142,14 @@ Changelog:
   - Database contains weight progression: 70.77kg → 72.4kg → 75.2kg → 77.4kg
   - Weight Trend visualization in Summary tab now displays actual workout weight data
   - Resolved mobility section button cycling issue and added freestyle strength training option
+- June 29, 2025. Strength Training Exercise Expansion Completed
+  - Added 13 new gym equipment exercises to rep-based exercises list in alphabetical order
+  - New exercises: Biceps, Bulgarian Split Squats, Chest Press, Jefferson Curls, Lat Pull Down, Leg Curl, Leg Extension, Leg Press, Seated Rows, Shoulder Press, Side to Side Push Up, Squats, Triceps, Walking Lunges
+  - Implemented weight tracking for 12 exercises (excluding Side to Side Push Up per user request)
+  - Created weightTrackingExercises.ts utility for managing gym equipment vs bodyweight exercises
+  - Enhanced ExerciseCard component with weight input fields (kg) for gym equipment exercises
+  - Updated StrengthSection component with handleUpdateSetWeight functionality
+  - Weight data from all exercises contributes to overall weight trend visualization
 ```
 
 ## User Preferences

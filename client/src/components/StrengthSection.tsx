@@ -141,6 +141,7 @@ export default function StrengthSection({
             onAddSet={() => handleAddSet(index)}
             onRemoveSet={(setIndex) => handleRemoveSet(index, setIndex)}
             onUpdateSetValue={(setIndex, value) => handleUpdateSetValue(index, setIndex, value)}
+            onUpdateSetWeight={(setIndex, weight) => handleUpdateSetWeight(index, setIndex, weight)}
             onRemoveExercise={() => handleRemoveExercise(index)}
           />
         ))}

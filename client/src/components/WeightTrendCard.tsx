@@ -1,4 +1,4 @@
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, Dot } from 'recharts';
 
 interface WeightTrendCardProps {
   data: Array<{ date: string; weight: number }>;
