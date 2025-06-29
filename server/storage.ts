@@ -256,9 +256,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
+    console.log('getWeightSeries called with userId:', userId, 'days:', days);
+    
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - days + 1);
+    
+    console.log('Date range:', startDate.toISOString().split('T')[0], 'to', endDate.toISOString().split('T')[0]);
 
     // Get ALL weight data from workouts table first
     const allWorkouts = await db
@@ -269,8 +273,11 @@ export class DatabaseStorage implements IStorage {
       .from(workouts)
       .orderBy(workouts.date);
     
+    console.log('All workouts from DB:', allWorkouts);
+    
     // Filter for entries with valid weight data
     const workoutWeights = allWorkouts.filter(w => w.weight_kg !== null && w.weight_kg !== undefined);
+    console.log('Filtered workout weights:', workoutWeights);
 
     // Also get from body_weight table for manual entries
     const bodyWeights = await db
@@ -286,13 +293,17 @@ export class DatabaseStorage implements IStorage {
     workoutWeights.forEach(w => {
       if (w.weight_kg !== null && w.weight_kg !== undefined) {
         allWeights.set(w.date, Number(w.weight_kg));
+        console.log('Added workout weight:', w.date, Number(w.weight_kg));
       }
     });
     
     // Add body weight entries (these override workout weights if same date)
     bodyWeights.forEach(w => {
       allWeights.set(w.date, Number(w.weightKg));
+      console.log('Added body weight:', w.date, Number(w.weightKg));
     });
+
+    console.log('Final allWeights map:', Array.from(allWeights.entries()));
 
     // Generate gap-filled series for the requested date range
     const series: Array<{ date: string; weight: number }> = [];
@@ -300,11 +311,13 @@ export class DatabaseStorage implements IStorage {
 
     // Sort all weight entries and use them to build the series
     const sortedWeightEntries = Array.from(allWeights.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    console.log('Sorted weight entries:', sortedWeightEntries);
     
     // If we have any weight data, build the series
     if (sortedWeightEntries.length > 0) {
       // Start with the most recent weight available (even if before our date range)
       lastWeight = sortedWeightEntries[sortedWeightEntries.length - 1][1];
+      console.log('Starting with lastWeight:', lastWeight);
 
       for (let i = 0; i < days; i++) {
         const currentDate = new Date(startDate);
@@ -320,9 +333,12 @@ export class DatabaseStorage implements IStorage {
         
         if (lastWeight !== null) {
           series.push({ date: dateStr, weight: lastWeight });
+          console.log('Added to series:', dateStr, lastWeight);
         }
       }
     }
+
+    console.log('Final series:', series);
 
     return series;
   }
