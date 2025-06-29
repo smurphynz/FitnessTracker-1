@@ -69,6 +69,12 @@ export default function StrengthSection({
     setStrengthExercises(updatedExercises);
   };
 
+  const handleUpdateSetWeight = (exerciseIndex: number, setIndex: number, weight: number) => {
+    const updatedExercises = [...strengthExercises];
+    updatedExercises[exerciseIndex].sets[setIndex].weight = weight;
+    setStrengthExercises(updatedExercises);
+  };
+
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">

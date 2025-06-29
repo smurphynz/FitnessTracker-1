@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Exercise } from "@shared/schema";
+import { supportsWeightTracking } from "@/lib/weightTrackingExercises";
 
 interface ExerciseCardProps {
   exercise: Exercise;
   onAddSet: () => void;
   onRemoveSet: (setIndex: number) => void;
   onUpdateSetValue: (setIndex: number, value: number) => void;
+  onUpdateSetWeight: (setIndex: number, weight: number) => void;
   onRemoveExercise: () => void;
 }
 
@@ -15,6 +17,7 @@ export default function ExerciseCard({
   onAddSet,
   onRemoveSet,
   onUpdateSetValue,
+  onUpdateSetWeight,
   onRemoveExercise
 }: ExerciseCardProps) {
   return (
@@ -41,6 +44,23 @@ export default function ExerciseCard({
               min={1}
             />
             <span className="text-sm text-primary-900">{exercise.isTimeBased ? 'seconds' : 'reps'}</span>
+            
+            {/* Weight input for gym equipment exercises */}
+            {supportsWeightTracking(exercise.name) && (
+              <>
+                <Input 
+                  type="number" 
+                  className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 w-16 rounded p-1 text-sm text-primary-900 focus:border-primary-600" 
+                  value={set.weight || ''}
+                  onChange={(e) => onUpdateSetWeight(setIndex, parseFloat(e.target.value) || 0)}
+                  min={0}
+                  step={0.1}
+                  placeholder="kg"
+                />
+                <span className="text-sm text-primary-900">kg</span>
+              </>
+            )}
+            
             {exercise.sets.length > 1 && (
               <Button 
                 variant="ghost" 
