@@ -1,4 +1,4 @@
-modules = ["nodejs-20"] # ← brings back Node & npm
+modules = ["nodejs-20", "postgresql-16"]
 run = "npm run dev"
 
 [[ports]]

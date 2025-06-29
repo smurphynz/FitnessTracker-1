@@ -147,9 +147,11 @@ export class DatabaseStorage implements IStorage {
       .from(workouts)
       .orderBy(desc(workouts.date));
     
-    // Find the first one with a non-null strength day (program day, not freestyle)
-    const workoutWithStrengthDay = allWorkouts.find(w => w.strength_day !== null);
-    return workoutWithStrengthDay?.strength_day || undefined;
+    // Find the first one with a numeric strength day (program day, not freestyle)
+    const workoutWithStrengthDay = allWorkouts.find(w => 
+      w.strength_day !== null && w.strength_day !== "freestyle" && !isNaN(Number(w.strength_day))
+    );
+    return workoutWithStrengthDay?.strength_day ? Number(workoutWithStrengthDay.strength_day) : undefined;
   }
   
   // Get the last strength day even if recent workouts were freestyle days
@@ -168,20 +170,22 @@ export class DatabaseStorage implements IStorage {
     // Find the most recent workout
     const mostRecentWorkout = allWorkouts[0];
     
-    // If the most recent workout has a strength day, return it
-    if (mostRecentWorkout.strength_day !== null) {
+    // If the most recent workout has a numeric strength day, return it
+    if (mostRecentWorkout.strength_day !== null && mostRecentWorkout.strength_day !== "freestyle" && !isNaN(Number(mostRecentWorkout.strength_day))) {
       return { 
-        day: mostRecentWorkout.strength_day, 
+        day: Number(mostRecentWorkout.strength_day), 
         isRecent: true 
       };
     }
     
-    // Otherwise, look for the most recent workout with a strength day
-    const workoutWithStrengthDay = allWorkouts.find(w => w.strength_day !== null);
+    // Otherwise, look for the most recent workout with a numeric strength day
+    const workoutWithStrengthDay = allWorkouts.find(w => 
+      w.strength_day !== null && w.strength_day !== "freestyle" && !isNaN(Number(w.strength_day))
+    );
     
     if (workoutWithStrengthDay) {
       return { 
-        day: workoutWithStrengthDay.strength_day, 
+        day: Number(workoutWithStrengthDay.strength_day), 
         isRecent: false // This means this was not the most recent workout
       };
     }
@@ -461,7 +465,8 @@ export class DatabaseStorage implements IStorage {
         exercises: dbWorkout.handstand_exercises as string[]
       },
       strength: {
-        dayNumber: dbWorkout.strength_day || undefined,
+        dayNumber: dbWorkout.strength_day === "freestyle" ? "freestyle" : 
+                   (dbWorkout.strength_day && !isNaN(Number(dbWorkout.strength_day)) ? Number(dbWorkout.strength_day) : undefined),
         exercises: dbWorkout.strength_exercises as Exercise[]
       }
     };

@@ -42,20 +42,23 @@ export default function SummaryTab() {
   return (
     <div className="space-y-6">
       {/* Main Summary Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Weight Trend */}
-        <div className="forest-panel rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-primary-600 mb-4">Weight Trend</h3>
-          <WeightTrendCard data={summary.weightTrend} currentWeight={summary.currentWeight} />
+      <div className="space-y-6">
+        {/* Top Row - Weight Trend and PR Badges */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Weight Trend */}
+          <div className="forest-panel rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-primary-600 mb-4">Weight Trend</h3>
+            <WeightTrendCard data={summary.weightTrend} currentWeight={summary.currentWeight} />
+          </div>
+
+          {/* PR Badges */}
+          <div className="forest-panel rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-primary-600 mb-4">Personal Records</h3>
+            <PRBadges badges={summary.prBadges} />
+          </div>
         </div>
 
-        {/* PR Badges */}
-        <div className="forest-panel rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-primary-600 mb-4">Personal Records</h3>
-          <PRBadges badges={summary.prBadges} />
-        </div>
-
-        {/* Streak Panel */}
+        {/* Streak Panel - Full Width */}
         <div className="forest-panel rounded-lg p-4">
           <h3 className="text-lg font-semibold text-primary-600 mb-4">Workout Streaks</h3>
           <StreakPanel streaks={summary.streaks} />
