@@ -1,6 +1,6 @@
 interface TabNavigationProps {
-  activeTab: "workout" | "progress" | "summary";
-  setActiveTab: (tab: "workout" | "progress" | "summary") => void;
+  activeTab: "workout" | "summary";
+  setActiveTab: (tab: "workout" | "summary") => void;
 }
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
@@ -14,13 +14,6 @@ export default function TabNavigation({ activeTab, setActiveTab }: TabNavigation
             onClick={() => setActiveTab("workout")}
           >
             Log Workout
-          </button>
-          <button 
-            id="tab-progress" 
-            className={`flex-1 py-3 font-medium text-center ${activeTab === "progress" ? "tab-active" : "opacity-75"}`}
-            onClick={() => setActiveTab("progress")}
-          >
-            Progress
           </button>
           <button 
             id="tab-summary" 

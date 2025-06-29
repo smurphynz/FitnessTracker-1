@@ -11,7 +11,7 @@ import WeightTrendCard from "./WeightTrendCard";
 import RecentWorkoutsList from "./RecentWorkoutsList";
 import PRBadges from "./PRBadges";
 import StreakPanel from "./StreakPanel";
-import WeightBanner from "./WeightBanner";
+
 import type { Summary } from "@shared/schema";
 
 export default function SummaryTab() {
@@ -41,17 +41,8 @@ export default function SummaryTab() {
 
   return (
     <div className="space-y-6">
-      {/* Weight Banner */}
-      <WeightBanner currentWeight={currentWeight?.weight || null} />
-      
       {/* Main Summary Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Weekly Frequency Chart */}
-        <div className="forest-panel rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-primary-600 mb-4">Weekly Activity</h3>
-          <WeeklyFrequencyChart data={summary.weeklyFrequency} />
-        </div>
-
         {/* Weight Trend */}
         <div className="forest-panel rounded-lg p-4">
           <h3 className="text-lg font-semibold text-primary-600 mb-4">Weight Trend</h3>

@@ -4,7 +4,7 @@ import { z } from "zod";
 import Header from "@/components/Header";
 import TabNavigation from "@/components/TabNavigation";
 import WorkoutTab from "@/components/WorkoutTab";
-import ProgressTab from "@/components/ProgressTab";
+
 import SummaryTab from "@/components/SummaryTab";
 import { workoutSchema, type Workout } from "@shared/schema";
 
@@ -18,7 +18,7 @@ const workoutsArraySchema = z.array(workoutSchema);
 export default function Home() {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [weight, setWeight] = useState("70");
-  const [activeTab, setActiveTab] = useState<"workout" | "progress" | "summary">("workout");
+  const [activeTab, setActiveTab] = useState<"workout" | "summary">("workout");
 
   // Get all workouts
   const { data: workouts = [] } = useQuery({
@@ -65,8 +65,6 @@ export default function Home() {
           lastMobilityDay={lastMobilityDay}
           lastStrengthDay={lastStrengthDay}
         />
-      ) : activeTab === "progress" ? (
-        <ProgressTab workouts={workouts} />
       ) : (
         <SummaryTab />
       )}

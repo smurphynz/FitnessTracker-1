@@ -93,7 +93,7 @@ export default function HandstandSection({
         >
           {handstandCompleted 
             ? 'Handstand Training Completed ✓' 
-            : 'Mark Exercise Day Completed'}
+            : 'Handstand Training Completed'}
         </Button>
       </div>
     </section>
