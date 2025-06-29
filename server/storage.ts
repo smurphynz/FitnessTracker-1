@@ -242,34 +242,24 @@ export class DatabaseStorage implements IStorage {
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - days + 1);
 
-    // Get weight data from workouts table (weight_kg column)
+    // Get weight data from workouts table (weight_kg column) - all entries with weights
     const workoutWeights = await db
       .select({
         date: workouts.date,
         weight_kg: workouts.weight_kg
       })
       .from(workouts)
-      .where(
-        and(
-          gte(workouts.date, startDate.toISOString().split('T')[0]),
-          sql`${workouts.weight_kg} IS NOT NULL`
-        )
-      )
+      .where(sql`${workouts.weight_kg} IS NOT NULL`)
       .orderBy(workouts.date);
 
     // Also get from body_weight table for manual entries
     const bodyWeights = await db
       .select()
       .from(bodyWeight)
-      .where(
-        and(
-          eq(bodyWeight.userId, userId),
-          gte(bodyWeight.date, startDate.toISOString().split('T')[0])
-        )
-      )
+      .where(eq(bodyWeight.userId, userId))
       .orderBy(bodyWeight.date);
 
-    // Combine both sources
+    // Create a comprehensive map of all weights
     const allWeights = new Map<string, number>();
     
     // Add workout weights
@@ -284,9 +274,20 @@ export class DatabaseStorage implements IStorage {
       allWeights.set(w.date, Number(w.weightKg));
     });
 
-    // Generate gap-filled series
+    // Generate gap-filled series for the requested date range
     const series: Array<{ date: string; weight: number }> = [];
     let lastWeight: number | null = null;
+
+    // Get the earliest weight to start gap-filling from
+    if (allWeights.size > 0) {
+      const sortedDates = Array.from(allWeights.keys()).sort();
+      const earliestWeightDate = sortedDates[0];
+      const earliestWeight = allWeights.get(earliestWeightDate);
+      
+      if (earliestWeight && earliestWeightDate <= endDate.toISOString().split('T')[0]) {
+        lastWeight = earliestWeight;
+      }
+    }
 
     for (let i = 0; i < days; i++) {
       const currentDate = new Date(startDate);
