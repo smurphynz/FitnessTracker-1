@@ -242,8 +242,23 @@ export class DatabaseStorage implements IStorage {
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - days + 1);
 
-    // Get all weight entries in the date range
-    const weights = await db
+    // Get weight data from workouts table (weight_kg column)
+    const workoutWeights = await db
+      .select({
+        date: workouts.date,
+        weight_kg: workouts.weight_kg
+      })
+      .from(workouts)
+      .where(
+        and(
+          gte(workouts.date, startDate.toISOString().split('T')[0]),
+          isNotNull(workouts.weight_kg)
+        )
+      )
+      .orderBy(workouts.date);
+
+    // Also get from body_weight table for manual entries
+    const bodyWeights = await db
       .select()
       .from(bodyWeight)
       .where(
@@ -253,6 +268,21 @@ export class DatabaseStorage implements IStorage {
         )
       )
       .orderBy(bodyWeight.date);
+
+    // Combine both sources
+    const allWeights = new Map<string, number>();
+    
+    // Add workout weights
+    workoutWeights.forEach(w => {
+      if (w.weight_kg) {
+        allWeights.set(w.date, Number(w.weight_kg));
+      }
+    });
+    
+    // Add body weight entries (these override workout weights if same date)
+    bodyWeights.forEach(w => {
+      allWeights.set(w.date, Number(w.weightKg));
+    });
 
     // Generate gap-filled series
     const series: Array<{ date: string; weight: number }> = [];
