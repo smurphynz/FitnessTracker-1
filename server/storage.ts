@@ -240,103 +240,40 @@ export class DatabaseStorage implements IStorage {
     }
     
     // If no body weight entries, get from most recent workout
-    const allWorkouts = await db
+    const [workoutResult] = await db
       .select()
       .from(workouts)
-      .orderBy(desc(workouts.date));
+      .where(sql`weight_kg IS NOT NULL`)
+      .orderBy(desc(workouts.date))
+      .limit(1);
     
-    // Find the most recent workout with weight data
-    for (const workout of allWorkouts) {
-      if (workout.weight_kg !== null && workout.weight_kg !== undefined) {
-        return Number(workout.weight_kg);
-      }
-    }
-    
-    return null;
+    return workoutResult?.weight_kg ? Number(workoutResult.weight_kg) : null;
   }
 
   async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
-    // Simplified approach - just return the weight data we have
-    const allWorkouts = await db
-      .select({
-        date: workouts.date,
-        weight_kg: workouts.weight_kg
-      })
-      .from(workouts)
-      .where(sql`weight_kg IS NOT NULL`)
-      .orderBy(workouts.date);
+    try {
+      // Get weight data from workouts table
+      const workoutWeights = await db
+        .select({
+          date: workouts.date,
+          weight_kg: workouts.weight_kg
+        })
+        .from(workouts)
+        .where(sql`weight_kg IS NOT NULL`)
+        .orderBy(workouts.date);
 
-    // Convert to the expected format
-    const weightData = allWorkouts.map(w => ({
-      date: w.date,
-      weight: Number(w.weight_kg)
-    }));
+      // Convert to simple array format for now
+      const weightData = workoutWeights.map(w => ({
+        date: w.date,
+        weight: Number(w.weight_kg!)
+      }));
 
-    // For now, return the last 7 days of weight data if available
-    return weightData.slice(-7);
-
-    // Also get from body_weight table for manual entries
-    const bodyWeights = await db
-      .select()
-      .from(bodyWeight)
-      .where(eq(bodyWeight.userId, userId))
-      .orderBy(bodyWeight.date);
-
-    // Create a comprehensive map of all weights
-    const allWeights = new Map<string, number>();
-    
-    // Add workout weights
-    workoutWeights.forEach(w => {
-      if (w.weight_kg !== null && w.weight_kg !== undefined) {
-        allWeights.set(w.date, Number(w.weight_kg));
-        console.log('Added workout weight:', w.date, Number(w.weight_kg));
-      }
-    });
-    
-    // Add body weight entries (these override workout weights if same date)
-    bodyWeights.forEach(w => {
-      allWeights.set(w.date, Number(w.weightKg));
-      console.log('Added body weight:', w.date, Number(w.weightKg));
-    });
-
-    console.log('Final allWeights map:', Array.from(allWeights.entries()));
-
-    // Generate gap-filled series for the requested date range
-    const series: Array<{ date: string; weight: number }> = [];
-    let lastWeight: number | null = null;
-
-    // Sort all weight entries and use them to build the series
-    const sortedWeightEntries = Array.from(allWeights.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-    console.log('Sorted weight entries:', sortedWeightEntries);
-    
-    // If we have any weight data, build the series
-    if (sortedWeightEntries.length > 0) {
-      // Start with the most recent weight available (even if before our date range)
-      lastWeight = sortedWeightEntries[sortedWeightEntries.length - 1][1];
-      console.log('Starting with lastWeight:', lastWeight);
-
-      for (let i = 0; i < days; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + i);
-        const dateStr = currentDate.toISOString().split('T')[0];
-
-        // Check if we have a weight entry for this date
-        const weight = allWeights.get(dateStr);
-        
-        if (weight) {
-          lastWeight = weight;
-        }
-        
-        if (lastWeight !== null) {
-          series.push({ date: dateStr, weight: lastWeight });
-          console.log('Added to series:', dateStr, lastWeight);
-        }
-      }
+      // Return the most recent entries up to requested days
+      return weightData.slice(-days);
+    } catch (error) {
+      console.error('Error in getWeightSeries:', error);
+      return [];
     }
-
-    console.log('Final series:', series);
-
-    return series;
   }
 
   // Summary methods
