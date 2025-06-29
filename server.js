@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-console.log('Starting Calisthenics Fitness Tracker');
+console.log('Calisthenics Fitness Tracker - Production');
 
 app.get('/', (req, res) => {
   res.send(`<!DOCTYPE html>

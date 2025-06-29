@@ -1,9 +1,9 @@
 modules = ["nodejs-20", "postgresql-16"]
-run = "node index.cjs"
+run = "npm start"
 
 [[ports]]
 localPort = 5000
-externalPort = 5000
+externalPort = 80
 
 [[ports]]
 localPort = 5002
@@ -11,10 +11,6 @@ externalPort = 3001
 
 [[ports]]
 localPort = 5173
-externalPort = 80
-
-[[ports]]
-localPort = 5174
 externalPort = 3000
 
 [nix]
@@ -22,6 +18,7 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "cloudrun"
+build = ["npm", "run", "build"]
 
 [env]
 NODE_ENV = "production"
