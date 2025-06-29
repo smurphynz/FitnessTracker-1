@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Exercise } from "@shared/schema";
+import { supportsWeightTracking } from "@/lib/weightTrackingExercises";
 
 interface ExerciseCardProps {
   exercise: Exercise;
   onAddSet: () => void;
   onRemoveSet: (setIndex: number) => void;
   onUpdateSetValue: (setIndex: number, value: number) => void;
+  onUpdateSetWeight: (setIndex: number, weight: number) => void;
   onRemoveExercise: () => void;
 }
 
@@ -15,15 +17,16 @@ export default function ExerciseCard({
   onAddSet,
   onRemoveSet,
   onUpdateSetValue,
+  onUpdateSetWeight,
   onRemoveExercise
 }: ExerciseCardProps) {
   return (
-    <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3">
+    <div className="bg-primary-50/80 backdrop-blur-sm border border-primary-300/30 rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-medium text-[#FFEB3B]">{exercise.name}</h3>
+        <h3 className="font-medium text-primary-600">{exercise.name}</h3>
         <span className={`text-xs px-2 py-1 rounded-full border ${exercise.isTimeBased 
-          ? 'bg-green-500/70 backdrop-blur-sm border-green-400' 
-          : 'bg-blue-500/70 backdrop-blur-sm border-blue-400'}`}>
+          ? 'bg-primary-500/70 backdrop-blur-sm border-primary-600 text-primary-50' 
+          : 'bg-primary-300/70 backdrop-blur-sm border-primary-600 text-primary-900'}`}>
           {exercise.isTimeBased ? 'Time-based' : 'Rep-based'}
         </span>
       </div>
@@ -32,15 +35,32 @@ export default function ExerciseCard({
       <div className="space-y-2 mb-3">
         {exercise.sets.map((set, setIndex) => (
           <div key={setIndex} className="flex items-center space-x-2">
-            <span className="text-sm text-[#FFEB3B]">Set {setIndex + 1}:</span>
+            <span className="text-sm text-primary-600 font-medium">Set {setIndex + 1}:</span>
             <Input 
               type="number" 
-              className="bg-forest-700 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 w-16 rounded p-1 text-sm" 
+              className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 w-16 rounded p-1 text-sm text-primary-900 focus:border-primary-600" 
               value={set.value}
               onChange={(e) => onUpdateSetValue(setIndex, parseInt(e.target.value) || 0)}
               min={1}
             />
-            <span className="text-sm">{exercise.isTimeBased ? 'seconds' : 'reps'}</span>
+            <span className="text-sm text-primary-900">{exercise.isTimeBased ? 'seconds' : 'reps'}</span>
+            
+            {/* Weight input for gym equipment exercises */}
+            {supportsWeightTracking(exercise.name) && (
+              <>
+                <Input 
+                  type="number" 
+                  className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 w-16 rounded p-1 text-sm text-primary-900 focus:border-primary-600" 
+                  value={set.weight || ''}
+                  onChange={(e) => onUpdateSetWeight(setIndex, parseFloat(e.target.value) || 0)}
+                  min={0}
+                  step={0.1}
+                  placeholder="kg"
+                />
+                <span className="text-sm text-primary-900">kg</span>
+              </>
+            )}
+            
             {exercise.sets.length > 1 && (
               <Button 
                 variant="ghost" 
@@ -61,7 +81,7 @@ export default function ExerciseCard({
         <Button 
           variant="outline"
           size="sm"
-          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 text-xs h-7 font-medium border border-[#FFEB3B]/50" 
+          className="bg-primary-600 hover:bg-primary-700 text-primary-50 text-xs h-7 font-medium border border-primary-300" 
           onClick={onAddSet}
         >
           + Add Set

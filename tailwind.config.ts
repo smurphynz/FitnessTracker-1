@@ -24,10 +24,6 @@ export default {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -36,10 +32,6 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -47,12 +39,30 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        forest: {
-          "900": "#1A402B",
-          "800": "#22543D",
-          "700": "#2D694E",
-          "600": "#3C825F",
-          "500": "#4B9872",
+        // Primary blue scale following color system instructions
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          50: "#EFF6FF",   // app backgrounds, subtle cards
+          300: "#93C5FD",  // secondary buttons, hover overlay
+          600: "#2563EB",  // main action buttons, tabs, links
+          700: "#1E3A8A",  // header bar, active tab underline
+          900: "#0F172A",  // highest-contrast text on light backgrounds
+        },
+        // Keep accent yellow for highlights
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+          yellow: "#FFC107",
+        },
+        // Status colors
+        success: "#10B981",
+        error: "#EF4444",
+        warning: "#F59E0B",
+        // Neutral colors
+        neutral: {
+          text: "#111827",
+          border: "#E5E7EB",
         },
         chart: {
           "1": "hsl(var(--chart-1))",

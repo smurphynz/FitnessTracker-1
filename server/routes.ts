@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { workoutSchema, Workout } from "@shared/schema";
+import { workoutSchema, Workout, insertBodyWeightSchema, bodyWeightSchema } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
 import fs from "fs";
@@ -102,6 +102,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Weight tracking endpoints
+  app.post("/api/weight", async (req: Request, res: Response) => {
+    try {
+      const weightData = {
+        userId: 1, // For now, using default user ID
+        date: req.body.date || new Date().toISOString().split('T')[0],
+        weightKg: parseFloat(req.body.weight_kg)
+      };
+
+      const validatedWeight = insertBodyWeightSchema.safeParse(weightData);
+      
+      if (!validatedWeight.success) {
+        return res.status(400).json({ 
+          message: "Invalid weight data", 
+          errors: validatedWeight.error.errors 
+        });
+      }
+
+      const weight = await storage.logWeight(validatedWeight.data);
+      res.json(weight);
+    } catch (error) {
+      console.error('Error logging weight:', error);
+      res.status(500).json({ message: "Failed to log weight" });
+    }
+  });
+
+  app.get("/api/weight", async (req: Request, res: Response) => {
+    try {
+      console.log('Weight API called with query:', req.query);
+      const userId = 1; // Default user ID
+      const days = parseInt(req.query.days as string) || 30;
+      console.log('Calling getWeightSeries with userId:', userId, 'days:', days);
+      
+      const weightSeries = await storage.getWeightSeries(userId, days);
+      console.log('Weight series result:', weightSeries);
+      res.json(weightSeries);
+    } catch (error) {
+      console.error('Error fetching weight series:', error);
+      res.status(500).json({ message: "Failed to fetch weight data" });
+    }
+  });
+
+  app.get("/api/weight/current", async (req: Request, res: Response) => {
+    try {
+      const userId = 1; // Default user ID
+      const currentWeight = await storage.getCurrentWeight(userId);
+      res.json({ weight: currentWeight });
+    } catch (error) {
+      console.error('Error fetching current weight:', error);
+      res.status(500).json({ message: "Failed to fetch current weight" });
+    }
+  });
+
+  // Summary endpoints
+  app.get("/api/summary", async (req: Request, res: Response) => {
+    try {
+      const userId = 1; // Default user ID
+      const summary = await storage.getSummary(userId);
+      res.json(summary);
+    } catch (error) {
+      console.error('Error fetching summary:', error);
+      res.status(500).json({ message: "Failed to fetch summary data" });
+    }
+  });
+
+  app.get("/api/summary/weekly-frequency", async (req: Request, res: Response) => {
+    try {
+      const userId = 1; // Default user ID
+      const weeklyFrequency = await storage.getWeeklyFrequency(userId);
+      res.json(weeklyFrequency);
+    } catch (error) {
+      console.error('Error fetching weekly frequency:', error);
+      res.status(500).json({ message: "Failed to fetch weekly frequency" });
+    }
+  });
+
+  app.get("/api/summary/streaks", async (req: Request, res: Response) => {
+    try {
+      const userId = 1; // Default user ID
+      const streaks = await storage.getWorkoutStreaks(userId);
+      res.json(streaks);
+    } catch (error) {
+      console.error('Error fetching streaks:', error);
+      res.status(500).json({ message: "Failed to fetch workout streaks" });
+    }
+  });
+
+  app.get("/api/summary/pr-badges", async (req: Request, res: Response) => {
+    try {
+      const userId = 1; // Default user ID
+      const prBadges = await storage.getPRBadges(userId);
+      res.json(prBadges);
+    } catch (error) {
+      console.error('Error fetching PR badges:', error);
+      res.status(500).json({ message: "Failed to fetch PR badges" });
+    }
+  });
+
   // Admin endpoint to clear all workout data (password protected)
   app.post("/api/admin/clear-workouts", async (req: Request, res: Response) => {
     try {
@@ -366,15 +464,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.resolve(process.cwd(), "server/public/admin.html"));
   });
 
-  // Also serve the forest app at the root route with higher priority than Vite
-  app.get("/", (req: Request, res: Response) => {
-    // Set cache control headers to prevent caching issues
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    // Redirect to our ultra-fresh version with new exercise options
-    res.redirect("/fresh-exercises-options");
-  });
+  // Let Vite handle the root route to serve the React app
   
   // Emergency Save API endpoint - can be accessed directly through a browser
   app.get("/emergency-save", async (req: Request, res: Response) => {

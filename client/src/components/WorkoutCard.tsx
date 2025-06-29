@@ -26,13 +26,13 @@ export default function WorkoutCard({ workout }: WorkoutCardProps) {
   };
 
   return (
-    <div className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-lg p-3 shadow-md">
+    <div className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded-lg p-3 shadow-md">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-[#FFEB3B]">{formattedDate}</h3>
-        {workout.weight && <span className="text-sm">{workout.weight} kg</span>}
+        <h3 className="font-medium text-primary-600">{formattedDate}</h3>
+        {workout.weight && <span className="text-sm text-primary-900">{workout.weight} kg</span>}
       </div>
       
-      <div className="mt-2 border-t border-forest-700 pt-2">
+      <div className="mt-2 border-t border-primary-300 pt-2">
         <p className="text-sm">
           <span className="text-accent">Mobility:</span> 
           {workout.mobility.dayNumber 

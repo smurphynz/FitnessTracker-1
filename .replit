@@ -1,42 +1,24 @@
-modules = ["nodejs-20", "web", "postgresql-16"]
-run = "npm run dev"
-hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
-
-[nix]
-channel = "stable-24_05"
-
-[deployment]
-deploymentTarget = "autoscale"
-build = ["npm", "run", "build"]
-run = ["npm", "run", "start"]
+modules = ["nodejs-20", "postgresql-16"]
+run = "npm start"
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
-[workflows]
-runButton = "Project"
+[[ports]]
+localPort = 5002
+externalPort = 3001
 
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
+[[ports]]
+localPort = 5173
+externalPort = 3000
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Start application"
+[nix]
+channel = "stable-24_05"
 
-[[workflows.workflow]]
-name = "Start application"
-author = "agent"
+[deployment]
+deploymentTarget = "cloudrun"
+build = ["npm", "run", "build"]
 
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
-waitForPort = 5000
+[env]
+NODE_ENV = "production"

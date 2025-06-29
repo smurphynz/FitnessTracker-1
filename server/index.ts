@@ -48,27 +48,22 @@ app.use((req, res, next) => {
   });
 
   // Always serve static files first
-  app.use(express.static('server/public'));
-  
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
+  app.use(express.static("server/public"));
+
+  // In dev, hand the rest to Vite; in prod, serve the built client
   if (app.get("env") === "development") {
-    // Customize the setupVite to not override our main route
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+  /** -----------------------------------------------------------------
+   *  Listen on the first free port (default 5000).
+   *  This prevents crashes if an old process is still bound to 5000
+   * ---------------------------------------------------------------- */
+  const port = process.env.PORT ? Number(process.env.PORT) : 5002;
+
+  server.listen({ port, host: "0.0.0.0", reusePort: true }, () =>
+    log(`serving on port ${port}`),
+  );
 })();

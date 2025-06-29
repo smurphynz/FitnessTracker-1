@@ -1,0 +1,99 @@
+Comprehensive colour-system instructions for your blue refresh
+
+⸻
+
+1 · What the colour system must do
+
+Requirement	Why it matters
+Visual identity	Users should instantly recognise the app by its blue look—even when screenshots are tiny.
+Consistency	A single set of hues prevents the “random blue, random yellow” effect now visible.
+Hierarchy & state	Headings, buttons, success/error messages, disabled items all need unambiguous, repeatable colours.
+Accessibility	Text–background contrast must meet WCAG AA (4.5:1 for body text, 3:1 for large text).
+Dark-mode readiness	The palette should invert cleanly if you enable dark mode later.
+
+
+⸻
+
+2 · Define one primary blue scale
+
+Pick five–six stops that cover subtle backgrounds through bold accents.
+A practical starting set (any similar HSL progression is fine):
+
+Token	Example hex	Typical role
+primary-50	#EFF6FF	app backgrounds, subtle cards
+primary-300	#93C5FD	secondary buttons, hover overlay
+primary-600	#2563EB	main action buttons, tabs, links
+primary-700	#1E3A8A	header bar, active tab underline
+primary-900	#0F172A	highest-contrast text on light backgrounds
+
+Tip: check each combination in a contrast checker; if primary-600 text on primary-50 fails, darken one step.
+
+⸻
+
+3 · Keep one accent colour
+
+Your existing yellow (#FFC107) is fine for high-energy signals (highlight badges, key call-outs).
+Rules of thumb:
+	•	Use yellow sparingly—never for long paragraphs.
+	•	Pair yellow text with primary-900 background or vice-versa for contrast.
+
+⸻
+
+4 · Neutral & status colours
+
+Category	Recommended baseline
+Neutral text	near-black on light mode (#111827)
+Neutral borders	#E5E7EB (light gray)
+Success	#10B981 (teal-green)
+Error	#EF4444 (medium red)
+Warning	reuse accent yellow with darker text
+
+
+⸻
+
+5 · How to apply the palette
+
+UI element	Guideline
+Header & tab bar	Background primary-700; text/icon primary-50.
+Primary button	Fill primary-600; hover primary-700; disabled primary-300 + 40 % opacity.
+Secondary button	Border primary-600; text primary-600; hover background primary-50.
+Form inputs	1 px border primary-300 (default) → primary-600 on focus.
+Section titles	Text primary-600; underline primary-300 2 px.
+Cards / panels	Background primary-50 at 70 % opacity; rounded corners; subtle shadow.
+Charts	Use the lighter half of the blue scale for bars/lines; success green & error red for ancillary series.
+Link text	primary-600, underline only on hover for cleaner look.
+
+
+⸻
+
+6 · Transparency & overlays
+	•	Use 60–80 % opacity versions (primary-700/70) for frosted panels or hover highlights.
+	•	Stick to one opacity per shade to avoid a “muddy” feel.
+
+⸻
+
+7 · Dark-mode roadmap (if wanted later)
+	1.	Invert the scale (primary-900 becomes card bg, primary-50 becomes body text).
+	2.	Keep accent yellow but mute saturation ~15 % so it doesn’t glow.
+	3.	Store colours as CSS custom properties (--primary-600-hsl) to swap via [data-theme=dark].
+
+⸻
+
+8 · Implementation checklist
+	1.	Audit – run a grep for any #FFEB3B, #FFC107, forest- tokens, inline rgb/hex.
+	2.	Define tokens – set the blue scale as custom Tailwind colours or CSS variables first.
+	3.	Refactor components – replace every inline hex with your new tokens.
+Don’t mix old and new: a single stray forest-green undermines the whole refresh.
+	4.	Test contrast in both light and simulated dark mode.
+	5.	QA pass – spot-check buttons, badges, charts, empty states.
+	6.	Document – one page in your repo noting each token’s use-case (future contributors will thank you).
+
+⸻
+
+9 · Handy colour tools
+	•	Coolors.co or Khroma – generate harmonic blue scales.
+	•	Leonardo WCAG contrast tool – live-adjust hues until all text ratios pass.
+	•	Figma / Dev mode – inspect elements to verify no rogue colours.
+	•	WhoCanUse.com – visualise colour accessibility across colour-blind profiles.
+
+Follow these instructions and you’ll end up with a coherent, accessible blue palette that stays consistent across every tab, button and chart.

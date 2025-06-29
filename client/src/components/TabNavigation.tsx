@@ -1,11 +1,11 @@
 interface TabNavigationProps {
-  activeTab: "workout" | "progress";
-  setActiveTab: (tab: "workout" | "progress") => void;
+  activeTab: "workout" | "summary";
+  setActiveTab: (tab: "workout" | "summary") => void;
 }
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   return (
-    <div className="forest-panel border-b border-[#FFEB3B]/20 shadow-md mb-2">
+    <div className="forest-panel border-b border-primary-600/30 shadow-md mb-2">
       <div className="container mx-auto">
         <div className="flex">
           <button 
@@ -16,11 +16,11 @@ export default function TabNavigation({ activeTab, setActiveTab }: TabNavigation
             Log Workout
           </button>
           <button 
-            id="tab-progress" 
-            className={`flex-1 py-3 font-medium text-center ${activeTab === "progress" ? "tab-active" : "opacity-75"}`}
-            onClick={() => setActiveTab("progress")}
+            id="tab-summary" 
+            className={`flex-1 py-3 font-medium text-center ${activeTab === "summary" ? "tab-active" : "opacity-75"}`}
+            onClick={() => setActiveTab("summary")}
           >
-            Progress
+            Summary
           </button>
         </div>
       </div>

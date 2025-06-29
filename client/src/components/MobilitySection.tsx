@@ -21,13 +21,13 @@ export default function MobilitySection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Mobility Training</span>
+        <span className="border-b-2 border-primary-600 pb-1 text-primary-600 shadow-sm">Mobility Training</span>
       </h2>
       
-      <div className="bg-forest-800 bg-opacity-80 backdrop-blur-sm border border-[#FFEB3B]/10 rounded-md mb-3 p-2 text-center">
-        <p className="text-sm">
+      <div className="bg-primary-50/80 backdrop-blur-sm border border-primary-300/30 rounded-md mb-3 p-2 text-center">
+        <p className="text-sm text-primary-900">
           Last Mobility Day: 
-          <span className="font-medium text-[#FFEB3B] ml-1">
+          <span className="font-medium text-primary-600 ml-1">
             {lastMobilityDay !== null ? lastMobilityDay : "None"}
           </span>
         </p>
@@ -39,7 +39,7 @@ export default function MobilitySection({
           <Input 
             type="number" 
             id="mobility-day" 
-            className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded p-2" 
+            className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded p-2 text-primary-900 focus:border-primary-600" 
             value={mobilityDay === undefined ? '' : mobilityDay}
             onChange={(e) => {
               const value = e.target.value;
@@ -56,10 +56,10 @@ export default function MobilitySection({
               setMobilityCompletion(value)
             }
           >
-            <SelectTrigger id="mobility-completion" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+            <SelectTrigger id="mobility-completion" className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded text-primary-900 focus:border-primary-600">
               <SelectValue placeholder="Select completion level" />
             </SelectTrigger>
-            <SelectContent className="bg-forest-800">
+            <SelectContent className="bg-primary-50 border-primary-300">
               <SelectItem value="full-session">Full Session</SelectItem>
               <SelectItem value="half-session">Half Session</SelectItem>
               <SelectItem value="not-completed">Not Completed</SelectItem>
@@ -67,30 +67,7 @@ export default function MobilitySection({
           </Select>
         </div>
         
-        {/* Exercise Completion Button */}
-        <div className="mt-4">
-          <Button 
-            className={`w-full py-4 font-medium ${
-              mobilityCompletion !== 'not-completed' 
-                ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
-                : 'bg-forest-700 hover:bg-forest-600'
-            }`}
-            onClick={() => {
-              const nextState = mobilityCompletion === 'not-completed'
-                ? 'half-session'
-                : mobilityCompletion === 'half-session'
-                  ? 'full-session'
-                  : 'not-completed';
-              setMobilityCompletion(nextState);
-            }}
-          >
-            {mobilityCompletion === 'not-completed' 
-              ? 'Mark Exercise Day Completed' 
-              : mobilityCompletion === 'half-session'
-                ? 'Half Session Completed ✓' 
-                : 'Full Session Completed ✓'}
-          </Button>
-        </div>
+
       </div>
     </section>
   );

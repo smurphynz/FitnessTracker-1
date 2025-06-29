@@ -4,10 +4,9 @@ import { z } from "zod";
 import Header from "@/components/Header";
 import TabNavigation from "@/components/TabNavigation";
 import WorkoutTab from "@/components/WorkoutTab";
-import ProgressTab from "@/components/ProgressTab";
-import SaveWorkoutButton from "@/components/SaveWorkoutButton";
+
+import SummaryTab from "@/components/SummaryTab";
 import { workoutSchema, type Workout } from "@shared/schema";
-import { localStorageAPI } from "@/lib/storage";
 
 // Define API response types
 interface LastDayResponse {
@@ -19,7 +18,7 @@ const workoutsArraySchema = z.array(workoutSchema);
 export default function Home() {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [weight, setWeight] = useState("70");
-  const [activeTab, setActiveTab] = useState<"workout" | "progress">("workout");
+  const [activeTab, setActiveTab] = useState<"workout" | "summary">("workout");
 
   // Get all workouts
   const { data: workouts = [] } = useQuery({
@@ -46,11 +45,7 @@ export default function Home() {
   const lastMobilityDay = lastMobilityDayData?.lastDay ?? null;
   const lastStrengthDay = lastStrengthDayData?.lastDay ?? null;
 
-  const handleSaveWorkout = (newWorkout: Workout) => {
-    // Store the workout locally before syncing with server
-    localStorageAPI.addWorkout(newWorkout);
-    return true;
-  };
+
 
   return (
     <div className="container mx-auto px-4 pt-6 pb-24 max-w-md" style={{height: "auto", overflow: "visible", position: "relative"}}>
@@ -69,13 +64,10 @@ export default function Home() {
           weight={weight}
           lastMobilityDay={lastMobilityDay}
           lastStrengthDay={lastStrengthDay}
-          onSaveWorkout={handleSaveWorkout}
         />
       ) : (
-        <ProgressTab workouts={workouts} />
+        <SummaryTab />
       )}
-
-      {activeTab === "workout" && <SaveWorkoutButton />}
     </div>
   );
 }

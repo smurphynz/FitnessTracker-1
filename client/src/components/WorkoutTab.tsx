@@ -2,7 +2,7 @@ import { useState } from "react";
 import MobilitySection from "./MobilitySection";
 import HandstandSection from "./HandstandSection";
 import StrengthSection from "./StrengthSection";
-import { useToast } from "@/hooks/use-toast";
+import SaveWorkoutButton from "./SaveWorkoutButton";
 import { Workout, Exercise } from "@shared/schema";
 
 interface WorkoutTabProps {
@@ -10,17 +10,14 @@ interface WorkoutTabProps {
   weight: string;
   lastMobilityDay: number | null;
   lastStrengthDay: number | null;
-  onSaveWorkout: (workout: Workout) => boolean;
 }
 
 export default function WorkoutTab({ 
   date, 
   weight, 
   lastMobilityDay, 
-  lastStrengthDay,
-  onSaveWorkout 
+  lastStrengthDay
 }: WorkoutTabProps) {
-  const { toast } = useToast();
   
   // Mobility state
   const [mobilityDay, setMobilityDay] = useState<number | undefined>(
@@ -32,14 +29,13 @@ export default function WorkoutTab({
   const [handstandExercises, setHandstandExercises] = useState<string[]>([]);
   
   // Strength state
-  const [strengthDay, setStrengthDay] = useState<number | undefined>(
+  const [strengthDay, setStrengthDay] = useState<number | undefined | "freestyle">(
     lastStrengthDay ? lastStrengthDay + 1 : undefined
   );
   const [strengthExercises, setStrengthExercises] = useState<Exercise[]>([]);
-  
-  // Save workout handler
-  const handleSaveWorkout = () => {
-    const newWorkout: Workout = {
+  // Create workout data for saving
+  const createWorkoutData = (): Workout => {
+    return {
       date,
       weight: weight || undefined,
       mobility: {
@@ -50,39 +46,16 @@ export default function WorkoutTab({
         exercises: handstandExercises
       },
       strength: {
-        dayNumber: strengthDay,
+        dayNumber: strengthDay === "freestyle" ? "freestyle" : strengthDay,
         exercises: strengthExercises
       }
     };
-    
-    // Validation
-    if (!date) {
-      toast({
-        title: "Date Required",
-        description: "Please select a workout date",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    const success = onSaveWorkout(newWorkout);
-    
-    if (success) {
-      toast({
-        title: "Workout Saved",
-        description: "Your workout has been successfully saved",
-      });
-      
-      // Reset form for next entry (keeping the days)
-      setHandstandExercises([]);
-      setStrengthExercises([]);
-    } else {
-      toast({
-        title: "Save Failed",
-        description: "There was an error saving your workout",
-        variant: "destructive"
-      });
-    }
+  };
+
+  const handleSaveSuccess = () => {
+    // Reset form for next entry (keeping the days)
+    setHandstandExercises([]);
+    setStrengthExercises([]);
   };
 
   return (
@@ -111,7 +84,12 @@ export default function WorkoutTab({
         setStrengthExercises={setStrengthExercises}
       />
       
-      {/* Original save button now hidden, using global SaveWorkoutButton instead */}
+      {/* Save Workout Button */}
+      <SaveWorkoutButton 
+        workout={createWorkoutData()} 
+        onSuccess={handleSaveSuccess}
+      />
+      
       <div className="h-20"></div> {/* Spacer at bottom */}
     </div>
   );

@@ -32,14 +32,14 @@ export default function HandstandSection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-[#FFEB3B] pb-1 text-[#FFEB3B] shadow-sm">Handstand Training</span>
+        <span className="border-b-2 border-primary-600 pb-1 text-primary-600 shadow-sm">Handstand Training</span>
       </h2>
       
       {/* Selected exercises */}
       <div className="mb-3">
         <div className="flex flex-wrap gap-2" id="selected-handstand-exercises">
           {selectedExercises.map((exercise, index) => (
-            <Badge key={index} className="bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/20 text-white hover:bg-forest-700 rounded-full px-3 py-1 flex items-center">
+            <Badge key={index} className="bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 text-primary-900 hover:bg-primary-300/50 rounded-full px-3 py-1 flex items-center">
               <span>{exercise}</span>
               <Button 
                 variant="ghost" 
@@ -62,10 +62,10 @@ export default function HandstandSection({
         <div className="flex-grow">
           <Label htmlFor="handstand-exercise" className="block text-sm font-medium mb-1">Add Exercise</Label>
           <Select value={selectedExercise} onValueChange={setSelectedExercise}>
-            <SelectTrigger id="handstand-exercise" className="w-full bg-forest-800 bg-opacity-70 backdrop-blur-sm border border-[#FFEB3B]/10 rounded">
+            <SelectTrigger id="handstand-exercise" className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded text-primary-900 focus:border-primary-600">
               <SelectValue placeholder="Choose exercise" />
             </SelectTrigger>
-            <SelectContent className="bg-forest-800">
+            <SelectContent className="bg-primary-50 border-primary-300">
               {handstandExercises.map((exercise) => (
                 <SelectItem key={exercise} value={exercise}>{exercise}</SelectItem>
               ))}
@@ -73,7 +73,7 @@ export default function HandstandSection({
           </Select>
         </div>
         <Button 
-          className="bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900 font-medium border border-[#FFEB3B]/50" 
+          className="bg-primary-600 hover:bg-primary-700 text-primary-50 font-medium border border-primary-300" 
           onClick={handleAddExercise}
           disabled={!selectedExercise}
         >
@@ -86,14 +86,14 @@ export default function HandstandSection({
         <Button 
           className={`w-full py-4 font-medium ${
             handstandCompleted 
-              ? 'bg-[#FFEB3B] hover:bg-[#FFC107] text-forest-900' 
-              : 'bg-forest-700 hover:bg-forest-600'
+              ? 'bg-primary-600 hover:bg-primary-700 text-primary-50' 
+              : 'bg-primary-300 hover:bg-primary-600 text-primary-900 hover:text-primary-50'
           }`}
           onClick={() => setHandstandCompleted(!handstandCompleted)}
         >
           {handstandCompleted 
             ? 'Handstand Training Completed ✓' 
-            : 'Mark Exercise Day Completed'}
+            : 'Handstand Training Completed'}
         </Button>
       </div>
     </section>

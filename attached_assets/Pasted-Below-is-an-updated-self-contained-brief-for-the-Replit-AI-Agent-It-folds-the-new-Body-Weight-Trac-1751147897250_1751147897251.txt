@@ -1,0 +1,105 @@
+Below is an updated, self-contained brief for the Replit AI Agent.
+It folds the new Body-Weight Tracking requirement into the Workout Summary overhaul so the agent has everything in one place.
+
+⸻
+
+📌  Overall Goal (Sprint 2 + Body-Weight Extension)
+
+Deliver a “Summary” tab that shows:
+	1.	Consistency – weekly workout frequency.
+	2.	Progress – PR badges & streaks.
+	3.	Effort – recent workout list.
+	4.	Body-weight trend – current weight + mini chart that holds last value until a new weigh-in.
+
+All widgets must refresh immediately after a workout save or a new weight entry.
+
+⸻
+
+🎯  Definition of Done
+
+KPI	Acceptance criterion
+Weekly frequency	7-bar chart updates within 1 s of saving a workout.
+Recent list	Last 10 workouts visible, newest first.
+PR badges	Top 3 personal records displayed.
+Streak panel	Shows current & longest workout streak.
+Body-weight	“Current Weight” pill + 30-day spark-line; weight persists day-to-day until changed.
+API security	All /api/summary/* & /api/weight/* routes require valid session.
+Performance	Combined summary API ≤ 150 ms for 1 k workouts + 60 weight rows.
+Accessibility	All text/bars pass WCAG AA; charts keyboard-focusable.
+
+
+⸻
+
+🗂️  Scope of Work
+
+1. Database / Data Layer
+	1.	New table body_weight
+id, user_id (FK), date (DATE), weight_kg DECIMAL(5,2)
+Unique (user_id, date) so one entry per day (if user logs twice you can UPDATE).
+	2.	Optional snapshot add weight_kg column to workouts.
+	3.	SQL helpers / Drizzle functions:
+	•	getWeightSeries(user_id, days=30) – returns gap-filled array where missing dates reuse last known weight.
+	•	getCurrentWeight(user_id) – last weight_kg row.
+	4.	Update existing workout rows with nearest past weight for historical graphs (migration script).
+
+2. API Endpoints
+
+Route	Method	Purpose
+/api/weight	POST  {date?, weight_kg}	Add/replace today’s weight or specified date.
+/api/weight	GET   ?days=30	Return gap-filled series (date, weight_kg).
+/api/summary/…	existing	Add weight to combined summary payload if convenient.
+
+3. Front-end Components
+
+Component	Description
+WeightBanner (top of Summary)	Shows today’s weight; click → modal to edit.  Uses Tailwind pill: bg-primary-50, text-primary-700.
+WeightTrendCard	30-day spark-line (Recharts) + Δ (“-1.2 kg since last month”).
+WeeklyFrequencyChart	as specced earlier.
+RecentWorkoutsList	cards list.
+PRBadges	three coloured pills.
+StreakPanel	streak number + flame icon.
+
+4. State & Cache
+	•	Use React-Query; keys include userId.
+	•	After successful /api/weight POST, invalidate ["weightSeries"] and ["currentWeight"].
+	•	After /api/workouts POST, emit workout:saved event → invalidate summary queries.
+
+5. UI / UX Rules
+
+Item	Rule
+Weight persistence	If user skips days, charts repeat last known weight until next entry.
+Units	Store kg; in Profile page add toggle kg/lbs (convert in UI).
+Double entry handling	Same-day POST overwrites previous weight.
+Empty state	First-time user sees “Tap to log your weight” banner.
+Colour tokens	Use blue scale (primary-50/300/600/700) + accent yellow for PR badge border.
+
+6. Testing
+	•	Unit tests for gap-fill algorithm (getWeightSeries).
+	•	Supertest for /api/weight (create, update, unauthorized).
+	•	Cypress: log weight → trend chart updates, repeat day updates value not duplicated.
+
+7. Performance / Safety
+
+Concern	Approach
+Query speed	Index (user_id, date) on body_weight.
+Large gaps	Gap-fill in SQL (generate_series) not JS.
+Data privacy	Weight routes return 404 for other users’ IDs even if guessed.
+
+
+⸻
+
+⏱️  Suggested Task Board (≈ 30 min each)
+	1.	Migration: body_weight table + snapshot column.
+	2.	/api/weight routes with Zod validation & auth guard.
+	3.	React-Query hooks: useWeightSeries, useCurrentWeight, useLogWeight.
+	4.	WeightBanner component.
+	5.	WeightTrendCard spark-line.
+	6.	Integrate into Summary layout grid.
+	7.	Cache invalidation on save events.
+	8.	Gap-fill unit tests.
+	9.	Cypress end-to-end flow.
+	10.	README update & screenshots.
+
+⸻
+
+Hand this brief to the Replit AI Agent. It contains every requirement, endpoint, UI component, state rule, and test needed to implement the Workout Summary overhaul plus body-weight tracking.
