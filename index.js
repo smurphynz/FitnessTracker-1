@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-// Main entry point for production deployment
-const { spawn, execSync } = require('child_process');
-const { existsSync } = require('fs');
+// Simplified production entry point that works directly with the source
+import { spawn } from 'child_process';
 
 // Set production environment
 process.env.NODE_ENV = 'production';
@@ -12,20 +11,9 @@ console.log('Starting Calisthenics Fitness Tracker');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Port:', process.env.PORT);
 
-// Build if needed
-if (!existsSync('./dist/index.js')) {
-  console.log('Creating production build...');
-  try {
-    execSync('node production-build.js', { stdio: 'inherit' });
-  } catch (error) {
-    console.error('Build failed:', error.message);
-    process.exit(1);
-  }
-}
-
-// Start server
-console.log('Starting server...');
-const server = spawn('node', ['dist/index.js'], {
+// Run server directly from source with tsx
+console.log('Starting production server...');
+const server = spawn('npx', ['tsx', 'server/index.ts'], {
   stdio: 'inherit',
   env: {
     ...process.env,
