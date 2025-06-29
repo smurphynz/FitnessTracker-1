@@ -9,8 +9,8 @@ import { Exercise } from "@shared/schema";
 
 interface StrengthSectionProps {
   lastStrengthDay: number | null;
-  strengthDay: number | undefined;
-  setStrengthDay: (day: number | undefined) => void;
+  strengthDay: number | undefined | "freestyle";
+  setStrengthDay: (day: number | undefined | "freestyle") => void;
   strengthExercises: Exercise[];
   setStrengthExercises: (exercises: Exercise[]) => void;
 }
@@ -72,7 +72,7 @@ export default function StrengthSection({
   return (
     <section className="forest-panel rounded-lg p-4">
       <h2 className="text-xl font-semibold text-center mb-3">
-        <span className="border-b-2 border-primary-600 pb-1 text-primary-600 shadow-sm">CaliMove Level 2</span>
+        <span className="border-b-2 border-primary-600 pb-1 text-primary-600 shadow-sm">Strength Training</span>
       </h2>
       
       <div className="bg-primary-50/80 backdrop-blur-sm border border-primary-300/30 rounded-md mb-3 p-2 text-center">
@@ -84,18 +84,46 @@ export default function StrengthSection({
         </p>
       </div>
       
-      <div className="mb-4">
-        <Label htmlFor="strength-day" className="block text-sm font-medium mb-1">Day Number</Label>
-        <Input 
-          type="number" 
-          id="strength-day" 
-          className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded p-2 text-primary-900 focus:border-primary-600" 
-          value={strengthDay === undefined ? '' : strengthDay}
-          onChange={(e) => {
-            const value = e.target.value;
-            setStrengthDay(value === '' ? undefined : parseInt(value));
-          }}
-        />
+      <div className="mb-4 space-y-3">
+        <div>
+          <Label htmlFor="strength-day-type" className="block text-sm font-medium mb-1">Training Type</Label>
+          <Select
+            value={strengthDay === "freestyle" ? "freestyle" : strengthDay ? "program" : ""}
+            onValueChange={(value) => {
+              if (value === "freestyle") {
+                setStrengthDay("freestyle");
+              } else if (value === "program") {
+                setStrengthDay(lastStrengthDay ? lastStrengthDay + 1 : 1);
+              } else {
+                setStrengthDay(undefined);
+              }
+            }}
+          >
+            <SelectTrigger id="strength-day-type" className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded text-primary-900 focus:border-primary-600">
+              <SelectValue placeholder="Select training type" />
+            </SelectTrigger>
+            <SelectContent className="bg-primary-50 border-primary-300">
+              <SelectItem value="program">Program Day</SelectItem>
+              <SelectItem value="freestyle">Freestyle</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        {strengthDay !== "freestyle" && strengthDay !== undefined && (
+          <div>
+            <Label htmlFor="strength-day" className="block text-sm font-medium mb-1">Day Number</Label>
+            <Input 
+              type="number" 
+              id="strength-day" 
+              className="w-full bg-primary-50/70 backdrop-blur-sm border border-primary-300/30 rounded p-2 text-primary-900 focus:border-primary-600" 
+              value={typeof strengthDay === 'number' ? strengthDay : ''}
+              onChange={(e) => {
+                const value = e.target.value;
+                setStrengthDay(value === '' ? undefined : parseInt(value));
+              }}
+            />
+          </div>
+        )}
       </div>
       
       {/* Exercise List */}

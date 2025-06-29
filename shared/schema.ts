@@ -32,7 +32,7 @@ export const handstandSchema = z.object({
 export type Handstand = z.infer<typeof handstandSchema>;
 
 export const strengthSchema = z.object({
-  dayNumber: z.number().nullable().optional(),
+  dayNumber: z.union([z.number(), z.literal("freestyle")]).nullable().optional(),
   exercises: z.array(exerciseSchema),
 });
 
@@ -58,7 +58,7 @@ export const workouts = pgTable("workouts", {
   mobility_day: integer("mobility_day"),
   mobility_completion: text("mobility_completion").notNull(),
   handstand_exercises: jsonb("handstand_exercises").notNull().$type<string[]>(),
-  strength_day: integer("strength_day"),
+  strength_day: text("strength_day"), // Now supports both numbers and "freestyle"
   strength_exercises: jsonb("strength_exercises").notNull().$type<Exercise[]>(),
 });
 

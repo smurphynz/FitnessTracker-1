@@ -29,7 +29,7 @@ export default function WorkoutTab({
   const [handstandExercises, setHandstandExercises] = useState<string[]>([]);
   
   // Strength state
-  const [strengthDay, setStrengthDay] = useState<number | undefined>(
+  const [strengthDay, setStrengthDay] = useState<number | undefined | "freestyle">(
     lastStrengthDay ? lastStrengthDay + 1 : undefined
   );
   const [strengthExercises, setStrengthExercises] = useState<Exercise[]>([]);
@@ -46,7 +46,7 @@ export default function WorkoutTab({
         exercises: handstandExercises
       },
       strength: {
-        dayNumber: strengthDay,
+        dayNumber: strengthDay === "freestyle" ? "freestyle" : strengthDay,
         exercises: strengthExercises
       }
     };

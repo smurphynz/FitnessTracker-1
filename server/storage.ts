@@ -90,7 +90,7 @@ export class DatabaseStorage implements IStorage {
         mobility_day: workout.mobility.dayNumber || null,
         mobility_completion: workout.mobility.completion,
         handstand_exercises: workout.handstand.exercises,
-        strength_day: workout.strength.dayNumber || null,
+        strength_day: workout.strength.dayNumber ? workout.strength.dayNumber.toString() : null,
         strength_exercises: workout.strength.exercises
       };
       
@@ -113,7 +113,7 @@ export class DatabaseStorage implements IStorage {
       mobility_day: workout.mobility.dayNumber || null,
       mobility_completion: workout.mobility.completion,
       handstand_exercises: workout.handstand.exercises,
-      strength_day: workout.strength.dayNumber || null,
+      strength_day: workout.strength.dayNumber ? workout.strength.dayNumber.toString() : null,
       strength_exercises: workout.strength.exercises
     };
     

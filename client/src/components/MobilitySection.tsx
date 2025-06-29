@@ -67,30 +67,7 @@ export default function MobilitySection({
           </Select>
         </div>
         
-        {/* Exercise Completion Button */}
-        <div className="mt-4">
-          <Button 
-            className={`w-full py-4 font-medium ${
-              mobilityCompletion !== 'not-completed' 
-                ? 'bg-primary-600 hover:bg-primary-700 text-primary-50' 
-                : 'bg-primary-300 hover:bg-primary-600 text-primary-900 hover:text-primary-50'
-            }`}
-            onClick={() => {
-              const nextState = mobilityCompletion === 'not-completed'
-                ? 'half-session'
-                : mobilityCompletion === 'half-session'
-                  ? 'full-session'
-                  : 'not-completed';
-              setMobilityCompletion(nextState);
-            }}
-          >
-            {mobilityCompletion === 'not-completed' 
-              ? 'Mark Exercise Day Completed' 
-              : mobilityCompletion === 'half-session'
-                ? 'Half Session Completed ✓' 
-                : 'Full Session Completed ✓'}
-          </Button>
-        </div>
+
       </div>
     </section>
   );
