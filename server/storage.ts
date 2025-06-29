@@ -1,6 +1,6 @@
 import { workouts, Workout, InsertWorkout, users, User, InsertUser, Exercise, bodyWeight, BodyWeight, InsertBodyWeight, Summary } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql, and, gte } from "drizzle-orm";
+import { eq, desc, sql, and, gte, isNotNull } from "drizzle-orm";
 
 export interface IStorage {
   // User methods (keeping original methods)
@@ -252,7 +252,7 @@ export class DatabaseStorage implements IStorage {
       .where(
         and(
           gte(workouts.date, startDate.toISOString().split('T')[0]),
-          isNotNull(workouts.weight_kg)
+          sql`${workouts.weight_kg} IS NOT NULL`
         )
       )
       .orderBy(workouts.date);
@@ -294,10 +294,10 @@ export class DatabaseStorage implements IStorage {
       const dateStr = currentDate.toISOString().split('T')[0];
 
       // Check if we have a weight entry for this date
-      const weightEntry = weights.find(w => w.date === dateStr);
+      const weight = allWeights.get(dateStr);
       
-      if (weightEntry) {
-        lastWeight = Number(weightEntry.weightKg);
+      if (weight) {
+        lastWeight = weight;
         series.push({ date: dateStr, weight: lastWeight });
       } else if (lastWeight !== null) {
         // Use last known weight for missing dates
