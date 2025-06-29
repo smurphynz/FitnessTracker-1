@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import WeeklyFrequencyChart from "./WeeklyFrequencyChart";
+
 import WeightTrendCard from "./WeightTrendCard";
 import RecentWorkoutsList from "./RecentWorkoutsList";
 import PRBadges from "./PRBadges";

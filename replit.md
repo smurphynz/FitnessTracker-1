@@ -125,9 +125,16 @@ Changelog:
   - Extended workouts table with weight_kg snapshot column for historical data
   - Implemented comprehensive storage layer with gap-filled weight series algorithm
   - Created API endpoints: /api/weight (POST/GET), /api/summary, /api/summary/* routes
-  - Built Summary tab components: WeightBanner, WeeklyFrequencyChart, WeightTrendCard, PRBadges, StreakPanel
-  - Integrated Recharts for data visualization with 30-day spark lines and 7-day frequency bars
+  - Built Summary tab components: WeightTrendCard, PRBadges, StreakPanel, RecentWorkoutsList
+  - Integrated Recharts for data visualization with 30-day spark lines
   - Added React Query cache invalidation for real-time updates after workout saves
+- June 29, 2025. Tab Consolidation and Weight Tracking Fixes
+  - Removed Progress tab and consolidated into Summary tab for simplified navigation
+  - Fixed weight data flow: workout weights now properly save to weight_kg column
+  - Removed confusing Weekly Activity chart with 0.25 increments
+  - Removed redundant weight input banner from Summary tab
+  - Weight inputs from workout form now carry through to Weight Trend visualization
+  - Updated TabNavigation to show only Log Workout and Summary tabs
 ```
 
 ## User Preferences
