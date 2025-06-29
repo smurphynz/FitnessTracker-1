@@ -1,5 +1,5 @@
 modules = ["nodejs-20", "postgresql-16"]
-run = "node main.cjs"
+run = "npm start"
 
 [[ports]]
 localPort = 5000
