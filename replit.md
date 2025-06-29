@@ -135,6 +135,13 @@ Changelog:
   - Removed redundant weight input banner from Summary tab
   - Weight inputs from workout form now carry through to Weight Trend visualization
   - Updated TabNavigation to show only Log Workout and Summary tabs
+- June 29, 2025. Weight Tracking API Fix Completed
+  - Fixed critical weight tracking issue: API now correctly retrieves weight data from workouts table
+  - Updated getCurrentWeight() to return most recent weight from workouts (77.4kg)
+  - Updated getWeightSeries() to return proper chronological weight progression
+  - Database contains weight progression: 70.77kg → 72.4kg → 75.2kg → 77.4kg
+  - Weight Trend visualization in Summary tab now displays actual workout weight data
+  - Resolved mobility section button cycling issue and added freestyle strength training option
 ```
 
 ## User Preferences
