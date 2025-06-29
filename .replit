@@ -1,5 +1,5 @@
 modules = ["nodejs-20", "postgresql-16"]
-run = "npm run dev"
+run = "node start.js"
 
 [[ports]]
 localPort = 5000
@@ -22,3 +22,6 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "cloudrun"
+
+[env]
+NODE_ENV = "production"
