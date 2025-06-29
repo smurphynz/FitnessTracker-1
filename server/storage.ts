@@ -86,6 +86,7 @@ export class DatabaseStorage implements IStorage {
       // Prepare update data
       const updateData = {
         weight: workout.weight || '',
+        weight_kg: workout.weight ? workout.weight.toString() : null,
         mobility_day: workout.mobility.dayNumber || null,
         mobility_completion: workout.mobility.completion,
         handstand_exercises: workout.handstand.exercises,
@@ -108,6 +109,7 @@ export class DatabaseStorage implements IStorage {
     const insertData = {
       date: workout.date,
       weight: workout.weight || '',
+      weight_kg: workout.weight ? workout.weight.toString() : null,
       mobility_day: workout.mobility.dayNumber || null,
       mobility_completion: workout.mobility.completion,
       handstand_exercises: workout.handstand.exercises,
