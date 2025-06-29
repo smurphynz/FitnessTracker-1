@@ -227,23 +227,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getCurrentWeight(userId: number): Promise<number | null> {
-    // First try to get from body_weight table
-    const [bodyWeightResult] = await db
-      .select()
-      .from(bodyWeight)
-      .where(eq(bodyWeight.userId, userId))
-      .orderBy(desc(bodyWeight.date))
-      .limit(1);
-    
-    if (bodyWeightResult) {
-      return Number(bodyWeightResult.weightKg);
-    }
-    
-    // If no body weight entries, get from most recent workout
+    // Get the most recent weight from workouts table
     const [workoutResult] = await db
       .select()
       .from(workouts)
-      .where(sql`weight_kg IS NOT NULL`)
+      .where(sql`weight_kg IS NOT NULL AND weight_kg > 0`)
       .orderBy(desc(workouts.date))
       .limit(1);
     
@@ -252,24 +240,26 @@ export class DatabaseStorage implements IStorage {
 
   async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
     try {
-      // Get weight data from workouts table
+      // Get weight data from workouts table where weight_kg is not null
       const workoutWeights = await db
         .select({
           date: workouts.date,
           weight_kg: workouts.weight_kg
         })
         .from(workouts)
-        .where(sql`weight_kg IS NOT NULL`)
-        .orderBy(workouts.date);
+        .where(sql`weight_kg IS NOT NULL AND weight_kg > 0`)
+        .orderBy(desc(workouts.date))
+        .limit(days);
 
-      // Convert to simple array format for now
-      const weightData = workoutWeights.map(w => ({
-        date: w.date,
-        weight: Number(w.weight_kg!)
-      }));
+      // Convert to the expected format and reverse to get chronological order
+      const weightData = workoutWeights
+        .map(w => ({
+          date: w.date,
+          weight: Number(w.weight_kg!)
+        }))
+        .reverse(); // Reverse to get chronological order (oldest to newest)
 
-      // Return the most recent entries up to requested days
-      return weightData.slice(-days);
+      return weightData;
     } catch (error) {
       console.error('Error in getWeightSeries:', error);
       return [];
