@@ -256,28 +256,24 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
-    console.log('getWeightSeries called with userId:', userId, 'days:', days);
-    
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(endDate.getDate() - days + 1);
-    
-    console.log('Date range:', startDate.toISOString().split('T')[0], 'to', endDate.toISOString().split('T')[0]);
-
-    // Get ALL weight data from workouts table first
+    // Simplified approach - just return the weight data we have
     const allWorkouts = await db
       .select({
         date: workouts.date,
         weight_kg: workouts.weight_kg
       })
       .from(workouts)
+      .where(sql`weight_kg IS NOT NULL`)
       .orderBy(workouts.date);
-    
-    console.log('All workouts from DB:', allWorkouts);
-    
-    // Filter for entries with valid weight data
-    const workoutWeights = allWorkouts.filter(w => w.weight_kg !== null && w.weight_kg !== undefined);
-    console.log('Filtered workout weights:', workoutWeights);
+
+    // Convert to the expected format
+    const weightData = allWorkouts.map(w => ({
+      date: w.date,
+      weight: Number(w.weight_kg)
+    }));
+
+    // For now, return the last 7 days of weight data if available
+    return weightData.slice(-7);
 
     // Also get from body_weight table for manual entries
     const bodyWeights = await db

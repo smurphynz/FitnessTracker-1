@@ -130,10 +130,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/weight", async (req: Request, res: Response) => {
     try {
+      console.log('Weight API called with query:', req.query);
       const userId = 1; // Default user ID
       const days = parseInt(req.query.days as string) || 30;
+      console.log('Calling getWeightSeries with userId:', userId, 'days:', days);
       
       const weightSeries = await storage.getWeightSeries(userId, days);
+      console.log('Weight series result:', weightSeries);
       res.json(weightSeries);
     } catch (error) {
       console.error('Error fetching weight series:', error);
