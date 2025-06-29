@@ -240,14 +240,19 @@ export class DatabaseStorage implements IStorage {
     }
     
     // If no body weight entries, get from most recent workout
-    const [workoutResult] = await db
+    const allWorkouts = await db
       .select()
       .from(workouts)
-      .where(sql`weight_kg IS NOT NULL`)
-      .orderBy(desc(workouts.date))
-      .limit(1);
+      .orderBy(desc(workouts.date));
     
-    return workoutResult?.weight_kg ? Number(workoutResult.weight_kg) : null;
+    // Find the most recent workout with weight data
+    for (const workout of allWorkouts) {
+      if (workout.weight_kg !== null && workout.weight_kg !== undefined) {
+        return Number(workout.weight_kg);
+      }
+    }
+    
+    return null;
   }
 
   async getWeightSeries(userId: number, days: number = 30): Promise<Array<{ date: string; weight: number }>> {
@@ -255,15 +260,17 @@ export class DatabaseStorage implements IStorage {
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - days + 1);
 
-    // Get weight data from workouts table (weight_kg column) - all entries with weights
-    const workoutWeights = await db
+    // Get ALL weight data from workouts table first
+    const allWorkouts = await db
       .select({
         date: workouts.date,
         weight_kg: workouts.weight_kg
       })
       .from(workouts)
-      .where(sql`weight_kg IS NOT NULL`)
       .orderBy(workouts.date);
+    
+    // Filter for entries with valid weight data
+    const workoutWeights = allWorkouts.filter(w => w.weight_kg !== null && w.weight_kg !== undefined);
 
     // Also get from body_weight table for manual entries
     const bodyWeights = await db
@@ -277,7 +284,7 @@ export class DatabaseStorage implements IStorage {
     
     // Add workout weights
     workoutWeights.forEach(w => {
-      if (w.weight_kg) {
+      if (w.weight_kg !== null && w.weight_kg !== undefined) {
         allWeights.set(w.date, Number(w.weight_kg));
       }
     });
@@ -296,12 +303,8 @@ export class DatabaseStorage implements IStorage {
     
     // If we have any weight data, build the series
     if (sortedWeightEntries.length > 0) {
-      // Find the most recent weight before or during our date range
-      for (const [date, weight] of sortedWeightEntries) {
-        if (date <= endDate.toISOString().split('T')[0]) {
-          lastWeight = weight;
-        }
-      }
+      // Start with the most recent weight available (even if before our date range)
+      lastWeight = sortedWeightEntries[sortedWeightEntries.length - 1][1];
 
       for (let i = 0; i < days; i++) {
         const currentDate = new Date(startDate);
@@ -313,9 +316,9 @@ export class DatabaseStorage implements IStorage {
         
         if (weight) {
           lastWeight = weight;
-          series.push({ date: dateStr, weight: lastWeight });
-        } else if (lastWeight !== null) {
-          // Use last known weight for missing dates
+        }
+        
+        if (lastWeight !== null) {
           series.push({ date: dateStr, weight: lastWeight });
         }
       }
